@@ -7,6 +7,8 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.jgrapht.DirectedGraph;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Maps;
 import com.uc4.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
@@ -17,6 +19,9 @@ import com.uc4.scheduling.mrcpspmax.instance.IRenewableResource;
 import com.uc4.scheduling.mrcpspmax.instance.MrcpspMaxInstance;
 
 public abstract class InstanceLoader {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(InstanceLoader.class);
+	
 	private InstanceLoader() {}
 	
 	public static IMrcpspMaxInstance loadInstance(String path) throws IOException {
@@ -30,7 +35,7 @@ public abstract class InstanceLoader {
 		Map<INetworkVertex, List<List<Integer>>> renewableresourceConsumptionsMap = ActivityParser.parseRenewableResourceConsumptions(instanceLines);
 		Map<INetworkVertex, List<List<Integer>>> nonRenewableResourceConsumptionsMap = ActivityParser.parseNonRenewableResourceConsumptions(instanceLines);
 		Map<INetworkEdge, List<List<Integer>>> timelagsMap = Maps.newHashMap();
-		IMrcpspMaxInstance instance = new MrcpspMaxInstance(
+		IMrcpspMaxInstance instance = MrcpspMaxInstance.createInstance(
 				network, 
 				renewableResourceList,
 				nonRenewableResourceList, 
@@ -42,7 +47,8 @@ public abstract class InstanceLoader {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		loadInstance("instances/100/psp1.sch");
+		IMrcpspMaxInstance instance = loadInstance("instances/100/psp1.sch");
+		LOGGER.info("loaded instance: {}", instance);
 	}
 
 }

@@ -52,4 +52,14 @@ public class AonNetworkEdge implements INetworkEdge {
 				+ targetVertex + "]";
 	}
 
+	@Override
+	public int getSourceActivity() {
+		return sourceVertex.getActivityNumber();
+	}
+
+	@Override
+	public int getTargetActivity() {
+		return targetVertex.getActivityNumber();
+	}
+
 }

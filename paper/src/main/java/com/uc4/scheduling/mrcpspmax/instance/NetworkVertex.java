@@ -10,6 +10,11 @@ public class NetworkVertex implements INetworkVertex {
 	}
 
 	@Override
+	public int getActivityNumber() {
+		return activityIndex;
+	}
+
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
