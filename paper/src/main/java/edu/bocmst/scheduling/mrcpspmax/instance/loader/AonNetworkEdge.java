@@ -1,26 +1,33 @@
 package edu.bocmst.scheduling.mrcpspmax.instance.loader;
 
-import edu.bocmst.scheduling.mrcpspmax.instance.INetworkEdge;
-import edu.bocmst.scheduling.mrcpspmax.instance.INetworkVertex;
+import edu.bocmst.scheduling.mrcpspmax.instance.IAonNetworkEdge;
 
-public class AonNetworkEdge implements INetworkEdge {
+public class AonNetworkEdge implements IAonNetworkEdge {
 
-	private final INetworkVertex sourceVertex;
-	private final INetworkVertex targetVertex;
+	private final int source;
+	private final int target;
 
-	public AonNetworkEdge(INetworkVertex sourceVertex, INetworkVertex targetVertex) {
-		this.sourceVertex = sourceVertex;
-		this.targetVertex = targetVertex;
+	public AonNetworkEdge(int source, int target) {
+		this.source = source;
+		this.target = target;
+	}
+
+	@Override
+	public int getSource() {
+		return source;
+	}
+
+	@Override
+	public int getTarget() {
+		return target;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result
-				+ ((sourceVertex == null) ? 0 : sourceVertex.hashCode());
-		result = prime * result
-				+ ((targetVertex == null) ? 0 : targetVertex.hashCode());
+		result = prime * result + source;
+		result = prime * result + target;
 		return result;
 	}
 
@@ -33,33 +40,18 @@ public class AonNetworkEdge implements INetworkEdge {
 		if (getClass() != obj.getClass())
 			return false;
 		AonNetworkEdge other = (AonNetworkEdge) obj;
-		if (sourceVertex == null) {
-			if (other.sourceVertex != null)
-				return false;
-		} else if (!sourceVertex.equals(other.sourceVertex))
+		if (source != other.source)
 			return false;
-		if (targetVertex == null) {
-			if (other.targetVertex != null)
-				return false;
-		} else if (!targetVertex.equals(other.targetVertex))
+		if (target != other.target)
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "NetworkEdge [sourceVertex=" + sourceVertex + ", targetVertex="
-				+ targetVertex + "]";
+		return "[source=" + source + ", target=" + target + "]";
 	}
-
-	@Override
-	public int getSourceActivity() {
-		return sourceVertex.getActivityNumber();
-	}
-
-	@Override
-	public int getTargetActivity() {
-		return targetVertex.getActivityNumber();
-	}
-
+	
+	
+	
 }

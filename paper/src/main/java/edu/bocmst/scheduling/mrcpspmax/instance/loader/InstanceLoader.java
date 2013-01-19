@@ -6,14 +6,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
-import org.jgrapht.DirectedGraph;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.Maps;
+import edu.bocmst.scheduling.mrcpspmax.instance.IAonNetwork;
+import edu.bocmst.scheduling.mrcpspmax.instance.IAonNetworkEdge;
 import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
-import edu.bocmst.scheduling.mrcpspmax.instance.INetworkEdge;
-import edu.bocmst.scheduling.mrcpspmax.instance.INetworkVertex;
 import edu.bocmst.scheduling.mrcpspmax.instance.INonRenewableResource;
 import edu.bocmst.scheduling.mrcpspmax.instance.IRenewableResource;
 import edu.bocmst.scheduling.mrcpspmax.instance.MrcpspMaxInstance;
@@ -29,12 +27,12 @@ public abstract class InstanceLoader {
 		List<String> instanceLines = FileUtils.readLines(instanceFile);
 		ResourceParser.verifyNoMixedResources(instanceLines.get(0));
 		List<IRenewableResource> renewableResourceList = ResourceParser.parseRenewableResourcesList(instanceLines);
-		List<INonRenewableResource> nonRenewableResourceList = ResourceParser.parseNonRenewableResourceList(instanceLines);
+		List<INonRenewableResource> nonRenewableResourceList = ResourceParser.parseNonRenewableResourceList(instanceLines);Map<Integer, List<Integer>> processingTimes = ActivityParser.parseProcessingTimes(instanceLines);
+		Map<Integer, List<List<Integer>>> renewableresourceConsumptionsMap = ActivityParser.parseRenewableResourceConsumptions(instanceLines);
+		Map<Integer, List<List<Integer>>> nonRenewableResourceConsumptionsMap = ActivityParser.parseNonRenewableResourceConsumptions(instanceLines);
+		
 		IAonNetwork network = AonNetworkParser.parseProjectNetwork(instanceLines);
-		Map<INetworkVertex, List<Integer>> processingTimes = ActivityParser.parseProcessingTimes(instanceLines);
-		Map<INetworkVertex, List<List<Integer>>> renewableresourceConsumptionsMap = ActivityParser.parseRenewableResourceConsumptions(instanceLines);
-		Map<INetworkVertex, List<List<Integer>>> nonRenewableResourceConsumptionsMap = ActivityParser.parseNonRenewableResourceConsumptions(instanceLines);
-		Map<INetworkEdge, List<List<Integer>>> timelagsMap = Maps.newHashMap();
+		Map<IAonNetworkEdge, int[][]> timelagsMap = AonNetworkParser.parseTimeLags(instanceLines, processingTimes.size());
 		IMrcpspMaxInstance instance = MrcpspMaxInstance.createInstance(
 				network, 
 				renewableResourceList,
@@ -46,9 +44,12 @@ public abstract class InstanceLoader {
 		return instance;
 	}
 	
+
 	public static void main(String[] args) throws IOException {
-		IMrcpspMaxInstance instance = loadInstance("instances/100/psp1.sch");
+//		IMrcpspMaxInstance instance = loadInstance("instances/100/psp1.sch");
+		IMrcpspMaxInstance instance = loadInstance("src/test/resources/thesisExample.sch");
 		LOGGER.info("loaded instance: {}", instance);
+		System.out.println(instance.getTimeLag(5, 3, 7, 1));
 	}
 
 }

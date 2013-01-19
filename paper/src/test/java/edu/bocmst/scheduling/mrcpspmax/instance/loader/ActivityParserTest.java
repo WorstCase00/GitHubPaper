@@ -1,22 +1,18 @@
 package edu.bocmst.scheduling.mrcpspmax.instance.loader;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.channels.NonReadableChannelException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
 import com.google.common.collect.Lists;
 import com.google.common.primitives.Ints;
-import edu.bocmst.scheduling.mrcpspmax.instance.INetworkVertex;
-import edu.bocmst.scheduling.mrcpspmax.instance.NetworkVertex;
+
 
 public class ActivityParserTest extends BaseInstanceFileTest {
 
@@ -65,12 +61,12 @@ public class ActivityParserTest extends BaseInstanceFileTest {
 	public void testProcessingTimesLoadFromFile() throws FileNotFoundException, IOException {
 		List<String> instanceLines = readFromThesisFile();
 	
-		Map<INetworkVertex, List<Integer>> result = 
+		Map<Integer, List<Integer>> result = 
 			ActivityParser.parseProcessingTimes(instanceLines);
 		
 		assertEquals(ACTIVITY_COUNT, result.size());
 		for(int i = 0; i < ACTIVITY_COUNT; i++) {
-			List<Integer> procTimes = result.get(NetworkVertex.createInstance(i));
+			List<Integer> procTimes = result.get(i);
 			assertArrayEquals(PROCESSING_TIMES.get(i), Ints.toArray(procTimes));
 		}
 	}
@@ -79,12 +75,12 @@ public class ActivityParserTest extends BaseInstanceFileTest {
 	public void testNonRenewableresourcesLoadFromFile() throws FileNotFoundException, IOException {
 		List<String> instanceLines = readFromThesisFile();
 	
-		Map<INetworkVertex, List<List<Integer>>> result = 
+		Map<Integer, List<List<Integer>>> result = 
 			ActivityParser.parseNonRenewableResourceConsumptions(instanceLines);
 		
 		assertEquals(ACTIVITY_COUNT, result.size());
 		for(int i = 0; i < ACTIVITY_COUNT; i++) {
-			List<List<Integer>> allConsumptions = result.get(NetworkVertex.createInstance(i));
+			List<List<Integer>> allConsumptions = result.get(i);
 			assertEquals(NON_RENEWABLE_COUNT, allConsumptions.size());
 			for (int j = 0; j < allConsumptions.size(); j++) {
 				List<Integer> consumptions = allConsumptions.get(j);
@@ -97,12 +93,12 @@ public class ActivityParserTest extends BaseInstanceFileTest {
 	public void testRenewableresourcesLoadFromFile() throws FileNotFoundException, IOException {
 		List<String> instanceLines = readFromThesisFile();
 	
-		Map<INetworkVertex, List<List<Integer>>> result = 
+		Map<Integer, List<List<Integer>>> result = 
 			ActivityParser.parseRenewableResourceConsumptions(instanceLines);
 		
 		assertEquals(ACTIVITY_COUNT, result.size());
 		for(int i = 0; i < ACTIVITY_COUNT; i++) {
-			List<List<Integer>> allConsumptions = result.get(NetworkVertex.createInstance(i));
+			List<List<Integer>> allConsumptions = result.get(i);
 			assertEquals(RENEWABLE_COUNT, allConsumptions.size());
 			for (int j = 0; j < allConsumptions.size(); j++) {
 				List<Integer> consumptions = allConsumptions.get(j);

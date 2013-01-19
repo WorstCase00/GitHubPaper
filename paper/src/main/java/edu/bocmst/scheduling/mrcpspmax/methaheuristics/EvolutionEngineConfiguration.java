@@ -2,11 +2,11 @@ package edu.bocmst.scheduling.mrcpspmax.methaheuristics;
 
 import org.apache.commons.configuration.PropertiesConfiguration;
 
+import edu.bocmst.scheduling.mrcpspmax.commons.AbstractPropertyFileConfiguration;
 
-public class EvolutionEngineConfiguration {
 
-	private final PropertiesConfiguration properties;
-	
+public class EvolutionEngineConfiguration extends AbstractPropertyFileConfiguration {
+
 	private static class Keys {
 
 		public static final String TYPE = "type";
@@ -20,15 +20,21 @@ public class EvolutionEngineConfiguration {
 	}
 	
 	protected EvolutionEngineConfiguration(PropertiesConfiguration properties) {
-		this.properties = properties;
+		super(properties);
 	}
 
 	public EvolutionEngineType getEngineType() {
-		String typeString = properties.getString(
+		String typeString = configuration.getString(
 				Keys.TYPE,
 				Defaults.TYPE);
 		EvolutionEngineType type = EvolutionEngineType.valueOf(typeString);
 		return type;
+	}
+
+	public static EvolutionEngineConfiguration createDefault() {
+		PropertiesConfiguration properties = new PropertiesConfiguration();
+		EvolutionEngineConfiguration instance = new EvolutionEngineConfiguration(properties);
+		return instance;
 	}
 
 }

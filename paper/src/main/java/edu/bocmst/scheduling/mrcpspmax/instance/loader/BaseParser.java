@@ -6,8 +6,8 @@ public abstract class BaseParser {
 
 	protected static int getIntegerParsedIndexWord(String string, int index) {
 		String[] words = string.split(InstanceFileConstants.DELIMITER);
-		int nonRenewableCount = Integer.parseInt(words[index]);
-		return nonRenewableCount;
+		int integer = Integer.parseInt(words[index]);
+		return integer;
 	}
 	
 	protected static int getActivitesCount(List<String> instanceLines) {

@@ -1,4 +1,4 @@
-package edu.bocmst.scheduling.mrcpspmax.bmap.ga.evaluator;
+package edu.bocmst.scheduling.mrcpspmax.bmap.ga.evaluation;
 
 import java.util.List;
 import java.util.Set;
@@ -7,20 +7,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.uncommons.watchmaker.framework.FitnessEvaluator;
 
-import edu.bocmst.scheduling.mrcpspmax.bmap.solution.IModeAssignment;
+import edu.bocmst.scheduling.mrcpspmax.bmap.candidate.IModeAssignment;
+import edu.bocmst.scheduling.mrcpspmax.instance.IAonNetworkEdge;
 import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
-import edu.bocmst.scheduling.mrcpspmax.instance.INetworkEdge;
-import edu.bocmst.scheduling.mrcpspmax.instance.loader.IAonNetwork;
 
-public class ConstrainedEdgeSumEvaluator implements
+public class PenalizingEdgeSumEvaluator implements
 		FitnessEvaluator<IModeAssignment> {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ConstrainedEdgeSumEvaluator.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(PenalizingEdgeSumEvaluator.class);
 	private static final double RESOURCE_PENALTY = Double.MAX_VALUE;
 	private static final double TIME_PENALTY = Double.MAX_VALUE / 2;
 	private final IMrcpspMaxInstance problem;
 
-	public ConstrainedEdgeSumEvaluator(IMrcpspMaxInstance problem) {
+	public PenalizingEdgeSumEvaluator(IMrcpspMaxInstance problem) {
 		this.problem = problem;
 	}
 
@@ -29,7 +28,7 @@ public class ConstrainedEdgeSumEvaluator implements
 		if(!candidate.isResourceFeasible()) {
 			LOGGER.debug("candidate not resource feasible - fitness value: {}", RESOURCE_PENALTY);
 			return RESOURCE_PENALTY;
-		} else if(!candidate.isResourceFeasible()) {
+		} else if(!candidate.isTimeFeasible()) {
 			LOGGER.debug("candidate not resource feasible - fitness value: {}", RESOURCE_PENALTY);
 			return TIME_PENALTY;
 		}
@@ -38,14 +37,13 @@ public class ConstrainedEdgeSumEvaluator implements
 	}
 
 	private double calculateTimeLagSum(IModeAssignment candidate) {
-		IAonNetwork aonNetwork = problem.getAonNetwork();
-		Set<INetworkEdge> edges = aonNetwork.getEdges();
+		Set<IAonNetworkEdge> edges = problem.getAonNetworkEdges();
 		int[] modes = candidate.getModeArray();
 		double edgeWeightSum = 0;
-		for(INetworkEdge edge : edges) {
-			int source = edge.getSourceActivity();
+		for(IAonNetworkEdge edge : edges) {
+			int source = edge.getSource();
 			int sourceMode = modes[source];
-			int target = edge.getTargetActivity();
+			int target = edge.getTarget();
 			int targetMode = modes[target];
 			int timeLag = problem.getTimeLag(source, sourceMode, target, targetMode);
 			edgeWeightSum += timeLag;

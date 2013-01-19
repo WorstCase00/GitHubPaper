@@ -8,8 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import edu.bocmst.scheduling.mrcpspmax.instance.INetworkVertex;
-import edu.bocmst.scheduling.mrcpspmax.instance.NetworkVertex;
+
 
 public abstract class ActivityParser extends BaseParser {
 
@@ -17,17 +16,16 @@ public abstract class ActivityParser extends BaseParser {
 	
 	private ActivityParser() {}
 	
-	public static Map<INetworkVertex, List<Integer>> parseProcessingTimes(
+	public static Map<Integer, List<Integer>> parseProcessingTimes(
 			List<String> instanceLines) {
-		Map<INetworkVertex, List<Integer>> processingTimesMap = Maps.newHashMap();
+		Map<Integer, List<Integer>> processingTimesMap = Maps.newHashMap();
 		List<String> activityBlockLines = getActivityBlockLines(instanceLines);
 		List<List<Integer>> processingTimesLists =  parseModeWise(
 				activityBlockLines,
 				InstanceFileConstants.ActivityBlock.PROCESSING_TIME_INDEX);
-		for(int i = 0; i < processingTimesLists.size(); i++) {
-			INetworkVertex vertex = NetworkVertex.createInstance(i);
-			List<Integer> processingTimes = processingTimesLists.get(i);
-			LOGGER.debug("processing times parsed for vertex {}: {}", i, processingTimes);
+		for(int vertex = 0; vertex < processingTimesLists.size(); vertex++) {
+			List<Integer> processingTimes = processingTimesLists.get(vertex);
+			LOGGER.debug("processing times parsed for vertex {}: {}", vertex, processingTimes);
 			processingTimesMap.put(vertex, processingTimes);
 		}
 		return processingTimesMap;
@@ -57,7 +55,7 @@ public abstract class ActivityParser extends BaseParser {
 		return lines;
 	}
 
-	public static Map<INetworkVertex, List<List<Integer>>> parseRenewableResourceConsumptions(List<String> instanceLines) {
+	public static Map<Integer, List<List<Integer>>> parseRenewableResourceConsumptions(List<String> instanceLines) {
 		int renewableResourcesCount = getRenewableResourcesCount(instanceLines);
 		List<List<List<Integer>>> consumptionsForAllResources = Lists.newArrayList();
 		for(int resourceIndex = 0; resourceIndex < renewableResourcesCount; resourceIndex ++) {
@@ -68,32 +66,32 @@ public abstract class ActivityParser extends BaseParser {
 			consumptionsForAllResources.add(consumptionsForResource);
 		}
 		
-		Map<INetworkVertex, List<List<Integer>>> consumptionsMap = createConsumptionsMap(
+		Map<Integer, List<List<Integer>>> consumptionsMap = createConsumptionsMap(
 				consumptionsForAllResources,
 				renewableResourcesCount,
 				instanceLines);
 		return consumptionsMap;
 	}
 
-	private static Map<INetworkVertex, List<List<Integer>>> createConsumptionsMap(
+	private static Map<Integer, List<List<Integer>>> createConsumptionsMap(
 			List<List<List<Integer>>> consumptionsForAllResources,
 			int renewableResourcesCount, 
 			List<String> instanceLines) {
 		int activityCount = getActivitesCount(instanceLines);
-		Map<INetworkVertex, List<List<Integer>>> consumptionsMap = Maps.newHashMap();
+		Map<Integer, List<List<Integer>>> consumptionsMap = Maps.newHashMap();
 		for(int activityIndex = 0; activityIndex < activityCount; activityIndex++) {
 			List<List<Integer>> resourceConsumptions = Lists.newArrayList();
 			for(int resourceIndex = 0; resourceIndex < renewableResourcesCount; resourceIndex ++) {
 				List<Integer> consumption = consumptionsForAllResources.get(resourceIndex).get(activityIndex);
 				resourceConsumptions.add(consumption);
 			}
-			consumptionsMap.put(NetworkVertex.createInstance(activityIndex), resourceConsumptions);
+			consumptionsMap.put(activityIndex, resourceConsumptions);
 			
 		}
 		return consumptionsMap;
 	}
 
-	public static Map<INetworkVertex, List<List<Integer>>> parseNonRenewableResourceConsumptions(List<String> instanceLines) {
+	public static Map<Integer, List<List<Integer>>> parseNonRenewableResourceConsumptions(List<String> instanceLines) {
 		int renewableResourcesCount = getRenewableResourcesCount(instanceLines); // as offset
 		int nonRenewableResourcesCount = getNonRenewableResourcesCount(instanceLines);
 		List<List<List<Integer>>> consumptionsForAllResources = Lists.newArrayList();
@@ -105,7 +103,7 @@ public abstract class ActivityParser extends BaseParser {
 			consumptionsForAllResources.add(consumptionsForResource);
 		}
 		
-		Map<INetworkVertex, List<List<Integer>>> consumptionsMap = createConsumptionsMap(
+		Map<Integer, List<List<Integer>>> consumptionsMap = createConsumptionsMap(
 				consumptionsForAllResources,
 				renewableResourcesCount,
 				instanceLines);

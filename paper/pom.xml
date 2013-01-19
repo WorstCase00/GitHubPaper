@@ -9,10 +9,15 @@
 	<properties>
 		<slf4j.version>1.6.4</slf4j.version>
 		<logback.version>1.0.1</logback.version>
+		<powermock.version>1.5</powermock.version>
 	</properties>
 
 	<dependencies>
-
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>3.0</version>
+		</dependency>
 		<dependency>
 			<groupId>org.uncommons.watchmaker</groupId>
 			<artifactId>watchmaker-framework</artifactId>
@@ -30,7 +35,11 @@
 			<artifactId>commons-io</artifactId>
 			<version>2.4</version>
 		</dependency>
-
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-math3</artifactId>
+			<version>3.1</version>
+		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -58,7 +67,7 @@
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
-			<version>1.9.0</version>
+			<version>1.9.5</version>
 		</dependency>
 
 		<dependency>
@@ -80,9 +89,23 @@
 		</dependency>
 
 		<dependency>
-			<groupId>jgrapht</groupId>
+			<groupId>net.sf.jgrapht</groupId>
 			<artifactId>jgrapht</artifactId>
-			<version>0.7.3</version>
+			<version>0.8.3</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-module-junit4</artifactId>
+			<version>${powermock.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-api-mockito</artifactId>
+			<version>${powermock.version}</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
