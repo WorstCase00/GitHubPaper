@@ -28,8 +28,8 @@ public abstract class InstanceLoader {
 		ResourceParser.verifyNoMixedResources(instanceLines.get(0));
 		List<IRenewableResource> renewableResourceList = ResourceParser.parseRenewableResourcesList(instanceLines);
 		List<INonRenewableResource> nonRenewableResourceList = ResourceParser.parseNonRenewableResourceList(instanceLines);Map<Integer, List<Integer>> processingTimes = ActivityParser.parseProcessingTimes(instanceLines);
-		Map<Integer, List<List<Integer>>> renewableresourceConsumptionsMap = ActivityParser.parseRenewableResourceConsumptions(instanceLines);
 		Map<Integer, List<List<Integer>>> nonRenewableResourceConsumptionsMap = ActivityParser.parseNonRenewableResourceConsumptions(instanceLines);
+		Map<Integer, List<List<Integer>>> renewableresourceConsumptionsMap = ActivityParser.parseRenewableResourceConsumptions(instanceLines);
 		
 		IAonNetwork network = AonNetworkParser.parseProjectNetwork(instanceLines);
 		Map<IAonNetworkEdge, int[][]> timelagsMap = AonNetworkParser.parseTimeLags(instanceLines, processingTimes.size());

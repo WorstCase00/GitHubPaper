@@ -1,7 +1,6 @@
 package edu.bocmst.scheduling.mrcpspmax.instance.loader;
 
 import org.jgrapht.EdgeFactory;
-import org.jgrapht.graph.DefaultEdge;
 
 import edu.bocmst.scheduling.mrcpspmax.instance.IAonNetworkEdge;
 

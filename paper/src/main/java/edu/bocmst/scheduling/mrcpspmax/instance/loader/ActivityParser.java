@@ -55,24 +55,6 @@ public abstract class ActivityParser extends BaseParser {
 		return lines;
 	}
 
-	public static Map<Integer, List<List<Integer>>> parseRenewableResourceConsumptions(List<String> instanceLines) {
-		int renewableResourcesCount = getRenewableResourcesCount(instanceLines);
-		List<List<List<Integer>>> consumptionsForAllResources = Lists.newArrayList();
-		for(int resourceIndex = 0; resourceIndex < renewableResourcesCount; resourceIndex ++) {
-			List<String> activityBlockLines = getActivityBlockLines(instanceLines);
-			List<List<Integer>> consumptionsForResource =  parseModeWise(
-					activityBlockLines,
-					InstanceFileConstants.ActivityBlock.RENEWABLE_RESOURCE_START_INDEX + resourceIndex);
-			consumptionsForAllResources.add(consumptionsForResource);
-		}
-		
-		Map<Integer, List<List<Integer>>> consumptionsMap = createConsumptionsMap(
-				consumptionsForAllResources,
-				renewableResourcesCount,
-				instanceLines);
-		return consumptionsMap;
-	}
-
 	private static Map<Integer, List<List<Integer>>> createConsumptionsMap(
 			List<List<List<Integer>>> consumptionsForAllResources,
 			int renewableResourcesCount, 
@@ -91,9 +73,27 @@ public abstract class ActivityParser extends BaseParser {
 		return consumptionsMap;
 	}
 
+	public static Map<Integer, List<List<Integer>>> parseRenewableResourceConsumptions(List<String> instanceLines) {
+		int renewableResourcesCount = getRenewableResourcesCount(instanceLines);
+		List<List<List<Integer>>> consumptionsForAllResources = Lists.newArrayList();
+		for(int resourceIndex = 0; resourceIndex < renewableResourcesCount; resourceIndex ++) {
+			List<String> activityBlockLines = getActivityBlockLines(instanceLines);
+			List<List<Integer>> consumptionsForResource =  parseModeWise(
+					activityBlockLines,
+					InstanceFileConstants.ActivityBlock.RENEWABLE_RESOURCE_START_INDEX + resourceIndex);
+			consumptionsForAllResources.add(consumptionsForResource);
+		}
+		
+		Map<Integer, List<List<Integer>>> consumptionsMap = createConsumptionsMap(
+				consumptionsForAllResources,
+				renewableResourcesCount,
+				instanceLines);
+		return consumptionsMap;
+	}
+
 	public static Map<Integer, List<List<Integer>>> parseNonRenewableResourceConsumptions(List<String> instanceLines) {
-		int renewableResourcesCount = getRenewableResourcesCount(instanceLines); // as offset
 		int nonRenewableResourcesCount = getNonRenewableResourcesCount(instanceLines);
+		int renewableResourcesCount = getRenewableResourcesCount(instanceLines); // as offset
 		List<List<List<Integer>>> consumptionsForAllResources = Lists.newArrayList();
 		for(int resourceIndex = 0; resourceIndex < nonRenewableResourcesCount; resourceIndex ++) {
 			List<String> activityBlockLines = getActivityBlockLines(instanceLines);
@@ -105,7 +105,7 @@ public abstract class ActivityParser extends BaseParser {
 		
 		Map<Integer, List<List<Integer>>> consumptionsMap = createConsumptionsMap(
 				consumptionsForAllResources,
-				renewableResourcesCount,
+				nonRenewableResourcesCount,
 				instanceLines);
 		return consumptionsMap;
 	}

@@ -4,9 +4,9 @@ public interface IRcpspMaxInstance {
 
 	int getProcessingTime(int activity);
 
-	int[] getNonRenewablwResourceConsumption(int acitivity);
+	int[] getNonRenewableResourceConsumption(int acitivity);
 	
-	int[] getRenewablwResourceConsumption(int acitivity);
+	int[] getRenewableResourceConsumption(int acitivity);
 
 	int[][] getPathMatrix();
 

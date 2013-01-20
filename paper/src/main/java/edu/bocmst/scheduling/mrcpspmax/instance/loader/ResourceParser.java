@@ -14,14 +14,13 @@ import edu.bocmst.scheduling.mrcpspmax.instance.RenewableResource;
 public abstract class ResourceParser extends BaseParser {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ResourceParser.class);
-	private static final int MIXED_RENEWABLE_COUNT_INDEX = 3;
 	
 	private ResourceParser() {}
 
 	public static void verifyNoMixedResources(String string) {
 		int mixedResourcesCount = getIntegerParsedIndexWord(
 				string, 
-				MIXED_RENEWABLE_COUNT_INDEX);
+				InstanceFileConstants.Header.MIXED_RENEWABLE_COUNT_INDEX);
 		if(mixedResourcesCount != 0) {
 			throw new RuntimeException("mixed resources specified");
 		}

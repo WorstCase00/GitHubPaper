@@ -3,7 +3,8 @@ package edu.bocmst.scheduling.mrcpspmax.bmap.ga;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.commons.math3.genetics.TournamentSelection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.uncommons.maths.random.Probability;
 import org.uncommons.watchmaker.framework.CandidateFactory;
 import org.uncommons.watchmaker.framework.EvolutionEngine;
@@ -15,6 +16,7 @@ import org.uncommons.watchmaker.framework.SteadyStateEvolutionEngine;
 import org.uncommons.watchmaker.framework.TerminationCondition;
 import org.uncommons.watchmaker.framework.operators.EvolutionPipeline;
 import org.uncommons.watchmaker.framework.selection.StochasticUniversalSampling;
+import org.uncommons.watchmaker.framework.selection.TournamentSelection;
 
 import com.google.common.collect.Lists;
 
@@ -36,10 +38,11 @@ import edu.bocmst.scheduling.mrcpspmax.methaheuristics.EvolutionEngineConfigurat
 import edu.bocmst.scheduling.mrcpspmax.methaheuristics.EvolutionEngineType;
 import edu.bocmst.scheduling.mrcpspmax.methaheuristics.TerminationConditionConfiguration;
 import edu.bocmst.scheduling.mrcpspmax.methaheuristics.TerminationConditionCreator;
-import gov.sandia.cognition.learning.algorithm.genetic.selector.TournamentSelector;
 
 public abstract class GaBmapSolverFactory {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(GaBmapSolverFactory.class);
+	
 	private GaBmapSolverFactory() {}
 	
 	public static GaBmapSolver createInstance(
@@ -112,13 +115,14 @@ public abstract class GaBmapSolverFactory {
 	private static SelectionStrategy<? super IModeAssignment> createSelectionStrategy(
 			GaBmapSolverConfiguration solverConfiguration) {
 		BampSelectionType type = solverConfiguration.getSelectionType();
-		return new org.uncommons.watchmaker.framework.selection.TournamentSelection(new Probability(1.0));
-//		switch(type) {
-//		case Sampling: return new StochasticUniversalSampling();
-//		case SimilaritySampling: return new SimilaritySampling();
-//		case SimilarityTournament: return new SimilarityTournament();
-//		}
-//		throw new IllegalArgumentException();
+		LOGGER.info("selection type: {}", type.name());
+		switch(type) {
+		case Sampling: return new StochasticUniversalSampling();
+		case SimilaritySampling: return new SimilaritySampling();
+		case SimilarityTournament: return new SimilarityTournament();
+		case Tournament: return new TournamentSelection(new Probability(1.0));
+		}
+		throw new IllegalArgumentException();
 	}
 
 	private static EvolutionaryOperator<IModeAssignment> createEvolutionScheme(

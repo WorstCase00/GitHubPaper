@@ -1,4 +1,4 @@
-package edu.bocmst.scheduling.benchmarking;
+package edu.bocmst.scheduling.benchmarking.resultscript;
 
 public class FileNameConstants {
 	public static final String LBS_100 = "src/main/resources/lbs100.txt";

@@ -1,4 +1,4 @@
-package edu.bocmst.scheduling.benchmarking;
+package edu.bocmst.scheduling.benchmarking.resultscript;
 
 import java.io.FileNotFoundException;
 import java.util.PriorityQueue;

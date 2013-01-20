@@ -60,7 +60,7 @@ public class ModeAssignment implements IModeAssignment {
 
 	@Override
 	public int[] getNonRenewableResourceConsumption(int acitivity) {
-		return instance.getNonRenewablwResourceConsumption(acitivity);
+		return instance.getNonRenewableResourceConsumption(acitivity);
 	}
 
 	public static IModeAssignment createInstance(

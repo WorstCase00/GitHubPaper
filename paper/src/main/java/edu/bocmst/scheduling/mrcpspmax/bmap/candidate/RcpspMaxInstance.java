@@ -44,12 +44,12 @@ public class RcpspMaxInstance implements IRcpspMaxInstance {
 	}
 
 	@Override
-	public int[] getNonRenewablwResourceConsumption(int acitivity) {
+	public int[] getNonRenewableResourceConsumption(int acitivity) {
 		return nonRenewableResourceConsumptions.get(acitivity);
 	}
 	
 	@Override
-	public int[] getRenewablwResourceConsumption(int acitivity) {
+	public int[] getRenewableResourceConsumption(int acitivity) {
 		return renewableResourceConsumptions.get(acitivity);
 	}
 
@@ -81,7 +81,8 @@ public class RcpspMaxInstance implements IRcpspMaxInstance {
 		return procTimes;
 	}
 
-	private static List<int[]> getRenewConsumptions(int[] modes,
+	private static List<int[]> getRenewConsumptions(
+			int[] modes,
 			IMrcpspMaxInstance instance) {
 		List<int[]> consumptions = Lists.newArrayListWithCapacity(modes.length);
 		for(int activity = 0; activity < modes.length; activity ++) {

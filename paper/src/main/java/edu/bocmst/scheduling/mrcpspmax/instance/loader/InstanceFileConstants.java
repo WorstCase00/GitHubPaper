@@ -13,9 +13,10 @@ public abstract class InstanceFileConstants {
 	
 	public static class Header {
 
-		public static final int RENEWABLE_COUNT_IN_HEADER_INDEX = 1;
 		public static final int ACTIVITY_COUNT_IN_HEADER_INDEX = 0;
+		public static final int RENEWABLE_COUNT_IN_HEADER_INDEX = 1;
 		public static final int NON_RENEWABLE_COUNT_IN_HEADER_INDEX = 2;
+		public static final int MIXED_RENEWABLE_COUNT_INDEX = 3;
 	}
 	
 	public static class EdgeLine {

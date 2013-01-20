@@ -3,7 +3,6 @@ package edu.bocmst.scheduling.mrcpspmax.instance;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.collections.SetUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.GraphPath;

@@ -1,4 +1,4 @@
-package edu.bocmst.scheduling.benchmarking;
+package edu.bocmst.scheduling.benchmarking.resultscript;
 
 class DeviationEntry {
 	private static final String TEMPLATE = "dev for instance %d: %f (ballestin: %d, own: %d)";

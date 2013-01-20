@@ -1,37 +1,37 @@
-package edu.bocmst.scheduling.benchmarking;
+package edu.bocmst.scheduling.benchmarking.resultscript;
 
-import gov.sandia.cognition.statistics.method.ChiSquareConfidence;
-import gov.sandia.cognition.statistics.method.MannWhitneyUConfidence;
 import gov.sandia.cognition.statistics.method.StudentTConfidence;
-import gov.sandia.cognition.statistics.method.WilcoxonSignedRankConfidence;
-import gov.sandia.cognition.statistics.method.WilcoxonSignedRankConfidence.Statistic;
 
 import java.util.Collection;
 import java.util.Iterator;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
 
 public class SignificanceTests {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(SignificanceTests.class);
 	private static final double EPS = 0.000001;
 
 	public static void evaluateSignificance(
-			double[] lbs, 
-			double[] results,
-			double[] ballestin) {
+			double[] lowerBounds, 
+			double[] results1,
+			double[] results2) {
 		StudentTConfidence test = new StudentTConfidence();
 //		ChiSquareConfidence test = new ChiSquareConfidence();
 //		MannWhitneyUConfidence test = new MannWhitneyUConfidence();
 //		WilcoxonSignedRankConfidence test = new WilcoxonSignedRankConfidence();
-		Collection<? extends Number> absDeviations1 = getAbsoluteDeviations(ballestin, lbs);
-		Collection<? extends Number> absDeviations2 = getAbsoluteDeviations(results, lbs);
+		Collection<? extends Number> absDeviations1 = getAbsoluteDeviations(results2, lowerBounds);
+		Collection<? extends Number> absDeviations2 = getAbsoluteDeviations(results1, lowerBounds);
 		gov.sandia.cognition.statistics.method.StudentTConfidence.Statistic result = test.evaluateNullHypothesis(absDeviations1, absDeviations2);
-		System.out.println("P0 absDevs: " + result.getNullHypothesisProbability());
+		LOGGER.info("P0 absDevs: " + result.getNullHypothesisProbability());
 		
-		Collection<? extends Number> relDeviations1 = getRelativeDeviations(absDeviations1, lbs);
-		Collection<? extends Number> relDeviations2 = getRelativeDeviations(absDeviations2, lbs);
+		Collection<? extends Number> relDeviations1 = getRelativeDeviations(absDeviations1, lowerBounds);
+		Collection<? extends Number> relDeviations2 = getRelativeDeviations(absDeviations2, lowerBounds);
 		result = test.evaluateNullHypothesis(relDeviations1, relDeviations2);
-		System.out.println("P0 relDevs: " + result.getNullHypothesisProbability());
+		LOGGER.info("P0 relDevs: " + result.getNullHypothesisProbability());
 	}
 
 	private static Collection<? extends Number> getRelativeDeviations(
