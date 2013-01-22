@@ -9,5 +9,9 @@ public interface IAonNetwork {
 	IAonNetworkEdge getEdge(int source, int target);
 
 	Set<Set<IAonNetworkEdge>> getCycleStructures();
+	
+	Set<Integer> getSuccessors(int activity);
+	
+	Set<Integer> getPredecessors(int activity);
 
 }

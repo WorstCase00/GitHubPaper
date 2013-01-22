@@ -16,4 +16,6 @@ public interface IModeAssignment {
 
 	int[] getResourceRemainingVector();
 
+	IRcpspMaxInstance getInstance();
+
 }

@@ -31,7 +31,7 @@ public abstract class AonNetworkParser extends BaseParser {
 		addVertices(network, instanceLines);
 		addEdges(network, instanceLines);
 		
-		IAonNetwork aonNetwork = new AonNetworkJGraphTImpl(network);
+		IAonNetwork aonNetwork = AonNetworkJGraphTImpl.createInstance(network);
 		return aonNetwork;
 	}
 

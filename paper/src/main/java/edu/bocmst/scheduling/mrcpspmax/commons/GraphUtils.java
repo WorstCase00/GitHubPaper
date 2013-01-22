@@ -1,12 +1,22 @@
 package edu.bocmst.scheduling.mrcpspmax.commons;
 
+import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang.ArrayUtils;
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.GraphPath;
+import org.jgrapht.alg.KShortestPaths;
+import org.jgrapht.alg.StrongConnectivityInspector;
+import org.jgrapht.graph.DirectedSubgraph;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
+import edu.bocmst.scheduling.mrcpspmax.bmap.candidate.IRcpspMaxInstance;
 import edu.bocmst.scheduling.mrcpspmax.instance.IAonNetworkEdge;
 import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
 
@@ -94,5 +104,95 @@ public abstract class GraphUtils {
 			}
 		}
 		return matrix;
+	}
+	
+	public static Set<Set<IAonNetworkEdge>> calculateCycleStructures(
+			DirectedGraph<Integer, IAonNetworkEdge> network) {
+		Set<Set<IAonNetworkEdge>> structures = Sets.newHashSet();
+		StrongConnectivityInspector<Integer, IAonNetworkEdge> inspector = 
+			new StrongConnectivityInspector<Integer, IAonNetworkEdge>(network);
+		List<DirectedSubgraph<Integer, IAonNetworkEdge>> connectedComponents = inspector.stronglyConnectedSubgraphs();
+		for(DirectedSubgraph<Integer, IAonNetworkEdge> connectedCmponent : connectedComponents) {
+			addCyclesInConnectedComponent(structures, connectedCmponent);
+		}
+		return structures;
+	}
+
+	private static void addCyclesInConnectedComponent(
+			Set<Set<IAonNetworkEdge>> structures,
+			DirectedSubgraph<Integer, 
+			IAonNetworkEdge> connectedCmponent) {
+		for(Integer startVertex : connectedCmponent.vertexSet()) {
+			KShortestPaths<Integer, IAonNetworkEdge> spp = new KShortestPaths<Integer, IAonNetworkEdge>(
+					connectedCmponent, 
+					startVertex, 
+					Integer.MAX_VALUE, 
+					connectedCmponent.vertexSet().size() + 1);
+			Set<IAonNetworkEdge> incomingEdges = connectedCmponent.incomingEdgesOf(startVertex);
+			for(IAonNetworkEdge incomingEdge : incomingEdges) {
+				List<GraphPath<Integer, IAonNetworkEdge>> pathsForCycles = spp.getPaths(incomingEdge.getSource());
+				if(pathsForCycles == null) {
+					continue;
+				}
+				for(GraphPath<Integer, IAonNetworkEdge> pathForCycle : pathsForCycles) {
+					Set<IAonNetworkEdge> edgeSet = Sets.newHashSet(pathForCycle.getEdgeList());
+					edgeSet.add(incomingEdge);
+					LOGGER.debug("found path: ", ArrayUtils.toString(edgeSet.toArray()));
+					if(structures.contains(edgeSet)) {
+						LOGGER.debug("cycle structure already found");
+					} else {
+						structures.add(edgeSet);
+					}
+				}
+			}
+		}
+	}
+
+	public static ImmutableList<Set<Integer>> getSuccessors(
+			DirectedGraph<Integer, IAonNetworkEdge> graph) {
+		List<Set<Integer>> list = initEmptySets(graph.vertexSet().size());
+		for(IAonNetworkEdge edge : graph.edgeSet()) {
+			int successor = edge.getTarget();
+			int activity = edge.getSource();
+			list.get(activity).add(successor);
+		}
+		ImmutableList<Set<Integer>> immutableList = ImmutableList.copyOf(list);
+		return immutableList;
+	}
+
+	private static List<Set<Integer>> initEmptySets(int n) {
+		List<Set<Integer>> list = Lists.newArrayList();
+		for(int activity = 0; activity < n; activity ++) {
+			Set<Integer> emptySet = Sets.newHashSet();
+			list.add(emptySet);
+		}
+		return list;
+	}
+
+	public static ImmutableList<Set<Integer>> getPredecessors(
+			DirectedGraph<Integer, IAonNetworkEdge> graph) {
+		List<Set<Integer>> list = initEmptySets(graph.vertexSet().size());
+		for(IAonNetworkEdge edge : graph.edgeSet()) {
+			int predecessor = edge.getSource();
+			int activity = edge.getTarget();
+			list.get(activity).add(predecessor);
+		}
+		ImmutableList<Set<Integer>> immutableList = ImmutableList.copyOf(list);
+		return immutableList;
+	}
+
+	public static List<Set<Integer>> getPositivePredecessors(
+			int[] modeArray,
+			IRcpspMaxInstance instance) {
+		List<Set<Integer>> predecessors = initEmptySets(modeArray.length);
+		for(IAonNetworkEdge edge : instance.getAonNetwork().getEdges()) {
+			int source = edge.getSource();
+			int target = edge.getTarget();
+			int weight = instance.getAdjacencyMatrix()[source][target];
+			if(weight > 0) {
+				predecessors.get(target).add(source);
+			}
+		}
+		return predecessors;
 	}
 }

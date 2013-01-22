@@ -33,4 +33,6 @@ public interface IMrcpspMaxInstance {
 	int[] getNonRenewableResourceConsumption(int activity, int mode);
 
 	int[] getRenewableResourceConsumption(int activity, int mode);
+
+	IAonNetwork getAonNetwork();
 }

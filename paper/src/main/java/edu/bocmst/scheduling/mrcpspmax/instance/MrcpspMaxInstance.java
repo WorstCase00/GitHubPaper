@@ -197,4 +197,9 @@ public class MrcpspMaxInstance implements IMrcpspMaxInstance {
 	public int[] getRenewableResourceConsumption(int activity, int mode) {
 		return renewableResourceConsumptionsList.get(activity)[mode-1];
 	}
+
+	@Override
+	public IAonNetwork getAonNetwork() {
+		return this.aonNetwork;
+	}
 }
