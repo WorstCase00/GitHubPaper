@@ -24,15 +24,15 @@ public class ResourceProfileListImpl implements IResourceProfile {
 	}
 
 	@Override
-	public int getEarliestPossibleStartInTimeWindow(
+	public int getEarliestPossibleStartInTimeWindowOrNegativeMissingTimeSpan(
 			int activity,
 			StartTimeWindow startTimeWindow) {
 		int lowerBound = startTimeWindow.getLowerBound();
 		int duration = instance.getProcessingTime(activity);
-		int[] resourceDemands = instance.getNonRenewableResourceConsumption(activity);
+		int[] resourceDemands = instance.getRenewableResourceConsumption(activity);
 		Integer result = wrapped.findEarliestResourceFeasibleStart(lowerBound, duration, resourceDemands);
-		if((result == null) || (result > startTimeWindow.getUpperBound())) {
-			return -1;
+		if(result > startTimeWindow.getUpperBound()) {
+			return startTimeWindow.getUpperBound() - result;
 		}
 		return result.intValue();
 	}
@@ -40,7 +40,7 @@ public class ResourceProfileListImpl implements IResourceProfile {
 	@Override
 	public void schedule(int activity, int startTime) {
 		int duration = instance.getProcessingTime(activity);
-		int[] resourceDemands = instance.getNonRenewableResourceConsumption(activity);
+		int[] resourceDemands = instance.getRenewableResourceConsumption(activity);
 		wrapped.bindResources(startTime, duration, resourceDemands);
 		
 	}
@@ -54,7 +54,7 @@ public class ResourceProfileListImpl implements IResourceProfile {
 
 	private void unschedule(int activity, int startTime) {
 		int duration = instance.getProcessingTime(activity);
-		int[] resourceDemands = instance.getNonRenewableResourceConsumption(activity);
+		int[] resourceDemands = instance.getRenewableResourceConsumption(activity);
 		wrapped.freeResources(startTime, duration, resourceDemands);
 	}
 

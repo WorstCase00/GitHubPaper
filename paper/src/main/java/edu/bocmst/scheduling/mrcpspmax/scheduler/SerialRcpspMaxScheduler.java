@@ -1,6 +1,10 @@
 package edu.bocmst.scheduling.mrcpspmax.scheduler;
 
+import java.util.Arrays;
 import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Sets;
 
@@ -13,40 +17,62 @@ import edu.bocmst.scheduling.mrcpspmax.candidate.Schedule;
 
 public class SerialRcpspMaxScheduler implements IRcpspMaxScheduler {
 
+	private static final Logger LOGGER = LoggerFactory
+		.getLogger(SerialRcpspMaxScheduler.class);
+	
+	private static final int UNSCHEDULE_LIMIT = 100;
+	private int unscheduleCount = 0;
+	private final int unscheduleLimit = UNSCHEDULE_LIMIT; // might be parameterized
+
 	@Override
 	public Schedule createSchedule(IModeAssignment candidate, IPriorityRule priorityRule) {
-		
+		LOGGER.debug("create schedule for candidate {} with priority rule {}", candidate, priorityRule);
 		Set<Integer> scheduledActivities = Sets.newHashSet();
 		IRcpspMaxInstance instance = candidate.getInstance();
 		int activityCount = instance.getActivityCount();
 		int[] startTimes = new int[activityCount];
 		IResourceProfile resourceProfile = new ResourceProfileListImpl(instance);
 		CausalEligibilityTracker causalConstraintsTracker = CausalEligibilityTracker.createInstance(candidate);
-		TemporalConstraintsTracker temporalConstraintsTracker = new TemporalConstraintsTracker(instance);
+		TemporalConstraintsTracker temporalConstraintsTracker = TemporalConstraintsTracker.createInstance(candidate);
 		
 		while(scheduledActivities.size() != activityCount) {
 			Set<Integer> eligibleActivities = causalConstraintsTracker.getEligibleActivities();
+			LOGGER.debug("eligibile activities in this iteration: {}", Arrays.toString(eligibleActivities.toArray()));
 			int activity = priorityRule.getNextActivity(eligibleActivities);
+			LOGGER.debug("next activity to be schedule: {}", activity);
 			StartTimeWindow startTimeWindow = temporalConstraintsTracker.getStartTimeWindow(activity);
-			int earliestPossibleStart = resourceProfile.getEarliestPossibleStartInTimeWindow(activity, startTimeWindow);
-			if(earliestPossibleStart < 0) {
-				int timeSpan = -earliestPossibleStart;
-				Set<Integer> unscheduleActivities = temporalConstraintsTracker.calculateUnscheduleSet(activity, timeSpan);
-				if(unscheduleActivities.contains(0)) {
+			LOGGER.debug("temporally valid start time window: {}", startTimeWindow);
+			int earliestStartOrMissingTime = resourceProfile.getEarliestPossibleStartInTimeWindowOrNegativeMissingTimeSpan(activity, startTimeWindow);
+			if(earliestStartOrMissingTime < 0) {
+				LOGGER.debug("unscheduling procedure must be called because of activity: {} with missing time {}", activity, earliestStartOrMissingTime);
+				unscheduleCount ++;
+				if(unscheduleCount > unscheduleLimit) {
+					LOGGER.debug("unschedule limit has been reached - procedure is cancelled");
 					return null;
 				}
-				
-				temporalConstraintsTracker.unschedule(unscheduleActivities);
+				int timeSpan = -earliestStartOrMissingTime;
+				LOGGER.debug("temporal bounds must be adjusted by timespan: {}", timeSpan);
+				Set<Integer> unscheduleActivities = temporalConstraintsTracker.unschedule(activity, timeSpan, startTimes);
+				LOGGER.debug("activities determined for unscheduling: {}", Arrays.toString(unscheduleActivities.toArray()));
+				if(unscheduleActivities.contains(0)) {
+					LOGGER.debug("procedure cancelled because activity 0 contained in unscheduling");
+					return null;
+				}
+				LOGGER.debug("free resources for activities: {}", Arrays.toString(unscheduleActivities.toArray()));
 				resourceProfile.unschedule(unscheduleActivities, startTimes);
+				LOGGER.debug("causal constraints are adapted");
 				causalConstraintsTracker.unschedule(unscheduleActivities);
+				LOGGER.debug("invalidate start times for unscheduled activities");
 				for(int unscheduleActivity : unscheduleActivities) {
 					startTimes[unscheduleActivity] = -1;
 				}
 			} else {
-				startTimes[activity] = earliestPossibleStart;
-				temporalConstraintsTracker.schedule(activity, earliestPossibleStart);
-				resourceProfile.schedule(activity, earliestPossibleStart);
+				LOGGER.debug("activity {} is schedule at time slot {}", activity, earliestStartOrMissingTime);
+				startTimes[activity] = earliestStartOrMissingTime;
+				temporalConstraintsTracker.schedule(activity, earliestStartOrMissingTime);
+				resourceProfile.schedule(activity, earliestStartOrMissingTime);
 				causalConstraintsTracker.schedule(activity);
+				scheduledActivities.add(activity);
 			}
 		}
 		Schedule schedule = new Schedule(startTimes, resourceProfile);

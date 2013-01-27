@@ -28,4 +28,12 @@ public abstract class IntArrays {
 			throw new IllegalArgumentException("different array lengths");
 		}
 	}
+
+	public static int[] getColumn(int index, int[][] matrix) {
+		int[] column = new int[matrix.length];
+		for (int i = 0; i < matrix.length; i++) {
+			column[i] = matrix[i][index];
+		}
+		return column;
+	}
 }

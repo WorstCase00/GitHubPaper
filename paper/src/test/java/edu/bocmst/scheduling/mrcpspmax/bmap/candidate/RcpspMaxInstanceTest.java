@@ -10,7 +10,6 @@ public class RcpspMaxInstanceTest {
 
 	private static final int[] PROC_TIMES = new int[] {0,6,1,2,1,2,4,0};
 	private static final int[][] RENEW_RESOURCES = new int[][] {{0},{2},{2},{1},{1},{2},{1},{0}};
-	private static final int[][] NON_RENEW_RESOURCES = new int[][] {{0},{1},{1},{1},{1},{1},{2},{0}};
 	
 	@Test
 	public void testInstanceCreation() {
@@ -21,7 +20,6 @@ public class RcpspMaxInstanceTest {
 		for(int activity = 0; activity < modes.length; activity ++) {
 			assertEquals(PROC_TIMES[activity], result.getProcessingTime(activity));
 			assertArrayEquals(RENEW_RESOURCES[activity], result.getRenewableResourceConsumption(activity));
-			assertArrayEquals(NON_RENEW_RESOURCES[activity], result.getNonRenewableResourceConsumption(activity));
 		}
 	}
 }

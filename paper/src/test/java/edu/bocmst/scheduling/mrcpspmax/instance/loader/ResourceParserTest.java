@@ -17,7 +17,7 @@ public class ResourceParserTest extends BaseInstanceFileTest {
 	private static final int NON_RENEWABLE_COUNT = 1;
 	private static final int NON_RENEWABLE_RESOURCE_LIMIT = 10;
 	private static final int RENEWABLE_COUNT = 1;
-	private static final int RENEWABLE_RESOURCE_LIMIT = 4;
+	private static final int RENEWABLE_RESOURCE_LIMIT = 2;
 	
 	@Test
 	public void testNonRenewableResourcesExampleFromFile() throws FileNotFoundException, IOException {

@@ -9,6 +9,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
@@ -16,8 +17,12 @@ import edu.bocmst.scheduling.mrcpspmax.bmap.BmapSolverConfiguration;
 import edu.bocmst.scheduling.mrcpspmax.bmap.BmapSolverFactory;
 import edu.bocmst.scheduling.mrcpspmax.bmap.IBmapSolver;
 import edu.bocmst.scheduling.mrcpspmax.bmap.candidate.IModeAssignment;
+import edu.bocmst.scheduling.mrcpspmax.candidate.ActivityListPriorityRule;
+import edu.bocmst.scheduling.mrcpspmax.candidate.IPriorityRule;
+import edu.bocmst.scheduling.mrcpspmax.commons.RandomUtils;
 import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
 import edu.bocmst.scheduling.mrcpspmax.instance.loader.InstanceLoader;
+import edu.bocmst.scheduling.mrcpspmax.scheduler.SerialRcpspMaxScheduler;
 
 public class FirstBenchmark implements IBmapBenchmark {
 
@@ -38,6 +43,11 @@ public class FirstBenchmark implements IBmapBenchmark {
 				Set<Integer> modesHashes = Sets.newHashSet();
 				for(IModeAssignment assignment : modeAssignments) {
 					modesHashes.add(Arrays.hashCode(assignment.getModeArray()));
+					SerialRcpspMaxScheduler scheduler = new SerialRcpspMaxScheduler();
+					List<Integer> randomList = RandomUtils.getRandomActivityPermutation(instance);
+					ImmutableList<Integer> activityList = ImmutableList.copyOf(randomList);
+					IPriorityRule priorityRule = new ActivityListPriorityRule(activityList);
+					LOGGER.info("schedule: {}", scheduler.createSchedule(assignment, priorityRule));
 				}
 				LOGGER.info("# different assignments: {}", modesHashes.size());
 			}

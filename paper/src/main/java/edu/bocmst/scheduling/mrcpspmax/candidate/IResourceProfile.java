@@ -6,7 +6,7 @@ import edu.bocmst.scheduling.mrcpspmax.scheduler.StartTimeWindow;
 
 public interface IResourceProfile {
 
-	int getEarliestPossibleStartInTimeWindow(
+	int getEarliestPossibleStartInTimeWindowOrNegativeMissingTimeSpan(
 			int activity,
 			StartTimeWindow startTimeWindow);
 

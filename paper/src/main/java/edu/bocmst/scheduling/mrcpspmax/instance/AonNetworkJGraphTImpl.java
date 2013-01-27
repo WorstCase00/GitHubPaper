@@ -73,4 +73,11 @@ public class AonNetworkJGraphTImpl implements IAonNetwork {
 		IAonNetwork instance = new AonNetworkJGraphTImpl(graph, cycles, succs, preds);
 		return instance;
 	}
+
+
+
+	@Override
+	public Set<Integer> getVertexSet() {
+		return network.vertexSet();
+	}
 }

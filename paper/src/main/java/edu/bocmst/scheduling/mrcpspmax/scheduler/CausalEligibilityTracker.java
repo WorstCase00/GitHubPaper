@@ -19,17 +19,22 @@ class CausalEligibilityTracker {
 	
 	private final List<Set<Integer>> openCausalPredecessors;
 	private final List<Set<Integer>> causalSuccessors;
+	private final Set<Integer> scheduled;
 	
 	protected CausalEligibilityTracker(
 			List<Set<Integer>> openCausalPredecessors,
 			List<Set<Integer>> causalSuccessors) {
 		this.openCausalPredecessors = openCausalPredecessors;
 		this.causalSuccessors = causalSuccessors;
+		scheduled = Sets.newHashSet();
 	}
 
 	public Set<Integer> getEligibleActivities() {
 		Set<Integer> eligible = Sets.newHashSet();
 		for(int activity = 0; activity < openCausalPredecessors.size(); activity ++) {
+			if(scheduled.contains(activity)) {
+				continue;
+			}
 			if(openCausalPredecessors.get(activity).size() == 0) {
 				LOGGER.debug("found activity {} to be eligible", activity);
 				eligible.add(activity);
@@ -50,6 +55,7 @@ class CausalEligibilityTracker {
 			Set<Integer> open = openCausalPredecessors.get(successor.intValue());
 			open.add(activity);
 		}
+		scheduled.remove(activity);
 	}
 
 	public void schedule(int activity) {
@@ -58,23 +64,16 @@ class CausalEligibilityTracker {
 			Set<Integer> open = openCausalPredecessors.get(successor.intValue());
 			open.remove(activity);
 		}
+		scheduled.add(activity);
 	}
 	
 	public static CausalEligibilityTracker createInstance(IModeAssignment candidate) {
 		int[] modes = candidate.getModeArray();
 		IRcpspMaxInstance rcpspMaxInstance = candidate.getInstance();
-		List<Set<Integer>> causalSuccs = GraphUtils.getPositivePredecessors(modes, rcpspMaxInstance);
-		List<Set<Integer>> open = deepCopy(causalSuccs);
-		CausalEligibilityTracker instance = new CausalEligibilityTracker(open, causalSuccs);
+		List<Set<Integer>> openCausalPredecessors = GraphUtils.getPositivePredecessors(modes, rcpspMaxInstance);
+		List<Set<Integer>> causalSuccs = GraphUtils.getPositiveSuccessors(modes, rcpspMaxInstance);
+		CausalEligibilityTracker instance = new CausalEligibilityTracker(openCausalPredecessors, causalSuccs);
 		return instance;
-	}
-
-	private static List<Set<Integer>> deepCopy(List<Set<Integer>> list) {
-		List<Set<Integer>> copy = Lists.newArrayListWithCapacity(list.size());
-		for(Set<Integer> activities : list) {
-			copy.add(Sets.newHashSet(activities));
-		}
-		return copy;
 	}
 
 }

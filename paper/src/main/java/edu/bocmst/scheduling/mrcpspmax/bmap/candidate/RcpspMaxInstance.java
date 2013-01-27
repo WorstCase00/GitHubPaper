@@ -53,11 +53,6 @@ public class RcpspMaxInstance implements IRcpspMaxInstance {
 	}
 
 	@Override
-	public int[] getNonRenewableResourceConsumption(int acitivity) {
-		return nonRenewableResourceConsumptions.get(acitivity);
-	}
-	
-	@Override
 	public int[] getRenewableResourceConsumption(int acitivity) {
 		return renewableResourceConsumptions.get(acitivity);
 	}

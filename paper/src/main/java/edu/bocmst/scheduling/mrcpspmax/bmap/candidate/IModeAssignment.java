@@ -12,8 +12,6 @@ public interface IModeAssignment {
 	
 	int getProcessingTime(int activity);
 	
-	int[] getNonRenewableResourceConsumption(int acitivity);
-
 	int[] getResourceRemainingVector();
 
 	IRcpspMaxInstance getInstance();

@@ -14,4 +14,6 @@ public interface IAonNetwork {
 	
 	Set<Integer> getPredecessors(int activity);
 
+	Set<Integer> getVertexSet();
+
 }

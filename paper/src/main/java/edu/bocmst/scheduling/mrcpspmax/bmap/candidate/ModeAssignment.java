@@ -59,11 +59,6 @@ public class ModeAssignment implements IModeAssignment {
 	}
 
 	@Override
-	public int[] getNonRenewableResourceConsumption(int acitivity) {
-		return instance.getNonRenewableResourceConsumption(acitivity);
-	}
-
-	@Override
 	public IRcpspMaxInstance getInstance() {
 		return instance;
 	}

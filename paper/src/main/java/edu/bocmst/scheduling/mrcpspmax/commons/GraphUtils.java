@@ -1,5 +1,6 @@
 package edu.bocmst.scheduling.mrcpspmax.commons;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -23,7 +24,7 @@ import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
 public abstract class GraphUtils {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(GraphUtils.class);
-	static final int NO_EDGE = Integer.MIN_VALUE;
+	public static final int NO_EDGE = Integer.MIN_VALUE;
 	
 	private GraphUtils() {}
 
@@ -119,7 +120,7 @@ public abstract class GraphUtils {
 	}
 
 	private static void addCyclesInConnectedComponent(
-			Set<Set<IAonNetworkEdge>> structures,
+			Set<Set<IAonNetworkEdge>> cycleStructures,
 			DirectedSubgraph<Integer, 
 			IAonNetworkEdge> connectedCmponent) {
 		for(Integer startVertex : connectedCmponent.vertexSet()) {
@@ -137,11 +138,12 @@ public abstract class GraphUtils {
 				for(GraphPath<Integer, IAonNetworkEdge> pathForCycle : pathsForCycles) {
 					Set<IAonNetworkEdge> edgeSet = Sets.newHashSet(pathForCycle.getEdgeList());
 					edgeSet.add(incomingEdge);
-					LOGGER.debug("found path: ", ArrayUtils.toString(edgeSet.toArray()));
-					if(structures.contains(edgeSet)) {
+					LOGGER.debug("found path: {}", Arrays.toString(edgeSet.toArray()));
+					if(cycleStructures.contains(edgeSet)) {
 						LOGGER.debug("cycle structure already found");
 					} else {
-						structures.add(edgeSet);
+						LOGGER.debug("add cycle structure: {}", Arrays.toString(edgeSet.toArray()));
+						cycleStructures.add(edgeSet);
 					}
 				}
 			}
@@ -158,15 +160,6 @@ public abstract class GraphUtils {
 		}
 		ImmutableList<Set<Integer>> immutableList = ImmutableList.copyOf(list);
 		return immutableList;
-	}
-
-	private static List<Set<Integer>> initEmptySets(int n) {
-		List<Set<Integer>> list = Lists.newArrayList();
-		for(int activity = 0; activity < n; activity ++) {
-			Set<Integer> emptySet = Sets.newHashSet();
-			list.add(emptySet);
-		}
-		return list;
 	}
 
 	public static ImmutableList<Set<Integer>> getPredecessors(
@@ -189,10 +182,34 @@ public abstract class GraphUtils {
 			int source = edge.getSource();
 			int target = edge.getTarget();
 			int weight = instance.getAdjacencyMatrix()[source][target];
-			if(weight > 0) {
+			if(weight >= 0) {
 				predecessors.get(target).add(source);
 			}
 		}
 		return predecessors;
+	}
+
+	private static List<Set<Integer>> initEmptySets(int n) {
+		List<Set<Integer>> list = Lists.newArrayList();
+		for(int activity = 0; activity < n; activity ++) {
+			Set<Integer> emptySet = Sets.newHashSet();
+			list.add(emptySet);
+		}
+		return list;
+	}
+
+	public static List<Set<Integer>> getPositiveSuccessors(
+		int[] modeArray,
+		IRcpspMaxInstance instance) {
+	List<Set<Integer>> successors = initEmptySets(modeArray.length);
+	for(IAonNetworkEdge edge : instance.getAonNetwork().getEdges()) {
+		int source = edge.getSource();
+		int target = edge.getTarget();
+		int weight = instance.getAdjacencyMatrix()[source][target];
+		if(weight >= 0) {
+			successors.get(source).add(target);
+		}
+	}
+	return successors;
 	}
 }

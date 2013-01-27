@@ -348,8 +348,7 @@ class LegacyResourceProfileImpl {
 				}
 			}
 		}
-		LOGGER.error("Time Window Error");
-		return null;
+		throw new RuntimeException("Time Window Error");
 	}
 	
 	public String toString() {
