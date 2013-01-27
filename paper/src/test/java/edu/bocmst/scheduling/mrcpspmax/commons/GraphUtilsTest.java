@@ -1,16 +1,16 @@
 package edu.bocmst.scheduling.mrcpspmax.commons;
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.io.IOException;
 import java.util.Set;
 
-import static org.junit.Assert.*;
 import org.junit.Test;
 
 import edu.bocmst.scheduling.mrcpspmax.TestConstants;
 import edu.bocmst.scheduling.mrcpspmax.instance.IAonNetworkEdge;
-import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
 import edu.bocmst.scheduling.mrcpspmax.instance.loader.AonNetworkEdge;
-import edu.bocmst.scheduling.mrcpspmax.instance.loader.InstanceLoader;
 
 public class GraphUtilsTest {
 

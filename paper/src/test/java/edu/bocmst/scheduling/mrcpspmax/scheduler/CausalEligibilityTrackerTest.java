@@ -8,6 +8,5 @@ public class CausalEligibilityTrackerTest {
 	@Test
 	public void testInitializationOnlyZeroEligible() {
 		
-		CausalEligibilityTracker testee;
 	}
 }

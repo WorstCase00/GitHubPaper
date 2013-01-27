@@ -13,7 +13,6 @@ import edu.bocmst.scheduling.mrcpspmax.instance.IRenewableResource;
 public class RcpspMaxInstance implements IRcpspMaxInstance {
 
 	private final List<Integer> processingTimes;
-	private final List<int[]> nonRenewableResourceConsumptions;
 	private final List<int[]> renewableResourceConsumptions;
 	private final int[][] adjacencyMatrix;
 	private final int[][] pathMatrix;
@@ -22,14 +21,12 @@ public class RcpspMaxInstance implements IRcpspMaxInstance {
 
 	public RcpspMaxInstance(
 			List<Integer> processingTimes,
-			List<int[]> nonRenewableResourceConsumptions,
 			List<int[]> renewableResourceConsumptions, 
 			int[][] adjacencyMatrix,
 			int[][] pathMatrix, 
 			ImmutableList<IRenewableResource> resources, 
 			IAonNetwork aonNetwork) {
 		this.processingTimes = processingTimes;
-		this.nonRenewableResourceConsumptions = nonRenewableResourceConsumptions;
 		this.renewableResourceConsumptions = renewableResourceConsumptions;
 		this.adjacencyMatrix = adjacencyMatrix;
 		this.pathMatrix = pathMatrix;
@@ -62,14 +59,12 @@ public class RcpspMaxInstance implements IRcpspMaxInstance {
 			IMrcpspMaxInstance instance) {
 		int[][] adjMatrix = GraphUtils.getAdjacencyMatrix(modes, instance);
 		int[][] pathMatrix = GraphUtils.floydWarshallLongestPathWithoutPositiveCycleDetection(adjMatrix);
-		List<int[]> nonRenewConsumptions = getNonRenewConsumptions(modes, instance);
 		List<int[]> renewConsumptions = getRenewConsumptions(modes, instance);
 		List<Integer> processingTimes = getProcessingTimes(modes, instance);
 		ImmutableList<IRenewableResource> renewableResources = instance.getRenewableResourceList();
 		IAonNetwork aonNetwork = instance.getAonNetwork();
 		IRcpspMaxInstance rcpspMaxInstance = new RcpspMaxInstance(
 				processingTimes, 
-				nonRenewConsumptions, 
 				renewConsumptions, 
 				adjMatrix, 
 				pathMatrix,
@@ -95,17 +90,6 @@ public class RcpspMaxInstance implements IRcpspMaxInstance {
 		List<int[]> consumptions = Lists.newArrayListWithCapacity(modes.length);
 		for(int activity = 0; activity < modes.length; activity ++) {
 			int[] consumptionVector = instance.getRenewableResourceConsumption(activity, modes[activity]);
-			consumptions.add(consumptionVector);
-		}
-		return consumptions;
-	}
-
-	private static List<int[]> getNonRenewConsumptions(
-			int[] modes,
-			IMrcpspMaxInstance instance) {
-		List<int[]> consumptions = Lists.newArrayListWithCapacity(modes.length);
-		for(int activity = 0; activity < modes.length; activity ++) {
-			int[] consumptionVector = instance.getNonRenewableResourceConsumption(activity, modes[activity]);
 			consumptions.add(consumptionVector);
 		}
 		return consumptions;

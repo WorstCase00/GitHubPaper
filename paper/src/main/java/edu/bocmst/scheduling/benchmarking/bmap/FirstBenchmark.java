@@ -82,7 +82,7 @@ public class FirstBenchmark implements IBmapBenchmark {
 			Collection<IMrcpspMaxInstance> instances = Lists.newArrayList(
 					InstanceLoader.loadInstance(String.format(PATH, i)));
 			List<IBenchmarkStatistic> result = benchmark.performBenchmarks(solverConfigurations, instances);
-
+			LOGGER.info("result: {}", Arrays.toString(result.toArray()));
 		}
 	}
 
