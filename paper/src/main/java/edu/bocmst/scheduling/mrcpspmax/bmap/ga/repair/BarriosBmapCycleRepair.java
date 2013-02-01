@@ -48,6 +48,8 @@ public class BarriosBmapCycleRepair extends AbstractModeAssignmentOperator {
 
 	private int[] createNewModes(int[] modes) {
 		Set<Set<IAonNetworkEdge>> positiveCycles = GraphUtils.getPositiveCycles(modes, instance);
+		LOGGER.debug("found {} positive cycle structures for mode assignment {}",
+				positiveCycles.size(), Arrays.toString(modes));
 		boolean[] fixed = new boolean[modes.length];
 		int[] newModes = null;
 		for(Set<IAonNetworkEdge> positiveCycle : positiveCycles) {
@@ -75,25 +77,38 @@ public class BarriosBmapCycleRepair extends AbstractModeAssignmentOperator {
 			int[] modes, 
 			Set<IAonNetworkEdge> positiveCycle, 
 			boolean[] fixed) {
+		LOGGER.debug("start cycle repair for cycle structure {}", Arrays.toString(positiveCycle.toArray()));
 		int[] newModes = Arrays.copyOf(modes, modes.length);
 		for(int i = 0; i < REPAIR_TRIES; i++) {
 			newModes = randomizeUnfixedModesOfEdgeSet(modes, positiveCycle, fixed);
+			LOGGER.debug("new modes guessed for repair try {}: {}", i, Arrays.toString(newModes));
 			if(GraphUtils.isWeightSumPositive(positiveCycle, newModes, instance)) {
+				LOGGER.debug("cycle weight sum still positive for modes {}", Arrays.toString(newModes));
 				continue;
 			}
 			int[] remaining = MrcpspMaxHelper.calculateResourceRemainingVector(
 					newModes, 
 					instance);
+			LOGGER.debug("remaining resources vector is {} for mode assignment {}",
+					Arrays.toString(remaining),
+					Arrays.toString(newModes));
 			if(Ints.min(remaining) >= 0) {
+				LOGGER.debug("guessed mode vector is resource feasible");
 				return newModes;
 			}
+			LOGGER.debug("guessed mode vector not resource feasible - execute repair");
 			newModes = repairSinglePass(newModes, remaining, fixed);
 			remaining = MrcpspMaxHelper.calculateResourceRemainingVector(
 					newModes, 
 					instance);
+			LOGGER.debug("remaining resources vector is {} for mode assignment {}",
+					Arrays.toString(remaining),
+					Arrays.toString(newModes));
 			if(Ints.min(remaining) >= 0) {
+				LOGGER.debug("guessed mode vector is resource feasible");
 				return newModes;
 			}
+			LOGGER.debug("guessed mode vector not resource feasible - retry");
 		}
 		return newModes;
 	}
@@ -106,7 +121,10 @@ public class BarriosBmapCycleRepair extends AbstractModeAssignmentOperator {
 			if(fixed[activity]) {
 				continue;
 			}
-			int newMode = getMostEfficientModeAndUpdateRemaining(activity, modes[activity], remaining);
+			int oldMode = modes[activity];
+			int newMode = getMostEfficientModeAndUpdateRemaining(activity, oldMode, remaining);
+			LOGGER.debug("switch mode of activity {}: {} -> {}",
+					new Object[] {activity, oldMode, newMode});
 			modes[activity] = newMode;
 		}
 		return modes;
@@ -156,7 +174,9 @@ public class BarriosBmapCycleRepair extends AbstractModeAssignmentOperator {
 			int activity = edge.getSource();
 			if(!fixed[activity]) {
 				int randomMode = RandomUtils.getRandomMode(activity, instance);
-				modes[activity] = randomMode;
+				LOGGER.debug("mode of activity {} is set to random mode: {} -> {}",
+						new Object[] {activity, modes[activity], randomMode});
+				newModes[activity] = randomMode;
 			}
 		}
 		return newModes;
