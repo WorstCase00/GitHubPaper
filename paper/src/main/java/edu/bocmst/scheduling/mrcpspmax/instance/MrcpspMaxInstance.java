@@ -2,14 +2,10 @@ package edu.bocmst.scheduling.mrcpspmax.instance;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
-
-import org.apache.commons.lang.ArrayUtils;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
 
 
 public class MrcpspMaxInstance implements IMrcpspMaxInstance {
@@ -22,7 +18,7 @@ public class MrcpspMaxInstance implements IMrcpspMaxInstance {
 	private final ImmutableList<int[][]>  nonRenewableResourceConsumptionsList; //int[mode][resource]
 	private final ImmutableMap<IAonNetworkEdge, int[][]> timelagsMap;
 	
-	protected MrcpspMaxInstance(
+	public MrcpspMaxInstance(
 			IAonNetwork aonNetwork,
 			List<IRenewableResource> renewableResourceList,
 			List<INonRenewableResource> nonRenewableResourceList,
@@ -105,77 +101,6 @@ public class MrcpspMaxInstance implements IMrcpspMaxInstance {
 	@Override
 	public int getProcessingTime(int activity, int mode) {
 		return processingTimesList.get(activity)[mode - 1];
-	}
-
-	public static IMrcpspMaxInstance createInstance( // TODO rework loader method
-			IAonNetwork network,
-			List<IRenewableResource> renewableResourceList,
-			List<INonRenewableResource> nonRenewableResourceList,
-			Map<Integer, List<Integer>> processingTimes,
-			Map<Integer, List<List<Integer>>> renewableresourceConsumptionsMap,
-			Map<Integer, List<List<Integer>>> nonRenewableResourceConsumptionsMap,
-			Map<IAonNetworkEdge, int[][]> timelagsMap) {
-		List<int[]> processingTimesList = convertProcessingTimes(processingTimes);
-		List<int[][]> renewableResourceConsumptions = convertConsumptions(renewableresourceConsumptionsMap);
-		List<int[][]> nonRenewableResourceConsumptions = convertConsumptions(nonRenewableResourceConsumptionsMap);
-		IMrcpspMaxInstance instance = new MrcpspMaxInstance(
-				network, 
-				renewableResourceList, 
-				nonRenewableResourceList, 
-				processingTimesList, 
-				renewableResourceConsumptions, 
-				nonRenewableResourceConsumptions, 
-				timelagsMap);
-		return instance;
-	}
-
-	// TODO TBR
-	private static List<int[][]> convertConsumptions(
-			Map<Integer, List<List<Integer>>> consumptionsMap) {
-		int activityCount = consumptionsMap.size();
-		List<int[][]> consumptionMatrices  = Lists.newArrayListWithCapacity(activityCount);
-		for(int i = 0; i < activityCount; i++) {
-			consumptionMatrices.add(null);
-		}
-		for(Entry<Integer, List<List<Integer>>> entry : consumptionsMap.entrySet()) {
-			int activity = entry.getKey();
-			consumptionMatrices.remove(activity);
-			int[][] consumptionMatrix = convertLists(entry.getValue());
-			consumptionMatrices.add(activity, consumptionMatrix);
-		}
-		return consumptionMatrices;
-	}
-
-	// TODO TBR
-	private static int[][] convertLists(List<List<Integer>> value) {
-		int resourceCount = value.size();
-		int modeCount = value.get(0).size();
-		int[][] matrix = new int[modeCount][resourceCount];
-		for(int resourceIndex = 0; resourceIndex < resourceCount; resourceIndex ++) {
-			for(int modeIndex = 0; modeIndex < modeCount; modeIndex ++) {
-				matrix[modeIndex][resourceIndex] = value.get(resourceIndex).get(modeIndex);
-			}
-		}
-		return matrix;
-	}
-
-	// TODO TBR
-	private static List<int[]> convertProcessingTimes(
-			Map<Integer, List<Integer>> processingTimesMap) {
-		int activityCount = processingTimesMap.size();
-		List<int[]> processingTimes = Lists.newArrayListWithCapacity(activityCount);
-		for(int i = 0; i < activityCount; i++) {
-			processingTimes.add(null);
-		}
-		
-		for(Entry<Integer, List<Integer>> entry : processingTimesMap.entrySet()) {
-			int activity = entry.getKey();
-			List<Integer> timesList = entry.getValue();
-			processingTimes.remove(activity);
-			int[] timesArray = ArrayUtils.toPrimitive(timesList.toArray(new Integer[0]));
-			processingTimes.add(activity, timesArray);
-		}
-		return processingTimes;
 	}
 
 	@Override
