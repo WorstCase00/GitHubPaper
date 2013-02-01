@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import com.google.common.primitives.Ints;
 
-import edu.bocmst.scheduling.mrcpspmax.commons.MrcpspMaxHelper;
+import edu.bocmst.scheduling.mrcpspmax.commons.MrcpspMaxUtils;
 import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
 
 public class ModeAssignment implements IModeAssignment {
@@ -66,10 +66,10 @@ public class ModeAssignment implements IModeAssignment {
 	public static IModeAssignment createInstance(
 			int[] modes,
 			IMrcpspMaxInstance instance) {
-		int[] remaining = MrcpspMaxHelper.calculateResourceRemainingVector(modes, instance);
+		int[] remaining = MrcpspMaxUtils.calculateResourceRemainingVector(modes, instance);
 		boolean resourceFeasible = (Ints.min(remaining) >= 0);
 		
-		boolean timeFeasible = MrcpspMaxHelper.isModeAssignmentTimeValid(modes, instance);
+		boolean timeFeasible = MrcpspMaxUtils.isModeAssignmentTimeValid(modes, instance);
 		
 		IRcpspMaxInstance rcpspsMaxInstance = RcpspMaxInstance.create(modes, instance);
 		

@@ -4,6 +4,9 @@ import java.util.Set;
 
 import com.google.common.collect.ImmutableList;
 
+import edu.bocmst.graph.IDirectedEdge;
+import edu.bocmst.graph.IDirectedGraph;
+
 public interface IMrcpspMaxInstance {
 
 	ImmutableList<INonRenewableResource> getNonRenewableResourceList();
@@ -26,13 +29,13 @@ public interface IMrcpspMaxInstance {
 
 	int getProcessingTime(int activity, int mode);
 
-	Set<IAonNetworkEdge> getAonNetworkEdges();
+	Set<IDirectedEdge> getAonNetworkEdges();
 
-	Set<Set<IAonNetworkEdge>> getCycleStructures();
+	Set<Set<IDirectedEdge>> getCycleStructures();
 
 	int[] getNonRenewableResourceConsumption(int activity, int mode);
 
 	int[] getRenewableResourceConsumption(int activity, int mode);
 
-	IAonNetwork getAonNetwork();
+	IDirectedGraph getAonNetwork();
 }

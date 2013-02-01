@@ -7,11 +7,11 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Sets;
 
+import edu.bocmst.graph.IDirectedGraph;
 import edu.bocmst.scheduling.mrcpspmax.bmap.candidate.IModeAssignment;
 import edu.bocmst.scheduling.mrcpspmax.bmap.candidate.IRcpspMaxInstance;
 import edu.bocmst.scheduling.mrcpspmax.commons.GraphUtils;
-import edu.bocmst.scheduling.mrcpspmax.commons.IntArrays;
-import edu.bocmst.scheduling.mrcpspmax.instance.IAonNetwork;
+import edu.bocmst.utils.IntArrays;
 
 public class TemporalConstraintsTracker {
 
@@ -20,13 +20,13 @@ public class TemporalConstraintsTracker {
 	private static final Logger LOGGER = LoggerFactory.getLogger(TemporalConstraintsTracker.class);
 	
 	private final int[][] pathMatrix;
-	private final IAonNetwork aonNetwork;
+	private final IDirectedGraph aonNetwork;
 	private final int[] lowerBounds;
 	private final int[] upperBounds;
 	private final Set<Integer> scheduled;
 
 	TemporalConstraintsTracker(int[][] pathMatrix,
-			IAonNetwork aonNetwork, int[] lowerBounds, int[] upperBounds,
+			IDirectedGraph aonNetwork, int[] lowerBounds, int[] upperBounds,
 			IRcpspMaxInstance instance, Set<Integer> scheduled) {
 		this.pathMatrix = pathMatrix;
 		this.aonNetwork = aonNetwork;
@@ -143,7 +143,7 @@ public class TemporalConstraintsTracker {
 
 	public static TemporalConstraintsTracker createInstance(IModeAssignment candidate) {
 		int[][] paths = candidate.getInstance().getPathMatrix();
-		IAonNetwork network = candidate.getInstance().getAonNetwork();
+		IDirectedGraph network = candidate.getInstance().getAonNetwork();
 		int[] lbs = paths[0].clone();
 		lbs[0] = 0;
 		int[] ubs = initUpperBounds(candidate.getInstance().getPathMatrix());

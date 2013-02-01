@@ -11,17 +11,17 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import edu.bocmst.scheduling.mrcpspmax.instance.IAonNetworkEdge;
+import edu.bocmst.graph.IDirectedEdge;
 
 abstract class TimeLagsParser extends BaseParser {
 	
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(TimeLagsParser.class);
 
-	static Map<IAonNetworkEdge, int[][]> parseTimeLags(
+	static Map<IDirectedEdge, int[][]> parseTimeLags(
 			List<String> instanceLines, 
 			int activityCount) {
-		Map<IAonNetworkEdge, int[][]> timeLagsMap = Maps.newHashMap();
+		Map<IDirectedEdge, int[][]> timeLagsMap = Maps.newHashMap();
 		for(int activityIndex = 0; activityIndex < activityCount; activityIndex++) {
 			String vertexLine = instanceLines.get(activityIndex + 1);
 			LOGGER.debug("parse edges from line: ", vertexLine);
@@ -45,7 +45,7 @@ abstract class TimeLagsParser extends BaseParser {
 						timeLagMatrix[i][j] = timeLagArray[i * modesSuccessor + j];
 					}
 				}
-				IAonNetworkEdge edge = new AonNetworkEdge(activityIndex, successor);
+				IDirectedEdge edge = new AonNetworkEdge(activityIndex, successor);
 				timeLagsMap.put(edge, timeLagMatrix);
 			}
 		}

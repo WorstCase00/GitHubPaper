@@ -8,23 +8,23 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableList;
 
+import edu.bocmst.graph.IDirectedEdge;
+import edu.bocmst.graph.IDirectedGraph;
 import edu.bocmst.scheduling.mrcpspmax.commons.GraphUtils;
-import edu.bocmst.scheduling.mrcpspmax.instance.IAonNetwork;
-import edu.bocmst.scheduling.mrcpspmax.instance.IAonNetworkEdge;
 
 
-class AonNetworkJGraphTImpl implements IAonNetwork {
+class AonNetworkJGraphTImpl implements IDirectedGraph {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(AonNetworkJGraphTImpl.class);
 	
-	private final DirectedGraph<Integer, IAonNetworkEdge> network;
-	private final Set<Set<IAonNetworkEdge>> cycleStructures;
+	private final DirectedGraph<Integer, IDirectedEdge> network;
+	private final Set<Set<IDirectedEdge>> cycleStructures;
 	private final ImmutableList<Set<Integer>> successors;
 	private final ImmutableList<Set<Integer>> predecessors;
 
 	protected AonNetworkJGraphTImpl(
-			DirectedGraph<Integer, IAonNetworkEdge> network,
-			Set<Set<IAonNetworkEdge>> cycleStructures,
+			DirectedGraph<Integer, IDirectedEdge> network,
+			Set<Set<IDirectedEdge>> cycleStructures,
 			ImmutableList<Set<Integer>> successors,
 			ImmutableList<Set<Integer>> predecessors) {
 		this.network = network;
@@ -35,23 +35,23 @@ class AonNetworkJGraphTImpl implements IAonNetwork {
 
 	
 
-	protected DirectedGraph<Integer, IAonNetworkEdge> getNetwork() {
+	protected DirectedGraph<Integer, IDirectedEdge> getNetwork() {
 		return network;
 	}
 	
 	@Override
-	public Set<IAonNetworkEdge> getEdges() {
+	public Set<IDirectedEdge> getEdges() {
 		return network.edgeSet();
 	}
 
 	@Override
-	public IAonNetworkEdge getEdge(int source, int target) {
-		IAonNetworkEdge edge = network.getEdge(source, target);
+	public IDirectedEdge getEdge(int source, int target) {
+		IDirectedEdge edge = network.getEdge(source, target);
 		return edge;
 	}
 
 	@Override
-	public Set<Set<IAonNetworkEdge>> getCycleStructures() {
+	public Set<Set<IDirectedEdge>> getCycleStructures() {
 		return this.cycleStructures;
 	}
 
@@ -70,14 +70,14 @@ class AonNetworkJGraphTImpl implements IAonNetwork {
 		return network.vertexSet();
 	}
 	
-	static IAonNetwork createInstance(
-			DirectedGraph<Integer, IAonNetworkEdge> graph) {
+	static IDirectedGraph createInstance(
+			DirectedGraph<Integer, IDirectedEdge> graph) {
 		LOGGER.debug("create aon network instance for graph {}", graph);
-		Set<Set<IAonNetworkEdge>> cycles = GraphUtils.calculateCycleStructures(graph);
+		Set<Set<IDirectedEdge>> cycles = GraphUtils.calculateCycleStructures(graph);
 		LOGGER.debug("found {} cycle structures", cycles.size());
 		ImmutableList<Set<Integer>> succs = GraphUtils.getSuccessors(graph);
 		ImmutableList<Set<Integer>> preds = GraphUtils.getPredecessors(graph);
-		IAonNetwork instance = new AonNetworkJGraphTImpl(graph, cycles, succs, preds);
+		IDirectedGraph instance = new AonNetworkJGraphTImpl(graph, cycles, succs, preds);
 		return instance;
 	}
 }

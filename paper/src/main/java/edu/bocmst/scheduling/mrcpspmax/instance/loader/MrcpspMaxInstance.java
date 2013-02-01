@@ -7,8 +7,8 @@ import java.util.Set;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
-import edu.bocmst.scheduling.mrcpspmax.instance.IAonNetwork;
-import edu.bocmst.scheduling.mrcpspmax.instance.IAonNetworkEdge;
+import edu.bocmst.graph.IDirectedEdge;
+import edu.bocmst.graph.IDirectedGraph;
 import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
 import edu.bocmst.scheduling.mrcpspmax.instance.INonRenewableResource;
 import edu.bocmst.scheduling.mrcpspmax.instance.IRenewableResource;
@@ -16,22 +16,22 @@ import edu.bocmst.scheduling.mrcpspmax.instance.IRenewableResource;
 
 class MrcpspMaxInstance implements IMrcpspMaxInstance {
 
-	private final IAonNetwork aonNetwork;
+	private final IDirectedGraph aonNetwork;
 	private final ImmutableList<IRenewableResource> renewableResourceList;
 	private final ImmutableList<INonRenewableResource> nonRenewableResourceList;
 	private final ImmutableList<int[]> processingTimesList; //int[mode]
 	private final ImmutableList<int[][]> renewableResourceConsumptionsList; //int[mode][resource]
 	private final ImmutableList<int[][]>  nonRenewableResourceConsumptionsList; //int[mode][resource]
-	private final ImmutableMap<IAonNetworkEdge, int[][]> timelagsMap;
+	private final ImmutableMap<IDirectedEdge, int[][]> timelagsMap;
 	
 	MrcpspMaxInstance(
-			IAonNetwork aonNetwork,
+			IDirectedGraph aonNetwork,
 			List<IRenewableResource> renewableResourceList,
 			List<INonRenewableResource> nonRenewableResourceList,
 			List<int[]> processingTimesList,
 			List<int[][]> renewableResourceConsumptionsList,
 			List<int[][]>  nonRenewableResourceConsumptionsList,
-			Map<IAonNetworkEdge, int[][]> timelagsMap) {
+			Map<IDirectedEdge, int[][]> timelagsMap) {
 		super();
 		this.aonNetwork = aonNetwork;
 		this.renewableResourceList = ImmutableList.copyOf(renewableResourceList);
@@ -78,7 +78,7 @@ class MrcpspMaxInstance implements IMrcpspMaxInstance {
 			int sourceMode, 
 			int target, 
 			int targetMode) {
-		IAonNetworkEdge edge = aonNetwork.getEdge(source, target);
+		IDirectedEdge edge = aonNetwork.getEdge(source, target);
 		int[][] timeLags = timelagsMap.get(edge);
 		int timeLag = timeLags[sourceMode-1][targetMode-1];
 		return timeLag;
@@ -110,12 +110,12 @@ class MrcpspMaxInstance implements IMrcpspMaxInstance {
 	}
 
 	@Override
-	public Set<IAonNetworkEdge> getAonNetworkEdges() {
+	public Set<IDirectedEdge> getAonNetworkEdges() {
 		return aonNetwork.getEdges();
 	}
 
 	@Override
-	public Set<Set<IAonNetworkEdge>> getCycleStructures() {
+	public Set<Set<IDirectedEdge>> getCycleStructures() {
 		return aonNetwork.getCycleStructures();
 	}
 
@@ -130,7 +130,7 @@ class MrcpspMaxInstance implements IMrcpspMaxInstance {
 	}
 
 	@Override
-	public IAonNetwork getAonNetwork() {
+	public IDirectedGraph getAonNetwork() {
 		return this.aonNetwork;
 	}
 }

@@ -21,9 +21,10 @@ public class SerialRcpspMaxScheduler implements IRcpspMaxScheduler {
 		.getLogger(SerialRcpspMaxScheduler.class);
 	
 	private static final int UNSCHEDULE_LIMIT = 100;
-	private int unscheduleCount = 0;
 	private final int unscheduleLimit = UNSCHEDULE_LIMIT; // might be parameterized
 
+	private int unscheduleCount = 0;
+	
 	@Override
 	public Schedule createSchedule(IModeAssignment candidate, IPriorityRule priorityRule) {
 		LOGGER.debug("create schedule for candidate {} with priority rule {}", candidate, priorityRule);

@@ -1,4 +1,4 @@
-package edu.bocmst.scheduling.mrcpspmax.methaheuristics;
+package edu.bocmst.metaheuristic;
 
 import org.apache.commons.configuration.PropertiesConfiguration;
 

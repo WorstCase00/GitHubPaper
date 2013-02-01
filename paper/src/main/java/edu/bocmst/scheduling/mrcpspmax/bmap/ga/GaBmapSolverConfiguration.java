@@ -2,12 +2,12 @@ package edu.bocmst.scheduling.mrcpspmax.bmap.ga;
 
 import org.apache.commons.configuration.PropertiesConfiguration;
 
+import edu.bocmst.metaheuristic.EvolutionEngineConfiguration;
+import edu.bocmst.metaheuristic.TerminationConditionConfiguration;
 import edu.bocmst.scheduling.mrcpspmax.bmap.ga.evaluation.BmapEvaluationType;
 import edu.bocmst.scheduling.mrcpspmax.bmap.ga.factory.BmapFactoryType;
 import edu.bocmst.scheduling.mrcpspmax.bmap.ga.selection.BampSelectionType;
 import edu.bocmst.scheduling.mrcpspmax.commons.AbstractPropertyFileConfiguration;
-import edu.bocmst.scheduling.mrcpspmax.methaheuristics.EvolutionEngineConfiguration;
-import edu.bocmst.scheduling.mrcpspmax.methaheuristics.TerminationConditionConfiguration;
 
 public class GaBmapSolverConfiguration extends AbstractPropertyFileConfiguration {
 

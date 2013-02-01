@@ -2,7 +2,7 @@ package edu.bocmst.scheduling.mrcpspmax.bmap.candidate;
 
 import com.google.common.collect.ImmutableList;
 
-import edu.bocmst.scheduling.mrcpspmax.instance.IAonNetwork;
+import edu.bocmst.graph.IDirectedGraph;
 import edu.bocmst.scheduling.mrcpspmax.instance.IRenewableResource;
 
 public interface IRcpspMaxInstance {
@@ -19,5 +19,5 @@ public interface IRcpspMaxInstance {
 
 	int getActivityCount();
 
-	IAonNetwork getAonNetwork();
+	IDirectedGraph getAonNetwork();
 }

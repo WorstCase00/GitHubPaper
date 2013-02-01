@@ -11,7 +11,7 @@ import java.util.Map;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
-import edu.bocmst.scheduling.mrcpspmax.instance.IAonNetworkEdge;
+import edu.bocmst.graph.IDirectedEdge;
 
 public class TimeLagsParserTest {
 	
@@ -33,7 +33,7 @@ public class TimeLagsParserTest {
 	public void testTimeLagParsing() throws FileNotFoundException, IOException {
 		List<String> instanceLines = IOUtils.readLines(new FileInputStream(THESIS_FILE));
 		
-		Map<IAonNetworkEdge, int[][]> result = TimeLagsParser.parseTimeLags(instanceLines, VERTEX_COUNT);
+		Map<IDirectedEdge, int[][]> result = TimeLagsParser.parseTimeLags(instanceLines, VERTEX_COUNT);
 		
 		assertArrayEquals(TL_MATRIX01, result.get(new AonNetworkEdge(0, 1)));
 		assertArrayEquals(TL_MATRIX02, result.get(new AonNetworkEdge(0, 2)));

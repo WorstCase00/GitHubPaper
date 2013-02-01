@@ -1,4 +1,5 @@
-package edu.bocmst.scheduling.mrcpspmax.commons;
+package edu.bocmst.utils;
+
 
 public abstract class IntArrays {
 

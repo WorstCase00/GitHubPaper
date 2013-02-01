@@ -1,4 +1,4 @@
-package edu.bocmst.scheduling.mrcpspmax.methaheuristics;
+package edu.bocmst.metaheuristic;
 
 public enum EvolutionEngineType {
 	Generational,

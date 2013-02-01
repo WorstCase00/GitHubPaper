@@ -8,28 +8,28 @@ import org.jgrapht.graph.DefaultDirectedWeightedGraph;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.bocmst.scheduling.mrcpspmax.instance.IAonNetwork;
-import edu.bocmst.scheduling.mrcpspmax.instance.IAonNetworkEdge;
+import edu.bocmst.graph.IDirectedEdge;
+import edu.bocmst.graph.IDirectedGraph;
 
 abstract class AonNetworkParser extends BaseParser {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AonNetworkParser.class);
 	
-	static IAonNetwork parseProjectNetwork(
+	static IDirectedGraph parseProjectNetwork(
 			List<String> instanceLines) {
-		EdgeFactory<Integer, IAonNetworkEdge> edgeFactory = new AonNetworkEdgeFactory();
-		DirectedGraph<Integer, IAonNetworkEdge> network = 
-			new DefaultDirectedWeightedGraph<Integer, IAonNetworkEdge>(edgeFactory);
+		EdgeFactory<Integer, IDirectedEdge> edgeFactory = new AonNetworkEdgeFactory();
+		DirectedGraph<Integer, IDirectedEdge> network = 
+			new DefaultDirectedWeightedGraph<Integer, IDirectedEdge>(edgeFactory);
 
 		addVertices(network, instanceLines);
 		addEdges(network, instanceLines);
 		
-		IAonNetwork aonNetwork = AonNetworkJGraphTImpl.createInstance(network);
+		IDirectedGraph aonNetwork = AonNetworkJGraphTImpl.createInstance(network);
 		return aonNetwork;
 	}
 
 	private static void addEdges(
-			DirectedGraph<Integer, IAonNetworkEdge> network,
+			DirectedGraph<Integer, IDirectedEdge> network,
 			List<String> instanceLines) {
 		
 		int vertexCount = network.vertexSet().size();
@@ -55,7 +55,7 @@ abstract class AonNetworkParser extends BaseParser {
 	}
 
 	private static void addVertices(
-			DirectedGraph<Integer, IAonNetworkEdge> network,
+			DirectedGraph<Integer, IDirectedEdge> network,
 			List<String> instanceLines) {
 		String header = instanceLines.get(0);
 		int vertexCount = getIntegerParsedIndexWord(

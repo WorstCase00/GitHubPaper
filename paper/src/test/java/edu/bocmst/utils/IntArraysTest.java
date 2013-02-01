@@ -1,6 +1,8 @@
-package edu.bocmst.scheduling.mrcpspmax.commons;
+package edu.bocmst.utils;
 
 import org.junit.Test;
+
+import edu.bocmst.utils.IntArrays;
 import static org.junit.Assert.*;
 
 

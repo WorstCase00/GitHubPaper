@@ -5,8 +5,8 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
+import edu.bocmst.graph.IDirectedGraph;
 import edu.bocmst.scheduling.mrcpspmax.commons.GraphUtils;
-import edu.bocmst.scheduling.mrcpspmax.instance.IAonNetwork;
 import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
 import edu.bocmst.scheduling.mrcpspmax.instance.IRenewableResource;
 
@@ -17,7 +17,7 @@ public class RcpspMaxInstance implements IRcpspMaxInstance {
 	private final int[][] adjacencyMatrix;
 	private final int[][] pathMatrix;
 	private final ImmutableList<IRenewableResource> resources;
-	private final IAonNetwork aonNetwork;
+	private final IDirectedGraph aonNetwork;
 
 	public RcpspMaxInstance(
 			List<Integer> processingTimes,
@@ -25,7 +25,7 @@ public class RcpspMaxInstance implements IRcpspMaxInstance {
 			int[][] adjacencyMatrix,
 			int[][] pathMatrix, 
 			ImmutableList<IRenewableResource> resources, 
-			IAonNetwork aonNetwork) {
+			IDirectedGraph aonNetwork) {
 		this.processingTimes = processingTimes;
 		this.renewableResourceConsumptions = renewableResourceConsumptions;
 		this.adjacencyMatrix = adjacencyMatrix;
@@ -62,7 +62,7 @@ public class RcpspMaxInstance implements IRcpspMaxInstance {
 		List<int[]> renewConsumptions = getRenewConsumptions(modes, instance);
 		List<Integer> processingTimes = getProcessingTimes(modes, instance);
 		ImmutableList<IRenewableResource> renewableResources = instance.getRenewableResourceList();
-		IAonNetwork aonNetwork = instance.getAonNetwork();
+		IDirectedGraph aonNetwork = instance.getAonNetwork();
 		IRcpspMaxInstance rcpspMaxInstance = new RcpspMaxInstance(
 				processingTimes, 
 				renewConsumptions, 
@@ -106,7 +106,7 @@ public class RcpspMaxInstance implements IRcpspMaxInstance {
 	}
 
 	@Override
-	public IAonNetwork getAonNetwork() {
+	public IDirectedGraph getAonNetwork() {
 		return this.aonNetwork;
 	}
 

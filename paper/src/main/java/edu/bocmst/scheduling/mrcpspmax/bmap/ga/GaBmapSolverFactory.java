@@ -20,6 +20,11 @@ import org.uncommons.watchmaker.framework.selection.TournamentSelection;
 
 import com.google.common.collect.Lists;
 
+import edu.bocmst.metaheuristic.EvolutionEngineConfiguration;
+import edu.bocmst.metaheuristic.EvolutionEngineType;
+import edu.bocmst.metaheuristic.IGeneratedSolutionsCounter;
+import edu.bocmst.metaheuristic.TerminationConditionConfiguration;
+import edu.bocmst.metaheuristic.TerminationConditionCreator;
 import edu.bocmst.scheduling.mrcpspmax.bmap.candidate.IModeAssignment;
 import edu.bocmst.scheduling.mrcpspmax.bmap.ga.evaluation.BmapEvaluationType;
 import edu.bocmst.scheduling.mrcpspmax.bmap.ga.evaluation.PenalizingEdgeSumEvaluator;
@@ -34,10 +39,6 @@ import edu.bocmst.scheduling.mrcpspmax.bmap.ga.selection.SimilaritySampling;
 import edu.bocmst.scheduling.mrcpspmax.bmap.ga.selection.SimilarityTournament;
 import edu.bocmst.scheduling.mrcpspmax.commons.RandomUtils;
 import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
-import edu.bocmst.scheduling.mrcpspmax.methaheuristics.EvolutionEngineConfiguration;
-import edu.bocmst.scheduling.mrcpspmax.methaheuristics.EvolutionEngineType;
-import edu.bocmst.scheduling.mrcpspmax.methaheuristics.TerminationConditionConfiguration;
-import edu.bocmst.scheduling.mrcpspmax.methaheuristics.TerminationConditionCreator;
 
 public abstract class GaBmapSolverFactory {
 
@@ -47,8 +48,8 @@ public abstract class GaBmapSolverFactory {
 	
 	public static GaBmapSolver createInstance(
 			IMrcpspMaxInstance problem, 
-			GaBmapSolverConfiguration configuration) {
-		EvolutionEngine<IModeAssignment> ga = createEngine(problem, configuration);
+			GaBmapSolverConfiguration configuration,
+			IGeneratedSolutionsCounter solutionsCounter) {
 		
 		int popSize = configuration.getPopulationSize();
 		int elite = configuration.getEliteCount();
@@ -56,8 +57,11 @@ public abstract class GaBmapSolverFactory {
 		TerminationConditionConfiguration terminationConfiguration = 
 			configuration.getTerminationConfiguration();
 		TerminationConditionCreator terminationCreator = new TerminationConditionCreator();
-		
-		TerminationCondition termination = terminationCreator.createCondition(terminationConfiguration);
+		EvolutionEngine<IModeAssignment> ga = createEngine(
+				problem, 
+				configuration,
+				solutionsCounter);
+		TerminationCondition termination = terminationCreator.createCondition(terminationConfiguration, solutionsCounter);
 		GaBmapSolver instance = new GaBmapSolver(
 				ga, 
 				popSize, 
@@ -68,14 +72,14 @@ public abstract class GaBmapSolverFactory {
 
 	private static EvolutionEngine<IModeAssignment> createEngine(
 			IMrcpspMaxInstance problem, 
-			GaBmapSolverConfiguration solverConfiguration) {
+			GaBmapSolverConfiguration solverConfiguration, IGeneratedSolutionsCounter solutionsCounter) {
 		EvolutionEngineConfiguration engineConfiguration = solverConfiguration.getEvolutionEngineConfiguration();
 		EvolutionEngineType engineType = engineConfiguration.getEngineType();
 		CandidateFactory<IModeAssignment> candidateFactory = createFactory(problem, solverConfiguration);
 		EvolutionaryOperator<IModeAssignment> evolutionScheme = createEvolutionScheme(solverConfiguration, problem);
 		SelectionStrategy<? super IModeAssignment> selectionStrategy = createSelectionStrategy(solverConfiguration);
 		FitnessEvaluator<? super IModeAssignment> fitnessEvaluator = 
-			createFitnessEvaluator(problem, solverConfiguration);
+			createFitnessEvaluator(problem, solverConfiguration, solutionsCounter);
 		Random rng = RandomUtils.getInstance();
 		switch(engineType) {
 		case Generational: 	
@@ -103,11 +107,11 @@ public abstract class GaBmapSolverFactory {
 
 	private static FitnessEvaluator<? super IModeAssignment> createFitnessEvaluator(
 			IMrcpspMaxInstance instance, 
-			GaBmapSolverConfiguration solverConfiguration) {
+			GaBmapSolverConfiguration solverConfiguration, IGeneratedSolutionsCounter solutionsCounter) {
 		BmapEvaluationType type = solverConfiguration.getEvaluationType();
 		switch(type) {
-		case PenalizingEdgeSum: return new PenalizingEdgeSumEvaluator(instance);
-		case PenalizingLongestPath: return new PenalizingLongestPathEvaluation();
+		case PenalizingEdgeSum: return new PenalizingEdgeSumEvaluator(instance, solutionsCounter);
+		case PenalizingLongestPath: return new PenalizingLongestPathEvaluation(solutionsCounter);
 		}
 		throw new IllegalArgumentException();
 	}

@@ -1,4 +1,4 @@
-package edu.bocmst.scheduling.mrcpspmax.methaheuristics;
+package edu.bocmst.metaheuristic;
 
 import org.apache.commons.configuration.PropertiesConfiguration;
 
@@ -6,7 +6,8 @@ public class TerminationConditionConfiguration {
 
 	private final PropertiesConfiguration properties;
 	
-	protected TerminationConditionConfiguration(PropertiesConfiguration properties) {
+	protected TerminationConditionConfiguration(
+			PropertiesConfiguration properties) {
 		this.properties = properties;
 	}
 
@@ -14,12 +15,14 @@ public class TerminationConditionConfiguration {
 		public static final String TYPE = "type";
 		public static final String MAX_DURATION_MS = "maxDurationMs";
 		public static final String GENERATION_COUNT = "generationCount";
+		public static final String TERMINATION_COUNT = "terminationCount";
 	}
 	
 	private static class Defaults {
 		public static final String TYPE = "ElapsedTime";
 		public static final long MAX_DURATION_MS = 10000;
 		public static final int GENERATION_COUNT = 100;
+		public static final int TERMINATION_COUNT = 10000;
 	}
 	
 	public TerminationConditionType getType() {
@@ -48,5 +51,12 @@ public class TerminationConditionConfiguration {
 		PropertiesConfiguration empty = new PropertiesConfiguration();
 		TerminationConditionConfiguration instance = new TerminationConditionConfiguration(empty);
 		return instance;
+	}
+
+	public int getTerminationCount() {
+		int terminationCount = properties.getInt(
+				Keys.TERMINATION_COUNT,
+				Defaults.TERMINATION_COUNT);
+		return terminationCount;
 	}
 }

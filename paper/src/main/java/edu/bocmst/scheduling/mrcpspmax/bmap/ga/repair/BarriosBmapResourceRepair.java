@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import edu.bocmst.scheduling.mrcpspmax.bmap.candidate.IModeAssignment;
 import edu.bocmst.scheduling.mrcpspmax.bmap.candidate.ModeAssignment;
 import edu.bocmst.scheduling.mrcpspmax.bmap.ga.AbstractModeAssignmentOperator;
-import edu.bocmst.scheduling.mrcpspmax.commons.MrcpspMaxHelper;
+import edu.bocmst.scheduling.mrcpspmax.commons.MrcpspMaxUtils;
 import edu.bocmst.scheduling.mrcpspmax.commons.RandomUtils;
 import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
 
@@ -46,7 +46,7 @@ public class BarriosBmapResourceRepair extends AbstractModeAssignmentOperator  {
 			for(int activity : reassignActivities) {
 				newModes[activity] = RandomUtils.getRandomMode(activity, instance);
 			}
-			if(MrcpspMaxHelper.isModeAssignmentResourceValid(newModes, instance)) {
+			if(MrcpspMaxUtils.isModeAssignmentResourceValid(newModes, instance)) {
 				LOGGER.debug("found resource valid mode assignment: {}", Arrays.toString(newModes));
 				return newModes;
 			}

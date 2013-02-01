@@ -13,8 +13,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
 
-import edu.bocmst.scheduling.mrcpspmax.instance.IAonNetwork;
-import edu.bocmst.scheduling.mrcpspmax.instance.IAonNetworkEdge;
+import edu.bocmst.graph.IDirectedEdge;
+import edu.bocmst.graph.IDirectedGraph;
 import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
 import edu.bocmst.scheduling.mrcpspmax.instance.INonRenewableResource;
 import edu.bocmst.scheduling.mrcpspmax.instance.IRenewableResource;
@@ -35,8 +35,8 @@ public abstract class InstanceLoader {
 		Map<Integer, List<List<Integer>>> nonRenewableResourceConsumptionsMap = ActivityParser.parseNonRenewableResourceConsumptions(instanceLines);
 		Map<Integer, List<List<Integer>>> renewableresourceConsumptionsMap = ActivityParser.parseRenewableResourceConsumptions(instanceLines);
 		
-		IAonNetwork network = AonNetworkParser.parseProjectNetwork(instanceLines);
-		Map<IAonNetworkEdge, int[][]> timelagsMap = TimeLagsParser.parseTimeLags(instanceLines, processingTimes.size());
+		IDirectedGraph network = AonNetworkParser.parseProjectNetwork(instanceLines);
+		Map<IDirectedEdge, int[][]> timelagsMap = TimeLagsParser.parseTimeLags(instanceLines, processingTimes.size());
 		List<int[]> procTimeArrays = convertProcessingTimes(processingTimes);
 		List<int[][]> renewableConsumptionsMatrices = convertConsumptions(renewableresourceConsumptionsMap);
 		List<int[][]> nonRenewableConsumptionMatrices = convertConsumptions(nonRenewableResourceConsumptionsMap);

@@ -16,7 +16,7 @@ public class SolutionValidatorTest {
 		
 		int[] modes = new int[] {1, 2, 2, 3, 3, 1, 3, 1};
 		IMrcpspMaxInstance instance = InstanceLoader.loadInstance(TestConstants.THESIS_PATH);
-		boolean result = MrcpspMaxHelper.isModeAssignmentTimeValid(modes, instance);
+		boolean result = MrcpspMaxUtils.isModeAssignmentTimeValid(modes, instance);
 		
 		assertFalse(result);
 	}
@@ -26,7 +26,7 @@ public class SolutionValidatorTest {
 		
 		int[] modes = new int[] {1,2,1,1,1,3,3,1};
 		IMrcpspMaxInstance instance = InstanceLoader.loadInstance(TestConstants.THESIS_PATH);
-		boolean result = MrcpspMaxHelper.isModeAssignmentTimeValid(modes, instance);
+		boolean result = MrcpspMaxUtils.isModeAssignmentTimeValid(modes, instance);
 		
 		assertTrue(result);
 	}
@@ -36,7 +36,7 @@ public class SolutionValidatorTest {
 		
 		int[] modes = new int[] {1,2,1,1,1,3,3,1};
 		IMrcpspMaxInstance instance = InstanceLoader.loadInstance(TestConstants.THESIS_PATH);
-		boolean result = MrcpspMaxHelper.isModeAssignmentResourceValid(modes, instance);
+		boolean result = MrcpspMaxUtils.isModeAssignmentResourceValid(modes, instance);
 		
 		assertFalse(result);
 	}
@@ -46,7 +46,7 @@ public class SolutionValidatorTest {
 		
 		int[] modes = new int[] {1, 2, 2, 3, 3, 1, 3, 1};
 		IMrcpspMaxInstance instance = InstanceLoader.loadInstance(TestConstants.THESIS_PATH);
-		boolean result = MrcpspMaxHelper.isModeAssignmentResourceValid(modes, instance);
+		boolean result = MrcpspMaxUtils.isModeAssignmentResourceValid(modes, instance);
 		
 		assertTrue(result);
 	}

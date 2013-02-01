@@ -7,9 +7,9 @@ import com.google.common.primitives.Ints;
 import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
 import edu.bocmst.scheduling.mrcpspmax.instance.INonRenewableResource;
 
-public abstract class MrcpspMaxHelper {
+public abstract class MrcpspMaxUtils {
 
-	private MrcpspMaxHelper() {}
+	private MrcpspMaxUtils() {}
 	
 	public static boolean isModeAssignmentResourceValid(
 			int[] modes, 

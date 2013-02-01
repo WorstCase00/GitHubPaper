@@ -8,8 +8,8 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import edu.bocmst.graph.IDirectedEdge;
 import edu.bocmst.scheduling.mrcpspmax.TestConstants;
-import edu.bocmst.scheduling.mrcpspmax.instance.IAonNetworkEdge;
 
 public class GraphUtilsTest {
 
@@ -36,19 +36,19 @@ public class GraphUtilsTest {
 	@Test
 	public void testPositiveCycleDetection() {
 		int[] modes = new int[] {1,2,2,3,3,1,3,1};
-		Set<Set<IAonNetworkEdge>> result = GraphUtils.getPositiveCycles(modes, TestConstants.THESIS_INSTANCE);
+		Set<Set<IDirectedEdge>> result = GraphUtils.getPositiveCycles(modes, TestConstants.THESIS_INSTANCE);
 		
 		assertTrue(result.size() == 1);
-		Set<IAonNetworkEdge> cycle = result.iterator().next();
+		Set<IDirectedEdge> cycle = result.iterator().next();
 		assertTrue(containsEdge(cycle, 2, 4));
 		assertTrue(containsEdge(cycle, 4, 2));
 	}
 	
 	private boolean containsEdge(
-			Set<IAonNetworkEdge> cycle, 
+			Set<IDirectedEdge> cycle, 
 			int source, 
 			int target) {
-		for(IAonNetworkEdge edge : cycle) {
+		for(IDirectedEdge edge : cycle) {
 			if((edge.getSource() == source) && (edge.getTarget() ==target)) {
 				return true;
 			}
@@ -59,7 +59,7 @@ public class GraphUtilsTest {
 	@Test
 	public void testNoPositiveCycleDetection() {
 		int[] modes = new int[] {1,2,1,1,1,3,3,1};
-		Set<Set<IAonNetworkEdge>> result = GraphUtils.getPositiveCycles(modes, TestConstants.THESIS_INSTANCE);
+		Set<Set<IDirectedEdge>> result = GraphUtils.getPositiveCycles(modes, TestConstants.THESIS_INSTANCE);
 		
 		assertTrue(result.size() == 0);
 	}

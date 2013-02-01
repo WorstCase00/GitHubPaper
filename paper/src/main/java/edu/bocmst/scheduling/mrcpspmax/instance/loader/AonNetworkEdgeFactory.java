@@ -2,14 +2,14 @@ package edu.bocmst.scheduling.mrcpspmax.instance.loader;
 
 import org.jgrapht.EdgeFactory;
 
-import edu.bocmst.scheduling.mrcpspmax.instance.IAonNetworkEdge;
+import edu.bocmst.graph.IDirectedEdge;
 
-class AonNetworkEdgeFactory implements EdgeFactory<Integer, IAonNetworkEdge> {
+class AonNetworkEdgeFactory implements EdgeFactory<Integer, IDirectedEdge> {
 
-	public IAonNetworkEdge createEdge(
+	public IDirectedEdge createEdge(
 			Integer sourceVertex,
 			Integer targetVertex) {
-		IAonNetworkEdge edge = new AonNetworkEdge(sourceVertex.intValue(), targetVertex.intValue());
+		IDirectedEdge edge = new AonNetworkEdge(sourceVertex.intValue(), targetVertex.intValue());
 		return edge;
 	}
 

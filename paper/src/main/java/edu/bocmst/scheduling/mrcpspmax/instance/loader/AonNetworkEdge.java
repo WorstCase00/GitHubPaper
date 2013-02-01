@@ -1,8 +1,8 @@
 package edu.bocmst.scheduling.mrcpspmax.instance.loader;
 
-import edu.bocmst.scheduling.mrcpspmax.instance.IAonNetworkEdge;
+import edu.bocmst.graph.IDirectedEdge;
 
-class AonNetworkEdge implements IAonNetworkEdge {
+class AonNetworkEdge implements IDirectedEdge {
 
 	private final int source;
 	private final int target;

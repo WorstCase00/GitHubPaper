@@ -8,15 +8,15 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.primitives.Ints;
 
+import edu.bocmst.graph.IDirectedEdge;
 import edu.bocmst.scheduling.mrcpspmax.bmap.candidate.IModeAssignment;
 import edu.bocmst.scheduling.mrcpspmax.bmap.candidate.ModeAssignment;
 import edu.bocmst.scheduling.mrcpspmax.bmap.ga.AbstractModeAssignmentOperator;
 import edu.bocmst.scheduling.mrcpspmax.commons.GraphUtils;
-import edu.bocmst.scheduling.mrcpspmax.commons.IntArrays;
-import edu.bocmst.scheduling.mrcpspmax.commons.MrcpspMaxHelper;
+import edu.bocmst.scheduling.mrcpspmax.commons.MrcpspMaxUtils;
 import edu.bocmst.scheduling.mrcpspmax.commons.RandomUtils;
-import edu.bocmst.scheduling.mrcpspmax.instance.IAonNetworkEdge;
 import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
+import edu.bocmst.utils.IntArrays;
 
 public class BarriosBmapCycleRepair extends AbstractModeAssignmentOperator {
 
@@ -47,12 +47,12 @@ public class BarriosBmapCycleRepair extends AbstractModeAssignmentOperator {
 	}
 
 	private int[] createNewModes(int[] modes) {
-		Set<Set<IAonNetworkEdge>> positiveCycles = GraphUtils.getPositiveCycles(modes, instance);
+		Set<Set<IDirectedEdge>> positiveCycles = GraphUtils.getPositiveCycles(modes, instance);
 		LOGGER.debug("found {} positive cycle structures for mode assignment {}",
 				positiveCycles.size(), Arrays.toString(modes));
 		boolean[] fixed = new boolean[modes.length];
 		int[] newModes = null;
-		for(Set<IAonNetworkEdge> positiveCycle : positiveCycles) {
+		for(Set<IDirectedEdge> positiveCycle : positiveCycles) {
 			newModes = repairCycleStructure(modes, positiveCycle, fixed);
 			if(GraphUtils.isWeightSumPositive(positiveCycle, newModes, instance)) {
 				LOGGER.debug("cycle repair failed");
@@ -65,8 +65,8 @@ public class BarriosBmapCycleRepair extends AbstractModeAssignmentOperator {
 
 	private boolean[] updateFixed(
 			boolean[] fixed,
-			Set<IAonNetworkEdge> edgeSet) {
-		for(IAonNetworkEdge edge : edgeSet) {
+			Set<IDirectedEdge> edgeSet) {
+		for(IDirectedEdge edge : edgeSet) {
 			fixed[edge.getSource()] = true;
 			fixed[edge.getTarget()] = true;
 		}
@@ -75,7 +75,7 @@ public class BarriosBmapCycleRepair extends AbstractModeAssignmentOperator {
 
 	private int[] repairCycleStructure(
 			int[] modes, 
-			Set<IAonNetworkEdge> positiveCycle, 
+			Set<IDirectedEdge> positiveCycle, 
 			boolean[] fixed) {
 		LOGGER.debug("start cycle repair for cycle structure {}", Arrays.toString(positiveCycle.toArray()));
 		int[] newModes = Arrays.copyOf(modes, modes.length);
@@ -86,7 +86,7 @@ public class BarriosBmapCycleRepair extends AbstractModeAssignmentOperator {
 				LOGGER.debug("cycle weight sum still positive for modes {}", Arrays.toString(newModes));
 				continue;
 			}
-			int[] remaining = MrcpspMaxHelper.calculateResourceRemainingVector(
+			int[] remaining = MrcpspMaxUtils.calculateResourceRemainingVector(
 					newModes, 
 					instance);
 			LOGGER.debug("remaining resources vector is {} for mode assignment {}",
@@ -98,7 +98,7 @@ public class BarriosBmapCycleRepair extends AbstractModeAssignmentOperator {
 			}
 			LOGGER.debug("guessed mode vector not resource feasible - execute repair");
 			newModes = repairSinglePass(newModes, remaining, fixed);
-			remaining = MrcpspMaxHelper.calculateResourceRemainingVector(
+			remaining = MrcpspMaxUtils.calculateResourceRemainingVector(
 					newModes, 
 					instance);
 			LOGGER.debug("remaining resources vector is {} for mode assignment {}",
@@ -137,10 +137,10 @@ public class BarriosBmapCycleRepair extends AbstractModeAssignmentOperator {
 		int modeCount = instance.getModeCount(activity);
 		int chosenMode = 0;
 		int highScore = Integer.MIN_VALUE;
-		int[] actualConsumption = MrcpspMaxHelper.getNonRenewableConsumptionVector(activity, actualMode, instance);
+		int[] actualConsumption = MrcpspMaxUtils.getNonRenewableConsumptionVector(activity, actualMode, instance);
 		remaining = IntArrays.plus(remaining, actualConsumption);
 		for(int mode = 1; mode <= modeCount; mode ++) {
-			int[] alternativeConsumption = MrcpspMaxHelper.getNonRenewableConsumptionVector(activity, mode, instance);
+			int[] alternativeConsumption = MrcpspMaxUtils.getNonRenewableConsumptionVector(activity, mode, instance);
 			int score = calculateScore(alternativeConsumption, remaining);
 			if(score > highScore) {
 				actualConsumption = alternativeConsumption;
@@ -167,10 +167,10 @@ public class BarriosBmapCycleRepair extends AbstractModeAssignmentOperator {
 
 	private int[] randomizeUnfixedModesOfEdgeSet(
 			int[] modes, 
-			Set<IAonNetworkEdge> positiveCycle, 
+			Set<IDirectedEdge> positiveCycle, 
 			boolean[] fixed) {
 		int[] newModes = modes.clone();
-		for(IAonNetworkEdge edge : positiveCycle) {
+		for(IDirectedEdge edge : positiveCycle) {
 			int activity = edge.getSource();
 			if(!fixed[activity]) {
 				int randomMode = RandomUtils.getRandomMode(activity, instance);
