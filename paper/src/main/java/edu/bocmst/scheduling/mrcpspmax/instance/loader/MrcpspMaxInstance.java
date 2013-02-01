@@ -1,4 +1,4 @@
-package edu.bocmst.scheduling.mrcpspmax.instance;
+package edu.bocmst.scheduling.mrcpspmax.instance.loader;
 
 import java.util.List;
 import java.util.Map;
@@ -7,8 +7,14 @@ import java.util.Set;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
+import edu.bocmst.scheduling.mrcpspmax.instance.IAonNetwork;
+import edu.bocmst.scheduling.mrcpspmax.instance.IAonNetworkEdge;
+import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
+import edu.bocmst.scheduling.mrcpspmax.instance.INonRenewableResource;
+import edu.bocmst.scheduling.mrcpspmax.instance.IRenewableResource;
 
-public class MrcpspMaxInstance implements IMrcpspMaxInstance {
+
+class MrcpspMaxInstance implements IMrcpspMaxInstance {
 
 	private final IAonNetwork aonNetwork;
 	private final ImmutableList<IRenewableResource> renewableResourceList;
@@ -18,7 +24,7 @@ public class MrcpspMaxInstance implements IMrcpspMaxInstance {
 	private final ImmutableList<int[][]>  nonRenewableResourceConsumptionsList; //int[mode][resource]
 	private final ImmutableMap<IAonNetworkEdge, int[][]> timelagsMap;
 	
-	public MrcpspMaxInstance(
+	MrcpspMaxInstance(
 			IAonNetwork aonNetwork,
 			List<IRenewableResource> renewableResourceList,
 			List<INonRenewableResource> nonRenewableResourceList,

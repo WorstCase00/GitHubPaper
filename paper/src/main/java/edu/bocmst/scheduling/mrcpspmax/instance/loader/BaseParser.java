@@ -2,7 +2,7 @@ package edu.bocmst.scheduling.mrcpspmax.instance.loader;
 
 import java.util.List;
 
-public abstract class BaseParser {
+abstract class BaseParser {
 
 	protected static int getIntegerParsedIndexWord(String string, int index) {
 		String[] words = string.split(InstanceFileConstants.DELIMITER);

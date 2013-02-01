@@ -8,16 +8,14 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.Lists;
 import edu.bocmst.scheduling.mrcpspmax.instance.INonRenewableResource;
 import edu.bocmst.scheduling.mrcpspmax.instance.IRenewableResource;
-import edu.bocmst.scheduling.mrcpspmax.instance.NonRenewableResource;
-import edu.bocmst.scheduling.mrcpspmax.instance.RenewableResource;
 
-public abstract class ResourceParser extends BaseParser {
+abstract class ResourceParser extends BaseParser {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ResourceParser.class);
 	
 	private ResourceParser() {}
 
-	public static void verifyNoMixedResources(String string) {
+	static void verifyNoMixedResources(String string) {
 		int mixedResourcesCount = getIntegerParsedIndexWord(
 				string, 
 				InstanceFileConstants.Header.MIXED_RENEWABLE_COUNT_INDEX);
@@ -26,7 +24,7 @@ public abstract class ResourceParser extends BaseParser {
 		}
 	}
 
-	public static List<IRenewableResource> parseRenewableResourcesList(
+	static List<IRenewableResource> parseRenewableResourcesList(
 			List<String> instanceLines) {
 		
 		int renewableCount = getRenewableResourcesCount(instanceLines);
@@ -44,7 +42,7 @@ public abstract class ResourceParser extends BaseParser {
 		return renewableResourceList;
 	}
 
-	public static List<INonRenewableResource> parseNonRenewableResourceList(
+	static List<INonRenewableResource> parseNonRenewableResourceList(
 			List<String> instanceLines) {
 		int nonRenewableCount = getNonRenewableResourcesCount(instanceLines);
 		LOGGER.debug("non-renewable resource count: {}", nonRenewableCount);

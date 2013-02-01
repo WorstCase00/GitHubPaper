@@ -10,13 +10,13 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 
-public abstract class ActivityParser extends BaseParser {
+abstract class ActivityParser extends BaseParser {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ActivityParser.class);
 	
 	private ActivityParser() {}
 	
-	public static Map<Integer, List<Integer>> parseProcessingTimes(
+	static Map<Integer, List<Integer>> parseProcessingTimes(
 			List<String> instanceLines) {
 		Map<Integer, List<Integer>> processingTimesMap = Maps.newHashMap();
 		List<String> activityBlockLines = getActivityBlockLines(instanceLines);
@@ -73,7 +73,7 @@ public abstract class ActivityParser extends BaseParser {
 		return consumptionsMap;
 	}
 
-	public static Map<Integer, List<List<Integer>>> parseRenewableResourceConsumptions(List<String> instanceLines) {
+	static Map<Integer, List<List<Integer>>> parseRenewableResourceConsumptions(List<String> instanceLines) {
 		int renewableResourcesCount = getRenewableResourcesCount(instanceLines);
 		List<List<List<Integer>>> consumptionsForAllResources = Lists.newArrayList();
 		for(int resourceIndex = 0; resourceIndex < renewableResourcesCount; resourceIndex ++) {
@@ -91,7 +91,7 @@ public abstract class ActivityParser extends BaseParser {
 		return consumptionsMap;
 	}
 
-	public static Map<Integer, List<List<Integer>>> parseNonRenewableResourceConsumptions(List<String> instanceLines) {
+	static Map<Integer, List<List<Integer>>> parseNonRenewableResourceConsumptions(List<String> instanceLines) {
 		int nonRenewableResourcesCount = getNonRenewableResourcesCount(instanceLines);
 		int renewableResourcesCount = getRenewableResourcesCount(instanceLines); // as offset
 		List<List<List<Integer>>> consumptionsForAllResources = Lists.newArrayList();

@@ -2,12 +2,12 @@ package edu.bocmst.scheduling.mrcpspmax.instance.loader;
 
 import edu.bocmst.scheduling.mrcpspmax.instance.IAonNetworkEdge;
 
-public class AonNetworkEdge implements IAonNetworkEdge {
+class AonNetworkEdge implements IAonNetworkEdge {
 
 	private final int source;
 	private final int target;
 
-	public AonNetworkEdge(int source, int target) {
+	AonNetworkEdge(int source, int target) {
 		this.source = source;
 		this.target = target;
 	}

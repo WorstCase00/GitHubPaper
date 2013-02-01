@@ -1,4 +1,4 @@
-package edu.bocmst.scheduling.mrcpspmax.instance;
+package edu.bocmst.scheduling.mrcpspmax.instance.loader;
 
 import java.util.Set;
 
@@ -9,9 +9,11 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.ImmutableList;
 
 import edu.bocmst.scheduling.mrcpspmax.commons.GraphUtils;
+import edu.bocmst.scheduling.mrcpspmax.instance.IAonNetwork;
+import edu.bocmst.scheduling.mrcpspmax.instance.IAonNetworkEdge;
 
 
-public class AonNetworkJGraphTImpl implements IAonNetwork {
+class AonNetworkJGraphTImpl implements IAonNetwork {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(AonNetworkJGraphTImpl.class);
 	
@@ -63,7 +65,12 @@ public class AonNetworkJGraphTImpl implements IAonNetwork {
 		return this.predecessors.get(activity);
 	}
 
-	public static IAonNetwork createInstance(
+	@Override
+	public Set<Integer> getVertexSet() {
+		return network.vertexSet();
+	}
+	
+	static IAonNetwork createInstance(
 			DirectedGraph<Integer, IAonNetworkEdge> graph) {
 		LOGGER.debug("create aon network instance for graph {}", graph);
 		Set<Set<IAonNetworkEdge>> cycles = GraphUtils.calculateCycleStructures(graph);
@@ -72,12 +79,5 @@ public class AonNetworkJGraphTImpl implements IAonNetwork {
 		ImmutableList<Set<Integer>> preds = GraphUtils.getPredecessors(graph);
 		IAonNetwork instance = new AonNetworkJGraphTImpl(graph, cycles, succs, preds);
 		return instance;
-	}
-
-
-
-	@Override
-	public Set<Integer> getVertexSet() {
-		return network.vertexSet();
 	}
 }

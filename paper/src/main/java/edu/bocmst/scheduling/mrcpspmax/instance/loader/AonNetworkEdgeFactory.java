@@ -4,8 +4,7 @@ import org.jgrapht.EdgeFactory;
 
 import edu.bocmst.scheduling.mrcpspmax.instance.IAonNetworkEdge;
 
-
-public class AonNetworkEdgeFactory implements EdgeFactory<Integer, IAonNetworkEdge> {
+class AonNetworkEdgeFactory implements EdgeFactory<Integer, IAonNetworkEdge> {
 
 	public IAonNetworkEdge createEdge(
 			Integer sourceVertex,

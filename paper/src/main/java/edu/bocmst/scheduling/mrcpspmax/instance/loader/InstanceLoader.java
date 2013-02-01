@@ -18,7 +18,6 @@ import edu.bocmst.scheduling.mrcpspmax.instance.IAonNetworkEdge;
 import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
 import edu.bocmst.scheduling.mrcpspmax.instance.INonRenewableResource;
 import edu.bocmst.scheduling.mrcpspmax.instance.IRenewableResource;
-import edu.bocmst.scheduling.mrcpspmax.instance.MrcpspMaxInstance;
 
 public abstract class InstanceLoader {
 	
@@ -37,7 +36,7 @@ public abstract class InstanceLoader {
 		Map<Integer, List<List<Integer>>> renewableresourceConsumptionsMap = ActivityParser.parseRenewableResourceConsumptions(instanceLines);
 		
 		IAonNetwork network = AonNetworkParser.parseProjectNetwork(instanceLines);
-		Map<IAonNetworkEdge, int[][]> timelagsMap = AonNetworkParser.parseTimeLags(instanceLines, processingTimes.size());
+		Map<IAonNetworkEdge, int[][]> timelagsMap = TimeLagsParser.parseTimeLags(instanceLines, processingTimes.size());
 		List<int[]> procTimeArrays = convertProcessingTimes(processingTimes);
 		List<int[][]> renewableConsumptionsMatrices = convertConsumptions(renewableresourceConsumptionsMap);
 		List<int[][]> nonRenewableConsumptionMatrices = convertConsumptions(nonRenewableResourceConsumptionsMap);

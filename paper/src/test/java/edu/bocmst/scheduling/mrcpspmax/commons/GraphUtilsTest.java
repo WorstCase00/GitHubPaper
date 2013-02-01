@@ -10,7 +10,6 @@ import org.junit.Test;
 
 import edu.bocmst.scheduling.mrcpspmax.TestConstants;
 import edu.bocmst.scheduling.mrcpspmax.instance.IAonNetworkEdge;
-import edu.bocmst.scheduling.mrcpspmax.instance.loader.AonNetworkEdge;
 
 public class GraphUtilsTest {
 
@@ -41,10 +40,22 @@ public class GraphUtilsTest {
 		
 		assertTrue(result.size() == 1);
 		Set<IAonNetworkEdge> cycle = result.iterator().next();
-		assertTrue(cycle.contains(new AonNetworkEdge(2, 4)));
-		assertTrue(cycle.contains(new AonNetworkEdge(4, 2)));
+		assertTrue(containsEdge(cycle, 2, 4));
+		assertTrue(containsEdge(cycle, 4, 2));
 	}
 	
+	private boolean containsEdge(
+			Set<IAonNetworkEdge> cycle, 
+			int source, 
+			int target) {
+		for(IAonNetworkEdge edge : cycle) {
+			if((edge.getSource() == source) && (edge.getTarget() ==target)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	@Test
 	public void testNoPositiveCycleDetection() {
 		int[] modes = new int[] {1,2,1,1,1,3,3,1};
