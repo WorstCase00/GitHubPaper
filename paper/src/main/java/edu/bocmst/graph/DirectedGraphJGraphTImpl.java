@@ -1,4 +1,4 @@
-package edu.bocmst.scheduling.mrcpspmax.instance.loader;
+package edu.bocmst.graph;
 
 import java.util.Set;
 
@@ -8,21 +8,19 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableList;
 
-import edu.bocmst.graph.IDirectedEdge;
-import edu.bocmst.graph.IDirectedGraph;
 import edu.bocmst.scheduling.mrcpspmax.commons.GraphUtils;
 
 
-class AonNetworkJGraphTImpl implements IDirectedGraph {
+class DirectedGraphJGraphTImpl implements IDirectedGraph {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(AonNetworkJGraphTImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(DirectedGraphJGraphTImpl.class);
 	
 	private final DirectedGraph<Integer, IDirectedEdge> network;
 	private final Set<Set<IDirectedEdge>> cycleStructures;
 	private final ImmutableList<Set<Integer>> successors;
 	private final ImmutableList<Set<Integer>> predecessors;
 
-	protected AonNetworkJGraphTImpl(
+	protected DirectedGraphJGraphTImpl(
 			DirectedGraph<Integer, IDirectedEdge> network,
 			Set<Set<IDirectedEdge>> cycleStructures,
 			ImmutableList<Set<Integer>> successors,
@@ -32,8 +30,6 @@ class AonNetworkJGraphTImpl implements IDirectedGraph {
 		this.successors = successors;
 		this.predecessors = predecessors;
 	}
-
-	
 
 	protected DirectedGraph<Integer, IDirectedEdge> getNetwork() {
 		return network;
@@ -77,7 +73,7 @@ class AonNetworkJGraphTImpl implements IDirectedGraph {
 		LOGGER.debug("found {} cycle structures", cycles.size());
 		ImmutableList<Set<Integer>> succs = GraphUtils.getSuccessors(graph);
 		ImmutableList<Set<Integer>> preds = GraphUtils.getPredecessors(graph);
-		IDirectedGraph instance = new AonNetworkJGraphTImpl(graph, cycles, succs, preds);
+		IDirectedGraph instance = new DirectedGraphJGraphTImpl(graph, cycles, succs, preds);
 		return instance;
 	}
 }

@@ -10,8 +10,8 @@ import org.uncommons.watchmaker.framework.factories.AbstractCandidateFactory;
 
 import com.google.common.collect.Lists;
 
-import edu.bocmst.scheduling.mrcpspmax.bmap.candidate.IModeAssignment;
-import edu.bocmst.scheduling.mrcpspmax.bmap.candidate.ModeAssignment;
+import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.IModeAssignment;
+import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.ModeAssignmentFactory;
 import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
 import edu.bocmst.scheduling.mrcpspmax.instance.INonRenewableResource;
 
@@ -29,7 +29,7 @@ public class RelativeResourceConsumptionBmapFactory extends AbstractCandidateFac
 	public IModeAssignment generateRandomCandidate(Random rng) {
 		LOGGER.debug("create relative resource consumption minimizing candidate");
 		int[] modes = createModes(rng);
-		IModeAssignment candidate = ModeAssignment.createInstance(modes, instance);
+		IModeAssignment candidate = ModeAssignmentFactory.createInstance(modes, instance);
 		return candidate;
 	}
 

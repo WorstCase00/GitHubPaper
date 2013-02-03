@@ -8,14 +8,13 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.Sets;
 
 import edu.bocmst.graph.IDirectedGraph;
-import edu.bocmst.scheduling.mrcpspmax.bmap.candidate.IModeAssignment;
-import edu.bocmst.scheduling.mrcpspmax.bmap.candidate.IRcpspMaxInstance;
+import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.IModeAssignment;
+import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.IRcpspMaxInstance;
 import edu.bocmst.scheduling.mrcpspmax.commons.GraphUtils;
 import edu.bocmst.utils.IntArrays;
+import edu.bocmst.utils.IntInterval;
 
-public class TemporalConstraintsTracker {
-
-	
+class TemporalConstraintsTracker {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(TemporalConstraintsTracker.class);
 	
@@ -35,14 +34,14 @@ public class TemporalConstraintsTracker {
 		this.scheduled = scheduled;
 	}
 
-	public StartTimeWindow getStartTimeWindow(int activity) {
+	IntInterval getStartTimeWindow(int activity) {
 		int earliestStart = lowerBounds[activity];
 		Integer latestStart = upperBounds[activity];
-		StartTimeWindow timeWindow = new StartTimeWindow(earliestStart, latestStart);
+		IntInterval timeWindow = new IntInterval(earliestStart, latestStart);
 		return timeWindow;
 	}
 
-	public void schedule(int activity, int start) {
+	void schedule(int activity, int start) {
 		Set<Integer> successors = aonNetwork.getSuccessors(activity);
 		scheduled.add(activity);
 		for(int successor : successors) {
@@ -63,7 +62,7 @@ public class TemporalConstraintsTracker {
 		}
 	}
 
-	public Set<Integer> unschedule(int activity, int timeSpan, int[] startTimes) {
+	Set<Integer> unschedule(int activity, int timeSpan, int[] startTimes) {
 		Set<Integer> directUnschedule = Sets.newHashSet();
 		for(int scheduledActivity : scheduled) {
 			int startTime = startTimes[scheduledActivity];
@@ -112,7 +111,7 @@ public class TemporalConstraintsTracker {
 			
 			}
 			LOGGER.debug("modefied time window for activity {}: {}", 
-					openActivity, new StartTimeWindow(lowerBounds[openActivity], upperBounds[openActivity]));
+					openActivity, new IntInterval(lowerBounds[openActivity], upperBounds[openActivity]));
 		}
 		
 		Set<Integer> allUnscheduled = Sets.union(directUnschedule, indirectUnschedule);
@@ -141,7 +140,7 @@ public class TemporalConstraintsTracker {
 		return minStartTime;
 	}
 
-	public static TemporalConstraintsTracker createInstance(IModeAssignment candidate) {
+	static TemporalConstraintsTracker createInstance(IModeAssignment candidate) {
 		int[][] paths = candidate.getInstance().getPathMatrix();
 		IDirectedGraph network = candidate.getInstance().getAonNetwork();
 		int[] lbs = paths[0].clone();
@@ -155,13 +154,10 @@ public class TemporalConstraintsTracker {
 
 	private static int[] initUpperBounds(int[][] paths) {
 		int[] distancesToEnd = IntArrays.getColumn(paths.length - 1, paths);
-//		int makespan = paths[0][paths.length - 1];
 		int[] upperBounds = new int[distancesToEnd.length];
 		for (int i = 0; i < distancesToEnd.length; i++) {
-//			upperBounds[i] = makespan - distancesToEnd[i];
-			upperBounds[i] = Integer.MAX_VALUE;//makespan - distancesToEnd[i];
+			upperBounds[i] = Integer.MAX_VALUE;
 		}
-//		upperBounds[upperBounds.length -1] = makespan;
 		return upperBounds;
 	}
 

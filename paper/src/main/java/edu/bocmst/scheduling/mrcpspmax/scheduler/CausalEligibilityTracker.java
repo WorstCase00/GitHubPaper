@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Sets;
 
-import edu.bocmst.scheduling.mrcpspmax.bmap.candidate.IModeAssignment;
-import edu.bocmst.scheduling.mrcpspmax.bmap.candidate.IRcpspMaxInstance;
+import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.IModeAssignment;
+import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.IRcpspMaxInstance;
 import edu.bocmst.scheduling.mrcpspmax.commons.GraphUtils;
 
 class CausalEligibilityTracker {
@@ -20,7 +20,7 @@ class CausalEligibilityTracker {
 	private final List<Set<Integer>> causalSuccessors;
 	private final Set<Integer> scheduled;
 	
-	protected CausalEligibilityTracker(
+	CausalEligibilityTracker(
 			List<Set<Integer>> openCausalPredecessors,
 			List<Set<Integer>> causalSuccessors) {
 		this.openCausalPredecessors = openCausalPredecessors;
@@ -28,7 +28,7 @@ class CausalEligibilityTracker {
 		scheduled = Sets.newHashSet();
 	}
 
-	public Set<Integer> getEligibleActivities() {
+	Set<Integer> getEligibleActivities() {
 		Set<Integer> eligible = Sets.newHashSet();
 		for(int activity = 0; activity < openCausalPredecessors.size(); activity ++) {
 			if(scheduled.contains(activity)) {
@@ -42,7 +42,7 @@ class CausalEligibilityTracker {
 		return eligible;
 	}
 
-	public void unschedule(Set<Integer> unschedule) {
+	void unschedule(Set<Integer> unschedule) {
 		for(Integer activity : unschedule) {
 			unschedule(activity);
 		}
@@ -57,7 +57,7 @@ class CausalEligibilityTracker {
 		scheduled.remove(activity);
 	}
 
-	public void schedule(int activity) {
+	void schedule(int activity) {
 		Set<Integer> successors = causalSuccessors.get(activity);
 		for(Integer successor : successors) {
 			Set<Integer> open = openCausalPredecessors.get(successor.intValue());
@@ -66,7 +66,7 @@ class CausalEligibilityTracker {
 		scheduled.add(activity);
 	}
 	
-	public static CausalEligibilityTracker createInstance(IModeAssignment candidate) {
+	static CausalEligibilityTracker createInstance(IModeAssignment candidate) {
 		int[] modes = candidate.getModeArray();
 		IRcpspMaxInstance rcpspMaxInstance = candidate.getInstance();
 		List<Set<Integer>> openCausalPredecessors = GraphUtils.getPositivePredecessors(modes, rcpspMaxInstance);

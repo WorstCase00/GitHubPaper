@@ -9,9 +9,9 @@ import org.slf4j.LoggerFactory;
 import com.google.common.primitives.Ints;
 
 import edu.bocmst.graph.IDirectedEdge;
-import edu.bocmst.scheduling.mrcpspmax.bmap.candidate.IModeAssignment;
-import edu.bocmst.scheduling.mrcpspmax.bmap.candidate.ModeAssignment;
 import edu.bocmst.scheduling.mrcpspmax.bmap.ga.AbstractModeAssignmentOperator;
+import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.IModeAssignment;
+import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.ModeAssignmentFactory;
 import edu.bocmst.scheduling.mrcpspmax.commons.GraphUtils;
 import edu.bocmst.scheduling.mrcpspmax.commons.MrcpspMaxUtils;
 import edu.bocmst.scheduling.mrcpspmax.commons.RandomUtils;
@@ -42,7 +42,7 @@ public class BarriosBmapCycleRepair extends AbstractModeAssignmentOperator {
 			LOGGER.debug("no repair modifications found");
 			return candidate;
 		}
-		IModeAssignment newCandidate = ModeAssignment.createInstance(newModes, instance);
+		IModeAssignment newCandidate = ModeAssignmentFactory.createInstance(newModes, instance);
 		return newCandidate;
 	}
 

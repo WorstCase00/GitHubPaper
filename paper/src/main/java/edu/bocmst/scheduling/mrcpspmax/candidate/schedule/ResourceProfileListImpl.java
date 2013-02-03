@@ -1,12 +1,12 @@
-package edu.bocmst.scheduling.mrcpspmax.candidate;
+package edu.bocmst.scheduling.mrcpspmax.candidate.schedule;
 
 import java.util.Set;
 
 import com.google.common.collect.ImmutableList;
 
-import edu.bocmst.scheduling.mrcpspmax.bmap.candidate.IRcpspMaxInstance;
+import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.IRcpspMaxInstance;
 import edu.bocmst.scheduling.mrcpspmax.instance.IRenewableResource;
-import edu.bocmst.scheduling.mrcpspmax.scheduler.StartTimeWindow;
+import edu.bocmst.utils.IntInterval;
 
 public class ResourceProfileListImpl implements IResourceProfile {
 
@@ -26,7 +26,7 @@ public class ResourceProfileListImpl implements IResourceProfile {
 	@Override
 	public int getEarliestPossibleStartInTimeWindowOrNegativeMissingTimeSpan(
 			int activity,
-			StartTimeWindow startTimeWindow) {
+			IntInterval startTimeWindow) {
 		int lowerBound = startTimeWindow.getLowerBound();
 		int duration = instance.getProcessingTime(activity);
 		int[] resourceDemands = instance.getRenewableResourceConsumption(activity);

@@ -1,6 +1,6 @@
 package edu.bocmst.scheduling.benchmarking.bmap.metric;
 
-import edu.bocmst.scheduling.mrcpspmax.bmap.candidate.IModeAssignment;
+import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.IModeAssignment;
 
 public class RelativeEditDistance implements ISimilarityMetric {
 

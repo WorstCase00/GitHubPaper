@@ -6,8 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.uncommons.watchmaker.framework.factories.AbstractCandidateFactory;
 
-import edu.bocmst.scheduling.mrcpspmax.bmap.candidate.IModeAssignment;
-import edu.bocmst.scheduling.mrcpspmax.bmap.candidate.ModeAssignment;
+import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.IModeAssignment;
+import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.ModeAssignmentFactory;
 import edu.bocmst.scheduling.mrcpspmax.commons.RandomUtils;
 import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
 
@@ -30,7 +30,7 @@ public class RandomBmapFactory extends AbstractCandidateFactory<IModeAssignment>
 			int randomMode = RandomUtils.getRandomMode(activity, instance);
 			modes[activity] = randomMode;
 		}
-		IModeAssignment candidate = ModeAssignment.createInstance(modes, instance);
+		IModeAssignment candidate = ModeAssignmentFactory.createInstance(modes, instance);
 		return candidate;
 	}
 

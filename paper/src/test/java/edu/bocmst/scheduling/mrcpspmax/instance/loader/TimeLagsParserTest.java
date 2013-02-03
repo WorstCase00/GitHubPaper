@@ -11,6 +11,7 @@ import java.util.Map;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
+import edu.bocmst.graph.DirectedGraphEdgeFactory;
 import edu.bocmst.graph.IDirectedEdge;
 
 public class TimeLagsParserTest {
@@ -35,15 +36,16 @@ public class TimeLagsParserTest {
 		
 		Map<IDirectedEdge, int[][]> result = TimeLagsParser.parseTimeLags(instanceLines, VERTEX_COUNT);
 		
-		assertArrayEquals(TL_MATRIX01, result.get(new AonNetworkEdge(0, 1)));
-		assertArrayEquals(TL_MATRIX02, result.get(new AonNetworkEdge(0, 2)));
-		assertArrayEquals(TL_MATRIX13, result.get(new AonNetworkEdge(1, 3)));
-		assertArrayEquals(TL_MATRIX24, result.get(new AonNetworkEdge(2, 4)));
-		assertArrayEquals(TL_MATRIX35, result.get(new AonNetworkEdge(3, 5)));
-		assertArrayEquals(TL_MATRIX42, result.get(new AonNetworkEdge(4, 2)));
-		assertArrayEquals(TL_MATRIX46, result.get(new AonNetworkEdge(4, 6)));
-		assertArrayEquals(TL_MATRIX53, result.get(new AonNetworkEdge(5, 3)));
-		assertArrayEquals(TL_MATRIX57, result.get(new AonNetworkEdge(5, 7)));
-		assertArrayEquals(TL_MATRIX67, result.get(new AonNetworkEdge(6, 7)));
+		DirectedGraphEdgeFactory edgeFactory = DirectedGraphEdgeFactory.getInstance();
+		assertArrayEquals(TL_MATRIX01, result.get(edgeFactory.createEdge(0, 1)));
+		assertArrayEquals(TL_MATRIX02, result.get(edgeFactory.createEdge(0, 2)));
+		assertArrayEquals(TL_MATRIX13, result.get(edgeFactory.createEdge(1, 3)));
+		assertArrayEquals(TL_MATRIX24, result.get(edgeFactory.createEdge(2, 4)));
+		assertArrayEquals(TL_MATRIX35, result.get(edgeFactory.createEdge(3, 5)));
+		assertArrayEquals(TL_MATRIX42, result.get(edgeFactory.createEdge(4, 2)));
+		assertArrayEquals(TL_MATRIX46, result.get(edgeFactory.createEdge(4, 6)));
+		assertArrayEquals(TL_MATRIX53, result.get(edgeFactory.createEdge(5, 3)));
+		assertArrayEquals(TL_MATRIX57, result.get(edgeFactory.createEdge(5, 7)));
+		assertArrayEquals(TL_MATRIX67, result.get(edgeFactory.createEdge(6, 7)));
 	}
 }

@@ -8,14 +8,15 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Sets;
 
-import edu.bocmst.scheduling.mrcpspmax.bmap.candidate.IModeAssignment;
-import edu.bocmst.scheduling.mrcpspmax.bmap.candidate.IRcpspMaxInstance;
-import edu.bocmst.scheduling.mrcpspmax.candidate.IPriorityRule;
-import edu.bocmst.scheduling.mrcpspmax.candidate.IResourceProfile;
-import edu.bocmst.scheduling.mrcpspmax.candidate.ResourceProfileListImpl;
-import edu.bocmst.scheduling.mrcpspmax.candidate.Schedule;
+import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.IModeAssignment;
+import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.IRcpspMaxInstance;
+import edu.bocmst.scheduling.mrcpspmax.candidate.priority.IPriorityRule;
+import edu.bocmst.scheduling.mrcpspmax.candidate.schedule.IResourceProfile;
+import edu.bocmst.scheduling.mrcpspmax.candidate.schedule.ResourceProfileListImpl;
+import edu.bocmst.scheduling.mrcpspmax.candidate.schedule.Schedule;
+import edu.bocmst.utils.IntInterval;
 
-public class SerialRcpspMaxScheduler implements IRcpspMaxScheduler {
+class SerialRcpspMaxScheduler implements IRcpspMaxScheduler {
 
 	private static final Logger LOGGER = LoggerFactory
 		.getLogger(SerialRcpspMaxScheduler.class);
@@ -41,7 +42,7 @@ public class SerialRcpspMaxScheduler implements IRcpspMaxScheduler {
 			LOGGER.debug("eligibile activities in this iteration: {}", Arrays.toString(eligibleActivities.toArray()));
 			int activity = priorityRule.getNextActivity(eligibleActivities);
 			LOGGER.debug("next activity to be schedule: {}", activity);
-			StartTimeWindow startTimeWindow = temporalConstraintsTracker.getStartTimeWindow(activity);
+			IntInterval startTimeWindow = temporalConstraintsTracker.getStartTimeWindow(activity);
 			LOGGER.debug("temporally valid start time window: {}", startTimeWindow);
 			int earliestStartOrMissingTime = resourceProfile.getEarliestPossibleStartInTimeWindowOrNegativeMissingTimeSpan(activity, startTimeWindow);
 			if(earliestStartOrMissingTime < 0) {

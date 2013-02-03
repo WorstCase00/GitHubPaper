@@ -8,8 +8,8 @@ import org.uncommons.watchmaker.framework.operators.IntArrayCrossover;
 
 import com.google.common.collect.Lists;
 
-import edu.bocmst.scheduling.mrcpspmax.bmap.candidate.IModeAssignment;
-import edu.bocmst.scheduling.mrcpspmax.bmap.candidate.ModeAssignment;
+import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.IModeAssignment;
+import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.ModeAssignmentFactory;
 import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
 
 public class BmapArrayCrossover implements
@@ -33,7 +33,7 @@ public class BmapArrayCrossover implements
 	private List<IModeAssignment> createCandidates(List<int[]> modesList) {
 		List<IModeAssignment> candidates = Lists.newArrayList();
 		for(int[] modes : modesList) {
-			IModeAssignment candidate = ModeAssignment.createInstance(modes, problem);
+			IModeAssignment candidate = ModeAssignmentFactory.createInstance(modes, problem);
 			candidates.add(candidate);
 		}
 		return candidates;

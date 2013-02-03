@@ -10,7 +10,7 @@ import org.uncommons.watchmaker.swing.evolutionmonitor.EvolutionMonitor;
 import com.google.common.collect.Lists;
 
 import edu.bocmst.scheduling.mrcpspmax.bmap.IBmapSolver;
-import edu.bocmst.scheduling.mrcpspmax.bmap.candidate.IModeAssignment;
+import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.IModeAssignment;
 import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
 
 public class GaBmapSolver implements IBmapSolver{

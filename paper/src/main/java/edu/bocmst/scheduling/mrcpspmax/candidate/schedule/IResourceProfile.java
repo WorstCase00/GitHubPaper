@@ -1,14 +1,14 @@
-package edu.bocmst.scheduling.mrcpspmax.candidate;
+package edu.bocmst.scheduling.mrcpspmax.candidate.schedule;
 
 import java.util.Set;
 
-import edu.bocmst.scheduling.mrcpspmax.scheduler.StartTimeWindow;
+import edu.bocmst.utils.IntInterval;
 
 public interface IResourceProfile {
 
 	int getEarliestPossibleStartInTimeWindowOrNegativeMissingTimeSpan(
-			int activity,
-			StartTimeWindow startTimeWindow);
+			int activity, 
+			IntInterval startTimeWindow);
 
 	void schedule(int activity, int earliestPossibleStart);
 

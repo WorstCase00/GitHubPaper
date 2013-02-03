@@ -1,4 +1,4 @@
-package edu.bocmst.scheduling.mrcpspmax.candidate;
+package edu.bocmst.scheduling.mrcpspmax.candidate.schedule;
 
 @Deprecated
 public class LegacyIndexedTimeWindow extends LegacyTimeWindow {

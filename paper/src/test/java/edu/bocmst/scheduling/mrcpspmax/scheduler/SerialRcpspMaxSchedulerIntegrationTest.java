@@ -10,11 +10,11 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
 import edu.bocmst.scheduling.mrcpspmax.TestConstants;
-import edu.bocmst.scheduling.mrcpspmax.bmap.candidate.IModeAssignment;
-import edu.bocmst.scheduling.mrcpspmax.bmap.candidate.ModeAssignment;
-import edu.bocmst.scheduling.mrcpspmax.candidate.ActivityListPriorityRule;
-import edu.bocmst.scheduling.mrcpspmax.candidate.IPriorityRule;
-import edu.bocmst.scheduling.mrcpspmax.candidate.Schedule;
+import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.IModeAssignment;
+import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.ModeAssignmentFactory;
+import edu.bocmst.scheduling.mrcpspmax.candidate.priority.ActivityListPriorityRule;
+import edu.bocmst.scheduling.mrcpspmax.candidate.priority.IPriorityRule;
+import edu.bocmst.scheduling.mrcpspmax.candidate.schedule.Schedule;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SerialRcpspMaxSchedulerIntegrationTest {
@@ -29,7 +29,7 @@ public class SerialRcpspMaxSchedulerIntegrationTest {
 	@Test
 	public void integrationTestBarriosPaperExample() throws Exception {
 		priorityRule = new ActivityListPriorityRule(LIST);
-		candidate = ModeAssignment.createInstance(MODES, TestConstants.THESIS_INSTANCE);
+		candidate = ModeAssignmentFactory.createInstance(MODES, TestConstants.THESIS_INSTANCE);
 		SerialRcpspMaxScheduler testee = new SerialRcpspMaxScheduler();
 		Schedule result = testee.createSchedule(candidate, priorityRule);
 		int[] startTime = result.getStartTimes();

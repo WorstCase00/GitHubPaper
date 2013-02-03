@@ -25,7 +25,6 @@ import edu.bocmst.metaheuristic.EvolutionEngineType;
 import edu.bocmst.metaheuristic.IGeneratedSolutionsCounter;
 import edu.bocmst.metaheuristic.TerminationConditionConfiguration;
 import edu.bocmst.metaheuristic.TerminationConditionCreator;
-import edu.bocmst.scheduling.mrcpspmax.bmap.candidate.IModeAssignment;
 import edu.bocmst.scheduling.mrcpspmax.bmap.ga.evaluation.BmapEvaluationType;
 import edu.bocmst.scheduling.mrcpspmax.bmap.ga.evaluation.PenalizingEdgeSumEvaluator;
 import edu.bocmst.scheduling.mrcpspmax.bmap.ga.evaluation.PenalizingLongestPathEvaluation;
@@ -37,6 +36,7 @@ import edu.bocmst.scheduling.mrcpspmax.bmap.ga.repair.BarriosBmapRepair;
 import edu.bocmst.scheduling.mrcpspmax.bmap.ga.selection.BampSelectionType;
 import edu.bocmst.scheduling.mrcpspmax.bmap.ga.selection.SimilaritySampling;
 import edu.bocmst.scheduling.mrcpspmax.bmap.ga.selection.SimilarityTournament;
+import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.IModeAssignment;
 import edu.bocmst.scheduling.mrcpspmax.commons.RandomUtils;
 import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
 

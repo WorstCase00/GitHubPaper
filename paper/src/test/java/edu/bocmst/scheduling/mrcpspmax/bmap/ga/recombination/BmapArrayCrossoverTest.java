@@ -19,12 +19,12 @@ import org.uncommons.watchmaker.framework.operators.IntArrayCrossover;
 
 import com.google.common.collect.Lists;
 
-import edu.bocmst.scheduling.mrcpspmax.bmap.candidate.IModeAssignment;
-import edu.bocmst.scheduling.mrcpspmax.bmap.candidate.ModeAssignment;
+import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.IModeAssignment;
+import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.ModeAssignmentFactory;
 import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(ModeAssignment.class)
+@PrepareForTest(ModeAssignmentFactory.class)
 public class BmapArrayCrossoverTest {
 
 	private static final int[] MODES1 = new int[] {1, 2};
@@ -40,7 +40,7 @@ public class BmapArrayCrossoverTest {
 
 	@Before
 	public void setupFixture() {
-		PowerMockito.mockStatic(ModeAssignment.class);
+		PowerMockito.mockStatic(ModeAssignmentFactory.class);
 	}
 	
 	@Test
@@ -50,9 +50,9 @@ public class BmapArrayCrossoverTest {
 		List<int[]> modeList = Lists.newArrayList(MODES1, MODES2, MODES3);
 		when(intArrayCrossover.apply(anyListOf(int[].class), any(Random.class))).thenReturn(modeList);
 	
-		PowerMockito.when(ModeAssignment.createInstance(MODES1, problem)).thenReturn(candidate1);
-		PowerMockito.when(ModeAssignment.createInstance(MODES2, problem)).thenReturn(candidate2);
-		PowerMockito.when(ModeAssignment.createInstance(MODES3, problem)).thenReturn(candidate3);
+		PowerMockito.when(ModeAssignmentFactory.createInstance(MODES1, problem)).thenReturn(candidate1);
+		PowerMockito.when(ModeAssignmentFactory.createInstance(MODES2, problem)).thenReturn(candidate2);
+		PowerMockito.when(ModeAssignmentFactory.createInstance(MODES3, problem)).thenReturn(candidate3);
 		when(candidate1.getModeArray()).thenReturn(MODES1);
 		when(candidate2.getModeArray()).thenReturn(MODES2);
 		when(candidate3.getModeArray()).thenReturn(MODES3);

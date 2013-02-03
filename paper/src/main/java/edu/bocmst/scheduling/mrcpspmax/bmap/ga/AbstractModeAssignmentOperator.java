@@ -7,7 +7,7 @@ import org.uncommons.watchmaker.framework.EvolutionaryOperator;
 
 import com.google.common.collect.Lists;
 
-import edu.bocmst.scheduling.mrcpspmax.bmap.candidate.IModeAssignment;
+import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.IModeAssignment;
 
 public abstract class AbstractModeAssignmentOperator implements EvolutionaryOperator<IModeAssignment> {
 	

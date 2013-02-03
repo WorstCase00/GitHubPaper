@@ -8,6 +8,8 @@ import org.jgrapht.graph.DefaultDirectedWeightedGraph;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import edu.bocmst.graph.DirectedGraphEdgeFactory;
+import edu.bocmst.graph.DirectedGraphFactory;
 import edu.bocmst.graph.IDirectedEdge;
 import edu.bocmst.graph.IDirectedGraph;
 
@@ -17,14 +19,15 @@ abstract class AonNetworkParser extends BaseParser {
 	
 	static IDirectedGraph parseProjectNetwork(
 			List<String> instanceLines) {
-		EdgeFactory<Integer, IDirectedEdge> edgeFactory = new AonNetworkEdgeFactory();
+		EdgeFactory<Integer, IDirectedEdge> edgeFactory =
+			DirectedGraphEdgeFactory.getInstance();
 		DirectedGraph<Integer, IDirectedEdge> network = 
 			new DefaultDirectedWeightedGraph<Integer, IDirectedEdge>(edgeFactory);
 
 		addVertices(network, instanceLines);
 		addEdges(network, instanceLines);
 		
-		IDirectedGraph aonNetwork = AonNetworkJGraphTImpl.createInstance(network);
+		IDirectedGraph aonNetwork = DirectedGraphFactory.wrapJGraphTGraph(network);
 		return aonNetwork;
 	}
 

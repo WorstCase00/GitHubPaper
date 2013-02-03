@@ -9,11 +9,10 @@ import org.uncommons.watchmaker.framework.FitnessEvaluator;
 
 import edu.bocmst.graph.IDirectedEdge;
 import edu.bocmst.metaheuristic.IGeneratedSolutionsCounter;
-import edu.bocmst.scheduling.mrcpspmax.bmap.candidate.IModeAssignment;
+import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.IModeAssignment;
 import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
 
-public class PenalizingEdgeSumEvaluator implements
-FitnessEvaluator<IModeAssignment> {
+public class PenalizingEdgeSumEvaluator implements FitnessEvaluator<IModeAssignment> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PenalizingEdgeSumEvaluator.class);
 	private static final double RESOURCE_PENALTY = Double.MAX_VALUE;

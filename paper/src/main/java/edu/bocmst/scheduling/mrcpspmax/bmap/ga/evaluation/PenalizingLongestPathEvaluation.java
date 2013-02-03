@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.uncommons.watchmaker.framework.FitnessEvaluator;
 
 import edu.bocmst.metaheuristic.IGeneratedSolutionsCounter;
-import edu.bocmst.scheduling.mrcpspmax.bmap.candidate.IModeAssignment;
+import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.IModeAssignment;
 
 public class PenalizingLongestPathEvaluation implements
 		FitnessEvaluator<IModeAssignment> {

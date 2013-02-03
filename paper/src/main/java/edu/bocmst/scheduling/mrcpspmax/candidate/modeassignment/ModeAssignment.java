@@ -1,13 +1,8 @@
-package edu.bocmst.scheduling.mrcpspmax.bmap.candidate;
+package edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment;
 
 import java.util.Arrays;
 
-import com.google.common.primitives.Ints;
-
-import edu.bocmst.scheduling.mrcpspmax.commons.MrcpspMaxUtils;
-import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
-
-public class ModeAssignment implements IModeAssignment {
+class ModeAssignment implements IModeAssignment {
 
 	private final int[] modeArray;
 	private final IRcpspMaxInstance instance;
@@ -15,7 +10,7 @@ public class ModeAssignment implements IModeAssignment {
 	private final boolean resourceFeasible;
 	private final boolean timeFeasible;
 
-	public ModeAssignment(
+	protected ModeAssignment(
 			int[] modeArray, 
 			IRcpspMaxInstance instance,
 			int[] resourceRemainingVector, 
@@ -27,12 +22,12 @@ public class ModeAssignment implements IModeAssignment {
 		this.resourceFeasible = resourceFeasible;
 		this.timeFeasible = timeFeasible;
 	}
-	
+
 	@Override
 	public int[] getResourceRemainingVector() {
 		return resourceRemainingVector;
 	}
-	
+
 	@Override
 	public int[] getModeArray() {
 		return modeArray;
@@ -63,23 +58,10 @@ public class ModeAssignment implements IModeAssignment {
 		return instance;
 	}
 
-	public static IModeAssignment createInstance(
-			int[] modes,
-			IMrcpspMaxInstance instance) {
-		int[] remaining = MrcpspMaxUtils.calculateResourceRemainingVector(modes, instance);
-		boolean resourceFeasible = (Ints.min(remaining) >= 0);
-		
-		boolean timeFeasible = MrcpspMaxUtils.isModeAssignmentTimeValid(modes, instance);
-		
-		IRcpspMaxInstance rcpspsMaxInstance = RcpspMaxInstance.create(modes, instance);
-		
-		return new ModeAssignment(modes, rcpspsMaxInstance, remaining, resourceFeasible, timeFeasible);
-	}
-
 	@Override
 	public String toString() {
 		return "ModeAssignment [modeArray=" + Arrays.toString(modeArray)
-				+ ", resourceFeasible=" + resourceFeasible + ", timeFeasible="
-				+ timeFeasible + "]";
+		+ ", resourceFeasible=" + resourceFeasible + ", timeFeasible="
+		+ timeFeasible + "]";
 	}
 }

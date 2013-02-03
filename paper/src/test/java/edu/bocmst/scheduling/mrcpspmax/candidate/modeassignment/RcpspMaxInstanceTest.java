@@ -1,8 +1,10 @@
-package edu.bocmst.scheduling.mrcpspmax.bmap.candidate;
+package edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment;
 
 import org.junit.Test;
 
 import edu.bocmst.scheduling.mrcpspmax.TestConstants;
+import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.IRcpspMaxInstance;
+import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.RcpspMaxInstance;
 import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
 import static org.junit.Assert.*;
 
@@ -15,7 +17,7 @@ public class RcpspMaxInstanceTest {
 	public void testInstanceCreation() {
 		int[] modes = new int[] {1,2,2,3,3,1,3,1};
 		IMrcpspMaxInstance instance = TestConstants.THESIS_INSTANCE;
-		IRcpspMaxInstance result = RcpspMaxInstance.create(modes, instance);
+		IRcpspMaxInstance result = RcpspMaxInstance.createInstance(modes, instance);
 		
 		for(int activity = 0; activity < modes.length; activity ++) {
 			assertEquals(PROC_TIMES[activity], result.getProcessingTime(activity));

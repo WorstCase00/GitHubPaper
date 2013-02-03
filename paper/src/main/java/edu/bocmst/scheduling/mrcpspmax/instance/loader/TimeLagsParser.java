@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import edu.bocmst.graph.DirectedGraphEdgeFactory;
 import edu.bocmst.graph.IDirectedEdge;
 
 abstract class TimeLagsParser extends BaseParser {
@@ -22,6 +23,7 @@ abstract class TimeLagsParser extends BaseParser {
 			List<String> instanceLines, 
 			int activityCount) {
 		Map<IDirectedEdge, int[][]> timeLagsMap = Maps.newHashMap();
+		DirectedGraphEdgeFactory edgeFactory = DirectedGraphEdgeFactory.getInstance();
 		for(int activityIndex = 0; activityIndex < activityCount; activityIndex++) {
 			String vertexLine = instanceLines.get(activityIndex + 1);
 			LOGGER.debug("parse edges from line: ", vertexLine);
@@ -33,7 +35,7 @@ abstract class TimeLagsParser extends BaseParser {
 			ArrayList<String> arrayStrings = Lists.newArrayList(timeLagsString.split("\\]\t\\["));
 			
 			List<Integer> orderedSuccessorList = getOrderedSuccessorList(vertexLine, modesCount);
-		
+			
 			for(int succIndex = 0; succIndex < orderedSuccessorList.size(); succIndex++) {
 				int successor = orderedSuccessorList.get(succIndex);
 				String timeLagArrayString = arrayStrings.get(succIndex);
@@ -45,7 +47,7 @@ abstract class TimeLagsParser extends BaseParser {
 						timeLagMatrix[i][j] = timeLagArray[i * modesSuccessor + j];
 					}
 				}
-				IDirectedEdge edge = new AonNetworkEdge(activityIndex, successor);
+				IDirectedEdge edge = edgeFactory.createEdge(activityIndex, successor);
 				timeLagsMap.put(edge, timeLagMatrix);
 			}
 		}

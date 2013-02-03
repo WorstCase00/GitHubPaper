@@ -17,7 +17,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import edu.bocmst.graph.IDirectedEdge;
-import edu.bocmst.scheduling.mrcpspmax.bmap.candidate.IRcpspMaxInstance;
+import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.IRcpspMaxInstance;
 import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
 
 public abstract class GraphUtils {

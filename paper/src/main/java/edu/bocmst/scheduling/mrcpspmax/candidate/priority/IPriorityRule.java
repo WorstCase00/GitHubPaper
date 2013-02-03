@@ -1,4 +1,4 @@
-package edu.bocmst.scheduling.mrcpspmax.candidate;
+package edu.bocmst.scheduling.mrcpspmax.candidate.priority;
 
 import java.util.Set;
 

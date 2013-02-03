@@ -1,4 +1,4 @@
-package edu.bocmst.scheduling.mrcpspmax.bmap.candidate;
+package edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import edu.bocmst.scheduling.mrcpspmax.commons.GraphUtils;
 import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
 import edu.bocmst.scheduling.mrcpspmax.instance.IRenewableResource;
 
-public class RcpspMaxInstance implements IRcpspMaxInstance {
+class RcpspMaxInstance implements IRcpspMaxInstance {
 
 	private final List<Integer> processingTimes;
 	private final List<int[]> renewableResourceConsumptions;
@@ -19,7 +19,7 @@ public class RcpspMaxInstance implements IRcpspMaxInstance {
 	private final ImmutableList<IRenewableResource> resources;
 	private final IDirectedGraph aonNetwork;
 
-	public RcpspMaxInstance(
+	RcpspMaxInstance(
 			List<Integer> processingTimes,
 			List<int[]> renewableResourceConsumptions, 
 			int[][] adjacencyMatrix,
@@ -54,7 +54,22 @@ public class RcpspMaxInstance implements IRcpspMaxInstance {
 		return renewableResourceConsumptions.get(acitivity);
 	}
 
-	public static IRcpspMaxInstance create(
+	@Override
+	public ImmutableList<IRenewableResource> getRenewableResourceList() {
+		return this.resources;
+	}
+
+	@Override
+	public int getActivityCount() {
+		return this.processingTimes.size();
+	}
+
+	@Override
+	public IDirectedGraph getAonNetwork() {
+		return this.aonNetwork;
+	}
+
+	public static IRcpspMaxInstance createInstance(
 			int[] modes,
 			IMrcpspMaxInstance instance) {
 		int[][] adjMatrix = GraphUtils.getAdjacencyMatrix(modes, instance);
@@ -93,21 +108,6 @@ public class RcpspMaxInstance implements IRcpspMaxInstance {
 			consumptions.add(consumptionVector);
 		}
 		return consumptions;
-	}
-
-	@Override
-	public ImmutableList<IRenewableResource> getRenewableResourceList() {
-		return this.resources;
-	}
-
-	@Override
-	public int getActivityCount() {
-		return this.processingTimes.size();
-	}
-
-	@Override
-	public IDirectedGraph getAonNetwork() {
-		return this.aonNetwork;
 	}
 
 }

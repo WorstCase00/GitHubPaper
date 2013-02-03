@@ -1,13 +1,12 @@
-package edu.bocmst.scheduling.mrcpspmax.instance.loader;
+package edu.bocmst.graph;
 
-import edu.bocmst.graph.IDirectedEdge;
 
-class AonNetworkEdge implements IDirectedEdge {
+class DirectedGraphEdge implements IDirectedEdge {
 
 	private final int source;
 	private final int target;
 
-	AonNetworkEdge(int source, int target) {
+	DirectedGraphEdge(int source, int target) {
 		this.source = source;
 		this.target = target;
 	}
@@ -39,7 +38,7 @@ class AonNetworkEdge implements IDirectedEdge {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		AonNetworkEdge other = (AonNetworkEdge) obj;
+		DirectedGraphEdge other = (DirectedGraphEdge) obj;
 		if (source != other.source)
 			return false;
 		if (target != other.target)

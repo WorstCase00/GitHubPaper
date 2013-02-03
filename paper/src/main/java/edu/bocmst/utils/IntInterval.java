@@ -1,11 +1,11 @@
-package edu.bocmst.scheduling.mrcpspmax.scheduler;
+package edu.bocmst.utils;
 
-public class StartTimeWindow {
+public class IntInterval {
 
 	private final int lowerBound;
 	private final Integer upperBound;
 
-	protected StartTimeWindow(int lowerBound, Integer upperBound) {
+	public IntInterval(int lowerBound, Integer upperBound) {
 		this.lowerBound = lowerBound;
 		this.upperBound = upperBound;
 	}
@@ -42,7 +42,7 @@ public class StartTimeWindow {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		StartTimeWindow other = (StartTimeWindow) obj;
+		IntInterval other = (IntInterval) obj;
 		if (lowerBound != other.lowerBound)
 			return false;
 		if (upperBound == null) {

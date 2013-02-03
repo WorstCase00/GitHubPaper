@@ -1,4 +1,4 @@
-package edu.bocmst.scheduling.mrcpspmax.bmap.candidate;
+package edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment;
 
 public interface IModeAssignment {
 

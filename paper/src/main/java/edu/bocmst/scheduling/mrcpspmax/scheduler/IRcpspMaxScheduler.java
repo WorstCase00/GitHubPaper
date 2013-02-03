@@ -1,8 +1,8 @@
 package edu.bocmst.scheduling.mrcpspmax.scheduler;
 
-import edu.bocmst.scheduling.mrcpspmax.bmap.candidate.IModeAssignment;
-import edu.bocmst.scheduling.mrcpspmax.candidate.IPriorityRule;
-import edu.bocmst.scheduling.mrcpspmax.candidate.Schedule;
+import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.IModeAssignment;
+import edu.bocmst.scheduling.mrcpspmax.candidate.priority.IPriorityRule;
+import edu.bocmst.scheduling.mrcpspmax.candidate.schedule.Schedule;
 
 public interface IRcpspMaxScheduler {
 	

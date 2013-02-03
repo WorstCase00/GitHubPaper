@@ -8,7 +8,7 @@ import org.uncommons.watchmaker.framework.operators.EvolutionPipeline;
 
 import com.google.common.collect.Lists;
 
-import edu.bocmst.scheduling.mrcpspmax.bmap.candidate.IModeAssignment;
+import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.IModeAssignment;
 import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
 
 public class BarriosBmapRepair implements EvolutionaryOperator<IModeAssignment> {

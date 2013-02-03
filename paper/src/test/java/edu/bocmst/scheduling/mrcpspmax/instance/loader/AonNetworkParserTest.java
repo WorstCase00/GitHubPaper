@@ -10,6 +10,8 @@ import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
+import edu.bocmst.graph.IDirectedGraph;
+
 
 public class AonNetworkParserTest {
 
@@ -20,7 +22,7 @@ public class AonNetworkParserTest {
 	public void testNetworkParsing() throws FileNotFoundException, IOException {
 		List<String> instanceLines = IOUtils.readLines(new FileInputStream(THESIS_FILE));
 	
-		AonNetworkJGraphTImpl result = (AonNetworkJGraphTImpl) AonNetworkParser.parseProjectNetwork(instanceLines);
+		IDirectedGraph result = AonNetworkParser.parseProjectNetwork(instanceLines);
 		
 		assertEquals(EDGE_COUNT, result.getEdges().size());
 	}
