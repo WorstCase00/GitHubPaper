@@ -3,11 +3,12 @@ package edu.bocmst.scheduling.mrcpspmax.bmap;
 import org.apache.commons.configuration.PropertiesConfiguration;
 
 import edu.bocmst.scheduling.mrcpspmax.bmap.ga.GaBmapSolverConfiguration;
-import edu.bocmst.scheduling.mrcpspmax.commons.AbstractPropertyFileConfiguration;
+import edu.bocmst.utils.AbstractPropertyFileConfiguration;
 
 public class BmapSolverConfiguration extends AbstractPropertyFileConfiguration {
 
-	protected BmapSolverConfiguration(PropertiesConfiguration configuration,
+	protected BmapSolverConfiguration(
+			PropertiesConfiguration configuration,
 			GaBmapSolverConfiguration gaConfiguration) {
 		super(configuration);
 		this.gaConfiguration = gaConfiguration;

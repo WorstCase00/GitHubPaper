@@ -26,4 +26,8 @@ public class Schedule {
 				+ ", resourceProfile=" + resourceProfile + "]";
 	}
 
+	public int getMakespan() {
+		return startTimes[startTimes.length - 1];
+	}
+
 }

@@ -16,6 +16,7 @@ import edu.bocmst.scheduling.mrcpspmax.instance.IRenewableResource;
 
 class MrcpspMaxInstance implements IMrcpspMaxInstance {
 
+	private final int instanceId;
 	private final IDirectedGraph aonNetwork;
 	private final ImmutableList<IRenewableResource> renewableResourceList;
 	private final ImmutableList<INonRenewableResource> nonRenewableResourceList;
@@ -25,6 +26,7 @@ class MrcpspMaxInstance implements IMrcpspMaxInstance {
 	private final ImmutableMap<IDirectedEdge, int[][]> timelagsMap;
 	
 	MrcpspMaxInstance(
+			int instanceId,
 			IDirectedGraph aonNetwork,
 			List<IRenewableResource> renewableResourceList,
 			List<INonRenewableResource> nonRenewableResourceList,
@@ -33,6 +35,7 @@ class MrcpspMaxInstance implements IMrcpspMaxInstance {
 			List<int[][]>  nonRenewableResourceConsumptionsList,
 			Map<IDirectedEdge, int[][]> timelagsMap) {
 		super();
+		this.instanceId = instanceId;
 		this.aonNetwork = aonNetwork;
 		this.renewableResourceList = ImmutableList.copyOf(renewableResourceList);
 		this.nonRenewableResourceList = ImmutableList.copyOf(nonRenewableResourceList);
@@ -40,6 +43,11 @@ class MrcpspMaxInstance implements IMrcpspMaxInstance {
 		this.renewableResourceConsumptionsList = ImmutableList.copyOf(renewableResourceConsumptionsList);
 		this.nonRenewableResourceConsumptionsList = ImmutableList.copyOf(nonRenewableResourceConsumptionsList);
 		this.timelagsMap = ImmutableMap.copyOf(timelagsMap);
+	}
+
+	@Override
+	public int getInstanceId() {
+		return this.instanceId;
 	}
 
 	@Override
@@ -133,4 +141,18 @@ class MrcpspMaxInstance implements IMrcpspMaxInstance {
 	public IDirectedGraph getAonNetwork() {
 		return this.aonNetwork;
 	}
+
+	@Override
+	public String toString() {
+		return "MrcpspMaxInstance [" +
+				"aonNetwork=" + aonNetwork
+				+ ", renewableResourceList=" + renewableResourceList
+				+ ", nonRenewableResourceList=" + nonRenewableResourceList
+				+ ", processingTimesList=" + processingTimesList
+				+ ", renewableResourceConsumptionsList=" + renewableResourceConsumptionsList
+				+ ", nonRenewableResourceConsumptionsList=" + nonRenewableResourceConsumptionsList 
+				+ ", timelagsMap="+ timelagsMap + "]";
+	}
+	
+	
 }

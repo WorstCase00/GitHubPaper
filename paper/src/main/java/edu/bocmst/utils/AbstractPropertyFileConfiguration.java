@@ -1,4 +1,4 @@
-package edu.bocmst.scheduling.mrcpspmax.commons;
+package edu.bocmst.utils;
 
 import org.apache.commons.configuration.PropertiesConfiguration;
 

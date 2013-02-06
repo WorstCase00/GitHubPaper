@@ -1,4 +1,4 @@
-package edu.bocmst.scheduling.mrcpspmax.bmap.ga;
+package edu.bocmst.scheduling.mrcpspmax.bmap.ga.repair;
 
 import java.util.List;
 import java.util.Random;
@@ -9,7 +9,7 @@ import com.google.common.collect.Lists;
 
 import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.IModeAssignment;
 
-public abstract class AbstractModeAssignmentOperator implements EvolutionaryOperator<IModeAssignment> {
+abstract class AbstractModeAssignmentRepair implements EvolutionaryOperator<IModeAssignment> {
 	
 	@Override
 	public List<IModeAssignment> apply(

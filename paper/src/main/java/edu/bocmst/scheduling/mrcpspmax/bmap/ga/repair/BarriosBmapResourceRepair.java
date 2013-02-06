@@ -6,14 +6,13 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.bocmst.scheduling.mrcpspmax.bmap.ga.AbstractModeAssignmentOperator;
 import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.IModeAssignment;
 import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.ModeAssignmentFactory;
 import edu.bocmst.scheduling.mrcpspmax.commons.MrcpspMaxUtils;
 import edu.bocmst.scheduling.mrcpspmax.commons.RandomUtils;
 import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
 
-public class BarriosBmapResourceRepair extends AbstractModeAssignmentOperator  {
+public class BarriosBmapResourceRepair extends AbstractModeAssignmentRepair  {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(BarriosBmapRepair.class);
 	private final IMrcpspMaxInstance instance;

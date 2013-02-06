@@ -7,5 +7,5 @@ import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
 
 public interface IBmapSolver {
 	
-	List<IModeAssignment> getRankedModeAssignments(IMrcpspMaxInstance instance);
+	List<IModeAssignment> solve(IMrcpspMaxInstance instance);
 }

@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import com.google.common.primitives.Ints;
 
 import edu.bocmst.graph.IDirectedEdge;
-import edu.bocmst.scheduling.mrcpspmax.bmap.ga.AbstractModeAssignmentOperator;
 import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.IModeAssignment;
 import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.ModeAssignmentFactory;
 import edu.bocmst.scheduling.mrcpspmax.commons.GraphUtils;
@@ -18,7 +17,7 @@ import edu.bocmst.scheduling.mrcpspmax.commons.RandomUtils;
 import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
 import edu.bocmst.utils.IntArrays;
 
-public class BarriosBmapCycleRepair extends AbstractModeAssignmentOperator {
+public class BarriosBmapCycleRepair extends AbstractModeAssignmentRepair {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(BarriosBmapCycleRepair.class);
 

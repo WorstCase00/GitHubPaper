@@ -2,65 +2,32 @@ package edu.bocmst.scheduling.mrcpspmax.bmap.ga;
 
 import org.apache.commons.configuration.PropertiesConfiguration;
 
+import edu.bocmst.metaheuristic.AbstractGaSolverConfiguration;
 import edu.bocmst.metaheuristic.EvolutionEngineConfiguration;
 import edu.bocmst.metaheuristic.TerminationConditionConfiguration;
 import edu.bocmst.scheduling.mrcpspmax.bmap.ga.evaluation.BmapEvaluationType;
 import edu.bocmst.scheduling.mrcpspmax.bmap.ga.factory.BmapFactoryType;
 import edu.bocmst.scheduling.mrcpspmax.bmap.ga.selection.BampSelectionType;
-import edu.bocmst.scheduling.mrcpspmax.commons.AbstractPropertyFileConfiguration;
 
-public class GaBmapSolverConfiguration extends AbstractPropertyFileConfiguration {
+public class GaBmapSolverConfiguration extends AbstractGaSolverConfiguration {
 
-	static final class Keys {
-
-		public static final String ELITE_COUNT = "eliteCount";
-		public static final String POPULATION_COUNT = "populationCount";
+	public static final class Keys {
 		public static final String SELECTION_TYPE = "selectionType";
 		public static final String FACTORY_TYPE = "factoryType";
 		public static final String EVALUATION_TYPE = "evaluationType";
-		
 	}
 	
-	static final class Defaults {
-
-		public static final int ELITE_COUNT = 5;
-		public static final int POPULATION_COUNT = 100;
+	public static final class Defaults {
 		public static final String SELECTION_TYPE = "Sampling";
 		public static final String FACTORY_TYPE = "RelativeResource";
 		public static final String EVALUATION_TYPE = BmapEvaluationType.PenalizingLongestPath.name();//"PenalizingLongestPath";
-		
 	}
-
-	private final TerminationConditionConfiguration terminationConditionConfiguration;
-	private final EvolutionEngineConfiguration evolutionEngineConfiguration;
-
+	
 	protected GaBmapSolverConfiguration(
 			PropertiesConfiguration configuration,
 			TerminationConditionConfiguration terminationConditionConfiguration,
 			EvolutionEngineConfiguration evolutionEngineConfiguration) {
-		super(configuration);
-		this.terminationConditionConfiguration = terminationConditionConfiguration;
-		this.evolutionEngineConfiguration = evolutionEngineConfiguration;
-	}
-
-	public TerminationConditionConfiguration getTerminationConfiguration() {
-		return this.terminationConditionConfiguration;
-	}
-
-	public int getEliteCount() {
-		return configuration.getInt(
-				Keys.ELITE_COUNT,
-				Defaults.ELITE_COUNT);
-	}
-
-	public int getPopulationSize() {
-		return configuration.getInt(
-				Keys.POPULATION_COUNT,
-				Defaults.POPULATION_COUNT);
-	}
-
-	public EvolutionEngineConfiguration getEvolutionEngineConfiguration() {
-		return this.evolutionEngineConfiguration;
+		super(configuration, terminationConditionConfiguration, evolutionEngineConfiguration);
 	}
 
 	public BampSelectionType getSelectionType() {
@@ -94,7 +61,4 @@ public class GaBmapSolverConfiguration extends AbstractPropertyFileConfiguration
 				Defaults.EVALUATION_TYPE);
 		return BmapEvaluationType.valueOf(typeString);
 	}
-
-	
-
 }

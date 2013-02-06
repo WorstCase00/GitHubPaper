@@ -2,7 +2,7 @@ package edu.bocmst.metaheuristic;
 
 import org.apache.commons.configuration.PropertiesConfiguration;
 
-import edu.bocmst.scheduling.mrcpspmax.commons.AbstractPropertyFileConfiguration;
+import edu.bocmst.utils.AbstractPropertyFileConfiguration;
 
 
 public class EvolutionEngineConfiguration extends AbstractPropertyFileConfiguration {

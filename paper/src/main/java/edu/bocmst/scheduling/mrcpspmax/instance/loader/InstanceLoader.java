@@ -40,7 +40,11 @@ public abstract class InstanceLoader {
 		List<int[]> procTimeArrays = convertProcessingTimes(processingTimes);
 		List<int[][]> renewableConsumptionsMatrices = convertConsumptions(renewableresourceConsumptionsMap);
 		List<int[][]> nonRenewableConsumptionMatrices = convertConsumptions(nonRenewableResourceConsumptionsMap);
+		
+		int instanceId = extractInstanceId(path);
+		
 		IMrcpspMaxInstance instance = new MrcpspMaxInstance(
+				instanceId,
 				network, 
 				renewableResourceList, 
 				nonRenewableResourceList, 
@@ -50,6 +54,23 @@ public abstract class InstanceLoader {
 				timelagsMap);
 		LOGGER.debug("create MrcpspMaxInstance: {}", instance);
 		return instance;
+	}
+
+	private static int extractInstanceId(String path) {
+		if(isBenchmarkInstance(path)) {
+			int start = path.lastIndexOf("psp");
+			int end = path.length() - 4;
+			String numberString = path.substring(start, end);
+			return Integer.parseInt(numberString);
+		}
+		return 0;
+	}
+
+	private static boolean isBenchmarkInstance(String path) {
+		if(path.contains("psp") && path.endsWith(".sch")) {
+			return true;
+		}
+		return false;
 	}
 
 	private static List<int[][]> convertConsumptions(

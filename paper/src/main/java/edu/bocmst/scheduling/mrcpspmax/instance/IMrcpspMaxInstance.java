@@ -38,4 +38,6 @@ public interface IMrcpspMaxInstance {
 	int[] getRenewableResourceConsumption(int activity, int mode);
 
 	IDirectedGraph getAonNetwork();
+
+	int getInstanceId();
 }

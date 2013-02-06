@@ -38,7 +38,7 @@ public class FirstBenchmark implements IBmapBenchmark {
 		for(BmapSolverConfiguration configuration : solverConfigurations) {
 			for(IMrcpspMaxInstance instance : instances) {
 				IBmapSolver solver = BmapSolverFactory.createInstanceForInstance(instance, configuration);
-				List<IModeAssignment> modeAssignments = solver.getRankedModeAssignments(instance);
+				List<IModeAssignment> modeAssignments = solver.solve(instance);
 				LOGGER.info("resource valid mode assignments: {} / {}", countResourceValid(modeAssignments), modeAssignments.size());
 				LOGGER.info("time valid mode assignments: {} / {}", countTimeValid(modeAssignments), modeAssignments.size());
 				Set<Integer> modesHashes = Sets.newHashSet();

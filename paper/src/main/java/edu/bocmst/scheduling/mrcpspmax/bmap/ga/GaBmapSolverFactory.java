@@ -20,6 +20,7 @@ import org.uncommons.watchmaker.framework.selection.TournamentSelection;
 
 import com.google.common.collect.Lists;
 
+import edu.bocmst.metaheuristic.AbstractGaSolverConfiguration;
 import edu.bocmst.metaheuristic.EvolutionEngineConfiguration;
 import edu.bocmst.metaheuristic.EvolutionEngineType;
 import edu.bocmst.metaheuristic.IGeneratedSolutionsCounter;
@@ -100,7 +101,7 @@ public abstract class GaBmapSolverFactory {
 				selectionSize, 
 				forceSingleCandidateUpdate, 
 				rng);
-		// here shoud be another one for barrios replacement strategy
+		// here should be another one for barrios replacement strategy
 		}
 		throw new IllegalArgumentException(engineType.name());
 	}
@@ -130,7 +131,7 @@ public abstract class GaBmapSolverFactory {
 	}
 
 	private static EvolutionaryOperator<IModeAssignment> createEvolutionScheme(
-			GaBmapSolverConfiguration solverConfiguration, IMrcpspMaxInstance instance) {
+			AbstractGaSolverConfiguration solverConfiguration, IMrcpspMaxInstance instance) {
 		List<EvolutionaryOperator<IModeAssignment>> operators = Lists.newArrayList();
 		EvolutionaryOperator<IModeAssignment> crossoverOperator = createCrossoverOperator(
 				solverConfiguration,
@@ -147,14 +148,14 @@ public abstract class GaBmapSolverFactory {
 	}
 
 	private static EvolutionaryOperator<IModeAssignment> createRepairOperator(
-			GaBmapSolverConfiguration solverConfiguration,
+			AbstractGaSolverConfiguration solverConfiguration,
 			IMrcpspMaxInstance instance) {
 		// TODO Auto-generated method stub
 		return BarriosBmapRepair.createInstance(instance);
 	}
 
 	private static EvolutionaryOperator<IModeAssignment> createCrossoverOperator(
-			GaBmapSolverConfiguration solverConfiguration, IMrcpspMaxInstance problem) {
+			AbstractGaSolverConfiguration solverConfiguration, IMrcpspMaxInstance problem) {
 		// TODO Auto-generated method stub
 		return BmapArrayCrossover.createInstance(2, problem);
 	}
