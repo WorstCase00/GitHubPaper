@@ -12,7 +12,7 @@ import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.IModeAssignment;
 import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.IRcpspMaxInstance;
 import edu.bocmst.scheduling.mrcpspmax.commons.GraphUtils;
 
-class CausalEligibilityTracker {
+public class CausalEligibilityTracker {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(CausalEligibilityTracker.class);
 	
@@ -20,7 +20,7 @@ class CausalEligibilityTracker {
 	private final List<Set<Integer>> causalSuccessors;
 	private final Set<Integer> scheduled;
 	
-	CausalEligibilityTracker(
+	protected CausalEligibilityTracker(
 			List<Set<Integer>> openCausalPredecessors,
 			List<Set<Integer>> causalSuccessors) {
 		this.openCausalPredecessors = openCausalPredecessors;
@@ -28,7 +28,7 @@ class CausalEligibilityTracker {
 		scheduled = Sets.newHashSet();
 	}
 
-	Set<Integer> getEligibleActivities() {
+	public Set<Integer> getEligibleActivities() {
 		Set<Integer> eligible = Sets.newHashSet();
 		for(int activity = 0; activity < openCausalPredecessors.size(); activity ++) {
 			if(scheduled.contains(activity)) {
@@ -42,7 +42,7 @@ class CausalEligibilityTracker {
 		return eligible;
 	}
 
-	void unschedule(Set<Integer> unschedule) {
+	public void unschedule(Set<Integer> unschedule) {
 		for(Integer activity : unschedule) {
 			unschedule(activity);
 		}
@@ -57,7 +57,7 @@ class CausalEligibilityTracker {
 		scheduled.remove(activity);
 	}
 
-	void schedule(int activity) {
+	public void schedule(int activity) {
 		Set<Integer> successors = causalSuccessors.get(activity);
 		for(Integer successor : successors) {
 			Set<Integer> open = openCausalPredecessors.get(successor.intValue());
@@ -66,11 +66,11 @@ class CausalEligibilityTracker {
 		scheduled.add(activity);
 	}
 	
-	static CausalEligibilityTracker createInstance(IModeAssignment candidate) {
+	public static CausalEligibilityTracker createInstance(IModeAssignment candidate) {
 		int[] modes = candidate.getModeArray();
 		IRcpspMaxInstance rcpspMaxInstance = candidate.getInstance();
-		List<Set<Integer>> openCausalPredecessors = GraphUtils.getPositivePredecessors(modes, rcpspMaxInstance);
-		List<Set<Integer>> causalSuccs = GraphUtils.getPositiveSuccessors(modes, rcpspMaxInstance);
+		List<Set<Integer>> openCausalPredecessors = GraphUtils.getStrictlyPositivePredecessors(modes, rcpspMaxInstance);
+		List<Set<Integer>> causalSuccs = GraphUtils.getStrictlyPositiveSuccessors(modes, rcpspMaxInstance);
 		CausalEligibilityTracker instance = new CausalEligibilityTracker(openCausalPredecessors, causalSuccs);
 		return instance;
 	}

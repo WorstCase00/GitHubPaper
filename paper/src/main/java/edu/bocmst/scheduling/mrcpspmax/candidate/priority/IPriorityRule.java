@@ -2,8 +2,13 @@ package edu.bocmst.scheduling.mrcpspmax.candidate.priority;
 
 import java.util.Set;
 
+import com.google.common.collect.ImmutableList;
+
 public interface IPriorityRule {
 
-	int getNextActivity(Set<Integer> scheduledActivities);
+	int getNextActivityFromEligibleSet(Set<Integer> eligibleActivities);
 
+	ImmutableList<Integer> getIntegerListRepresentation();
+	
+	int compare(int activity1, int activity2);
 }

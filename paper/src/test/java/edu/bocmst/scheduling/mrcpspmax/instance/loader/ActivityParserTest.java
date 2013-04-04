@@ -59,7 +59,7 @@ public class ActivityParserTest extends BaseInstanceFileTest {
 
 	@Test
 	public void testProcessingTimesLoadFromFile() throws FileNotFoundException, IOException {
-		List<String> instanceLines = readFromThesisFile();
+		List<String> instanceLines = readFromBarriosExampleFile();
 	
 		Map<Integer, List<Integer>> result = 
 			ActivityParser.parseProcessingTimes(instanceLines);
@@ -73,7 +73,7 @@ public class ActivityParserTest extends BaseInstanceFileTest {
 	
 	@Test
 	public void testNonRenewableresourcesLoadFromFile() throws FileNotFoundException, IOException {
-		List<String> instanceLines = readFromThesisFile();
+		List<String> instanceLines = readFromBarriosExampleFile();
 	
 		Map<Integer, List<List<Integer>>> result = 
 			ActivityParser.parseNonRenewableResourceConsumptions(instanceLines);
@@ -91,7 +91,7 @@ public class ActivityParserTest extends BaseInstanceFileTest {
 	
 	@Test
 	public void testRenewableresourcesLoadFromFile() throws FileNotFoundException, IOException {
-		List<String> instanceLines = readFromThesisFile();
+		List<String> instanceLines = readFromBarriosExampleFile();
 	
 		Map<Integer, List<List<Integer>>> result = 
 			ActivityParser.parseRenewableResourceConsumptions(instanceLines);

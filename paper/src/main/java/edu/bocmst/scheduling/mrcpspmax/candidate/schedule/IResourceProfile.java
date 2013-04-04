@@ -1,7 +1,5 @@
 package edu.bocmst.scheduling.mrcpspmax.candidate.schedule;
 
-import java.util.Set;
-
 import edu.bocmst.utils.IntInterval;
 
 public interface IResourceProfile {
@@ -10,8 +8,8 @@ public interface IResourceProfile {
 			int activity, 
 			IntInterval startTimeWindow);
 
-	void schedule(int activity, int earliestPossibleStart);
+	void schedule(int activity, int startTime);
 
-	void unschedule(Set<Integer> unschedule, int[] startTimes);
+	void unschedule(int activity, int startTime);
 
 }

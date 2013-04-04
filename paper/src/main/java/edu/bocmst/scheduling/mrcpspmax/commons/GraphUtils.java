@@ -75,12 +75,35 @@ public abstract class GraphUtils {
 		return matrix;
 	}
 	
-	private static int[][] initEmptyAdjacencyMatrix(int activityCount) {
-		int[][] matrix = new int[activityCount][activityCount];
-		for(int x = 0; x < activityCount; x ++) {
-			for(int y = 0; y < activityCount; y ++) {
-				matrix[x][y] = NO_EDGE;
+	public static boolean[][] getPathPresenceMatrix(DirectedGraph<Integer, IDirectedEdge> graph) {
+		int[][] unweightedAdjacencyMatrix = getUnweightedAdjacencyMatrix(graph);
+		int[][] unweightedPathMatrix = floydWarshallLongestPathWithoutPositiveCycleDetection(unweightedAdjacencyMatrix);
+		boolean[][] booleanPathMatrix = convert(unweightedPathMatrix);
+		return booleanPathMatrix;
+	}
+	
+	private static boolean[][] convert(int[][] unweightedPathMatrix) {
+		boolean[][] boolMatrix = new boolean[unweightedPathMatrix.length][unweightedPathMatrix.length];
+		for (int x = 0; x < boolMatrix.length; x++) {
+			for (int y = 0; y < boolMatrix.length; y++) {
+				if(unweightedPathMatrix[x][y] != NO_EDGE) {
+					boolMatrix[x][y] = true;
+				}
 			}
+		}
+		return boolMatrix;
+	}
+
+	private static int[][] getUnweightedAdjacencyMatrix(
+			DirectedGraph<Integer, IDirectedEdge> graph) {
+		LOGGER.debug("create adjacency matrix");
+		int activityCount = graph.vertexSet().size();
+		int[][] matrix = initEmptyAdjacencyMatrix(activityCount);
+		Set<IDirectedEdge> edges = graph.edgeSet();
+		for(IDirectedEdge edge : edges) {
+			int source = edge.getSource();
+			int target = edge.getTarget();
+			matrix[source][target] = 0;
 		}
 		return matrix;
 	}
@@ -105,7 +128,17 @@ public abstract class GraphUtils {
 		}
 		return matrix;
 	}
-	
+
+	private static int[][] initEmptyAdjacencyMatrix(int activityCount) {
+		int[][] matrix = new int[activityCount][activityCount];
+		for(int x = 0; x < activityCount; x ++) {
+			for(int y = 0; y < activityCount; y ++) {
+				matrix[x][y] = NO_EDGE;
+			}
+		}
+		return matrix;
+	}
+
 	public static Set<Set<IDirectedEdge>> calculateCycleStructures(
 			DirectedGraph<Integer, IDirectedEdge> network) {
 		Set<Set<IDirectedEdge>> structures = Sets.newHashSet();
@@ -173,7 +206,7 @@ public abstract class GraphUtils {
 		return immutableList;
 	}
 
-	public static List<Set<Integer>> getPositivePredecessors(
+	public static List<Set<Integer>> getStrictlyPositivePredecessors(
 			int[] modeArray,
 			IRcpspMaxInstance instance) {
 		List<Set<Integer>> predecessors = initEmptySets(modeArray.length);
@@ -181,7 +214,7 @@ public abstract class GraphUtils {
 			int source = edge.getSource();
 			int target = edge.getTarget();
 			int weight = instance.getAdjacencyMatrix()[source][target];
-			if(weight >= 0) {
+			if(weight > 0) {
 				predecessors.get(target).add(source);
 			}
 		}
@@ -197,7 +230,7 @@ public abstract class GraphUtils {
 		return list;
 	}
 
-	public static List<Set<Integer>> getPositiveSuccessors(
+	public static List<Set<Integer>> getStrictlyPositiveSuccessors(
 		int[] modeArray,
 		IRcpspMaxInstance instance) {
 	List<Set<Integer>> successors = initEmptySets(modeArray.length);
@@ -205,7 +238,7 @@ public abstract class GraphUtils {
 		int source = edge.getSource();
 		int target = edge.getTarget();
 		int weight = instance.getAdjacencyMatrix()[source][target];
-		if(weight >= 0) {
+		if(weight > 0) {
 			successors.get(source).add(target);
 		}
 	}

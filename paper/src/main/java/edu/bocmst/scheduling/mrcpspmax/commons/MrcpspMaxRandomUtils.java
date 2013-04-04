@@ -7,13 +7,12 @@ import java.util.Random;
 import com.google.common.collect.Lists;
 
 import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
+import edu.bocmst.utils.RandomUtils;
 
-public abstract class RandomUtils {
+public abstract class MrcpspMaxRandomUtils extends RandomUtils {
 	
-	private RandomUtils() {}
+	private MrcpspMaxRandomUtils() {}
 	
-	private static final Random INSTANCE = new Random(System.currentTimeMillis());
-
 	public static Random getInstance() {
 		return INSTANCE;
 	}

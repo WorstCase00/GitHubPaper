@@ -13,19 +13,19 @@ import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.IModeAssignment;
 import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.ModeAssignmentFactory;
 import edu.bocmst.scheduling.mrcpspmax.commons.GraphUtils;
 import edu.bocmst.scheduling.mrcpspmax.commons.MrcpspMaxUtils;
-import edu.bocmst.scheduling.mrcpspmax.commons.RandomUtils;
+import edu.bocmst.scheduling.mrcpspmax.commons.MrcpspMaxRandomUtils;
 import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
 import edu.bocmst.utils.IntArrays;
 
-public class BarriosBmapCycleRepair extends AbstractModeAssignmentRepair {
+public class BarriosModeAssignmentCycleRepair extends AbstractModeAssignmentRepair {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(BarriosBmapCycleRepair.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(BarriosModeAssignmentCycleRepair.class);
 
 	private static final int REPAIR_TRIES = 100;
 	
 	private final IMrcpspMaxInstance instance;
 	
-	public BarriosBmapCycleRepair(IMrcpspMaxInstance instance) {
+	public BarriosModeAssignmentCycleRepair(IMrcpspMaxInstance instance) {
 		this.instance = instance;
 	}
 	
@@ -172,7 +172,7 @@ public class BarriosBmapCycleRepair extends AbstractModeAssignmentRepair {
 		for(IDirectedEdge edge : positiveCycle) {
 			int activity = edge.getSource();
 			if(!fixed[activity]) {
-				int randomMode = RandomUtils.getRandomMode(activity, instance);
+				int randomMode = MrcpspMaxRandomUtils.getRandomMode(activity, instance);
 				LOGGER.debug("mode of activity {} is set to random mode: {} -> {}",
 						new Object[] {activity, modes[activity], randomMode});
 				newModes[activity] = randomMode;

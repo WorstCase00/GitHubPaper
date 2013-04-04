@@ -8,7 +8,7 @@ import org.uncommons.watchmaker.framework.factories.AbstractCandidateFactory;
 
 import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.IModeAssignment;
 import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.ModeAssignmentFactory;
-import edu.bocmst.scheduling.mrcpspmax.commons.RandomUtils;
+import edu.bocmst.scheduling.mrcpspmax.commons.MrcpspMaxRandomUtils;
 import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
 
 public class RandomBmapFactory extends AbstractCandidateFactory<IModeAssignment> {
@@ -27,7 +27,7 @@ public class RandomBmapFactory extends AbstractCandidateFactory<IModeAssignment>
 		int activityCount = instance.getActivityCount();
 		int[] modes = new int[activityCount];
 		for(int activity = 0; activity < modes.length; activity++) {
-			int randomMode = RandomUtils.getRandomMode(activity, instance);
+			int randomMode = MrcpspMaxRandomUtils.getRandomMode(activity, instance);
 			modes[activity] = randomMode;
 		}
 		IModeAssignment candidate = ModeAssignmentFactory.createInstance(modes, instance);

@@ -1,4 +1,4 @@
-package edu.bocmst.scheduling.benchmarking.bmap.metric;
+package edu.bocmst.scheduling.mrcpspmax.bmap.metric;
 
 import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.IModeAssignment;
 

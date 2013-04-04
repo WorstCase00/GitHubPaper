@@ -1,5 +1,6 @@
 package edu.bocmst.graph;
 
+import java.util.Arrays;
 import java.util.Set;
 
 import org.jgrapht.DirectedGraph;
@@ -20,15 +21,19 @@ class DirectedGraphJGraphTImpl implements IDirectedGraph {
 	private final ImmutableList<Set<Integer>> successors;
 	private final ImmutableList<Set<Integer>> predecessors;
 
+	private final boolean[][] pathMatrix;
+
 	protected DirectedGraphJGraphTImpl(
 			DirectedGraph<Integer, IDirectedEdge> network,
 			Set<Set<IDirectedEdge>> cycleStructures,
 			ImmutableList<Set<Integer>> successors,
-			ImmutableList<Set<Integer>> predecessors) {
+			ImmutableList<Set<Integer>> predecessors, 
+			boolean[][] pathMatrix) {
 		this.network = network;
 		this.cycleStructures = cycleStructures;
 		this.successors = successors;
 		this.predecessors = predecessors;
+		this.pathMatrix = pathMatrix;
 	}
 
 	protected DirectedGraph<Integer, IDirectedEdge> getNetwork() {
@@ -66,6 +71,11 @@ class DirectedGraphJGraphTImpl implements IDirectedGraph {
 		return network.vertexSet();
 	}
 	
+	@Override
+	public boolean[][] getPathMatrix() {
+		return this.pathMatrix;
+	}
+
 	static IDirectedGraph createInstance(
 			DirectedGraph<Integer, IDirectedEdge> graph) {
 		LOGGER.debug("create aon network instance for graph {}", graph);
@@ -73,7 +83,18 @@ class DirectedGraphJGraphTImpl implements IDirectedGraph {
 		LOGGER.debug("found {} cycle structures", cycles.size());
 		ImmutableList<Set<Integer>> succs = GraphUtils.getSuccessors(graph);
 		ImmutableList<Set<Integer>> preds = GraphUtils.getPredecessors(graph);
-		IDirectedGraph instance = new DirectedGraphJGraphTImpl(graph, cycles, succs, preds);
+		boolean[][] paths = GraphUtils.getPathPresenceMatrix(graph);
+		IDirectedGraph instance = new DirectedGraphJGraphTImpl(graph, cycles, succs, preds, paths);
 		return instance;
 	}
+
+	@Override
+	public String toString() {
+		return "DirectedGraphJGraphTImpl ["
+				+ "cycleStructureCount=" + cycleStructures.size()
+				+ ", cycleStructures=" + Arrays.toString(cycleStructures.toArray())
+				+ ", successors=" + Arrays.toString(successors.toArray()) + "]";
+	}
+	
+	
 }

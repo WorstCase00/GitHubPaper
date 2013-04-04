@@ -9,15 +9,15 @@ import org.slf4j.LoggerFactory;
 import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.IModeAssignment;
 import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.ModeAssignmentFactory;
 import edu.bocmst.scheduling.mrcpspmax.commons.MrcpspMaxUtils;
-import edu.bocmst.scheduling.mrcpspmax.commons.RandomUtils;
+import edu.bocmst.scheduling.mrcpspmax.commons.MrcpspMaxRandomUtils;
 import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
 
-public class BarriosBmapResourceRepair extends AbstractModeAssignmentRepair  {
+public class BarriosModeAssignmentResourceRepair extends AbstractModeAssignmentRepair  {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(BarriosBmapRepair.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(BarriosModeAssignmentRepair.class);
 	private final IMrcpspMaxInstance instance;
 	
-	public BarriosBmapResourceRepair(IMrcpspMaxInstance instance) {
+	public BarriosModeAssignmentResourceRepair(IMrcpspMaxInstance instance) {
 		this.instance = instance;
 	}
 
@@ -40,10 +40,10 @@ public class BarriosBmapResourceRepair extends AbstractModeAssignmentRepair  {
 		int numberOfTries = modes.length;
 		LOGGER.debug("number of repair tries: {}", numberOfTries);
 		for(int i = 0; i < numberOfTries; i++) {
-			List<Integer> reassignActivities = RandomUtils.getRandomActivitySelection(instance);
+			List<Integer> reassignActivities = MrcpspMaxRandomUtils.getRandomActivitySelection(instance);
 			int[] newModes = modes.clone();
 			for(int activity : reassignActivities) {
-				newModes[activity] = RandomUtils.getRandomMode(activity, instance);
+				newModes[activity] = MrcpspMaxRandomUtils.getRandomMode(activity, instance);
 			}
 			if(MrcpspMaxUtils.isModeAssignmentResourceValid(newModes, instance)) {
 				LOGGER.debug("found resource valid mode assignment: {}", Arrays.toString(newModes));

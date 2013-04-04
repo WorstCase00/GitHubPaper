@@ -46,13 +46,7 @@ public class ResourceProfileListImpl implements IResourceProfile {
 	}
 
 	@Override
-	public void unschedule(Set<Integer> activities, int[] startTimes) {
-		for(int activity : activities) {
-			unschedule(activity, startTimes[activity]);
-		}
-	}
-
-	private void unschedule(int activity, int startTime) {
+	public void unschedule(int activity, int startTime) {
 		int duration = instance.getProcessingTime(activity);
 		int[] resourceDemands = instance.getRenewableResourceConsumption(activity);
 		wrapped.freeResources(startTime, duration, resourceDemands);

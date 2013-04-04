@@ -19,7 +19,7 @@ public class TemporalConstraintsTrackerBarriosTest {
 	
 	@Test
 	public void testBoundInitializationCorrect() throws Exception {
-		IModeAssignment candidate = ModeAssignmentFactory.createInstance(MODES, TestConstants.THESIS_INSTANCE);
+		IModeAssignment candidate = ModeAssignmentFactory.createInstance(MODES, TestConstants.BARRIOS_INSTANCE);
 		TemporalConstraintsTracker testee = TemporalConstraintsTracker.createInstance(candidate);
 		
 //		assertEquals(new StartTimeWindow(0, 0), testee.getStartTimeWindow(0));
@@ -43,7 +43,7 @@ public class TemporalConstraintsTrackerBarriosTest {
 	
 	@Test
 	public void testBarriosReschedulingExample() throws Exception {
-		IModeAssignment candidate = ModeAssignmentFactory.createInstance(MODES, TestConstants.THESIS_INSTANCE);
+		IModeAssignment candidate = ModeAssignmentFactory.createInstance(MODES, TestConstants.BARRIOS_INSTANCE);
 		TemporalConstraintsTracker testee = TemporalConstraintsTracker.createInstance(candidate);
 		testee.schedule(0, 0);
 		testee.schedule(1, 0);

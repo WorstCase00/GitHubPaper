@@ -11,11 +11,11 @@ import com.google.common.collect.Lists;
 import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.IModeAssignment;
 import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
 
-public class BarriosBmapRepair implements EvolutionaryOperator<IModeAssignment> {
+public class BarriosModeAssignmentRepair implements EvolutionaryOperator<IModeAssignment> {
 
 	private final EvolutionPipeline<IModeAssignment> repairs;
 	
-	protected BarriosBmapRepair(EvolutionPipeline<IModeAssignment> repairs) {
+	protected BarriosModeAssignmentRepair(EvolutionPipeline<IModeAssignment> repairs) {
 		super();
 		this.repairs = repairs;
 	}
@@ -27,15 +27,15 @@ public class BarriosBmapRepair implements EvolutionaryOperator<IModeAssignment> 
 		return repairs.apply(selectedCandidates, rng);
 	}
 
-	public static BarriosBmapRepair createInstance(IMrcpspMaxInstance instance) {
-		EvolutionaryOperator<IModeAssignment> resourceRepair = new BarriosBmapResourceRepair(instance);
-		EvolutionaryOperator<IModeAssignment> cycleRepair = new BarriosBmapCycleRepair(instance);
+	public static BarriosModeAssignmentRepair createInstance(IMrcpspMaxInstance instance) {
+		EvolutionaryOperator<IModeAssignment> resourceRepair = new BarriosModeAssignmentResourceRepair(instance);
+		EvolutionaryOperator<IModeAssignment> cycleRepair = new BarriosModeAssignmentCycleRepair(instance);
 		@SuppressWarnings("unchecked")
 		List<EvolutionaryOperator<IModeAssignment>> operators = Lists.newArrayList(
 				resourceRepair,
 				cycleRepair);
 		EvolutionPipeline<IModeAssignment> pipeline = new EvolutionPipeline<IModeAssignment>(operators);
-		BarriosBmapRepair operator = new BarriosBmapRepair(pipeline);
+		BarriosModeAssignmentRepair operator = new BarriosModeAssignmentRepair(pipeline);
 		return operator;
 	}
 

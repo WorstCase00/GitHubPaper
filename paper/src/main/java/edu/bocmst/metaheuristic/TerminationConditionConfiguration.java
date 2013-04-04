@@ -19,9 +19,9 @@ public class TerminationConditionConfiguration {
 	}
 	
 	private static class Defaults {
-		public static final String TYPE = "ElapsedTime";
+		public static final String TYPE = TerminationConditionType.TerminationCounter.name();
 		public static final long MAX_DURATION_MS = 10000;
-		public static final int GENERATION_COUNT = 100;
+		public static final int GENERATION_COUNT = 1000;
 		public static final int TERMINATION_COUNT = 10000;
 	}
 	

@@ -16,7 +16,7 @@ import edu.bocmst.scheduling.mrcpspmax.candidate.schedule.ResourceProfileListImp
 import edu.bocmst.scheduling.mrcpspmax.candidate.schedule.Schedule;
 import edu.bocmst.utils.IntInterval;
 
-class SerialRcpspMaxScheduler implements IRcpspMaxScheduler {
+public class SerialRcpspMaxScheduler implements IRcpspMaxScheduler {
 
 	private static final Logger LOGGER = LoggerFactory
 		.getLogger(SerialRcpspMaxScheduler.class);
@@ -29,6 +29,10 @@ class SerialRcpspMaxScheduler implements IRcpspMaxScheduler {
 	@Override
 	public Schedule createSchedule(IModeAssignment candidate, IPriorityRule priorityRule) {
 		LOGGER.debug("create schedule for candidate {} with priority rule {}", candidate, priorityRule);
+		if(!candidate.isResourceFeasible() || !candidate.isTimeFeasible()) {
+			LOGGER.debug("candidate is not feasible for scheduling");
+			return null;
+		}
 		Set<Integer> scheduledActivities = Sets.newHashSet();
 		IRcpspMaxInstance instance = candidate.getInstance();
 		int activityCount = instance.getActivityCount();
@@ -40,7 +44,7 @@ class SerialRcpspMaxScheduler implements IRcpspMaxScheduler {
 		while(scheduledActivities.size() != activityCount) {
 			Set<Integer> eligibleActivities = causalConstraintsTracker.getEligibleActivities();
 			LOGGER.debug("eligibile activities in this iteration: {}", Arrays.toString(eligibleActivities.toArray()));
-			int activity = priorityRule.getNextActivity(eligibleActivities);
+			int activity = priorityRule.getNextActivityFromEligibleSet(eligibleActivities);
 			LOGGER.debug("next activity to be schedule: {}", activity);
 			IntInterval startTimeWindow = temporalConstraintsTracker.getStartTimeWindow(activity);
 			LOGGER.debug("temporally valid start time window: {}", startTimeWindow);
@@ -61,7 +65,9 @@ class SerialRcpspMaxScheduler implements IRcpspMaxScheduler {
 					return null;
 				}
 				LOGGER.debug("free resources for activities: {}", Arrays.toString(unscheduleActivities.toArray()));
-				resourceProfile.unschedule(unscheduleActivities, startTimes);
+				for(int unscheduleActivity : unscheduleActivities) {
+					resourceProfile.unschedule(unscheduleActivity, startTimes[unscheduleActivity]);
+				}
 				LOGGER.debug("causal constraints are adapted");
 				causalConstraintsTracker.unschedule(unscheduleActivities);
 				LOGGER.debug("invalidate start times for unscheduled activities");

@@ -1,7 +1,9 @@
 package edu.bocmst.scheduling.mrcpspmax.instance.loader;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import com.google.common.collect.ImmutableList;
@@ -12,6 +14,7 @@ import edu.bocmst.graph.IDirectedGraph;
 import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
 import edu.bocmst.scheduling.mrcpspmax.instance.INonRenewableResource;
 import edu.bocmst.scheduling.mrcpspmax.instance.IRenewableResource;
+import edu.bocmst.utils.IntArrays;
 
 
 class MrcpspMaxInstance implements IMrcpspMaxInstance {
@@ -146,13 +149,19 @@ class MrcpspMaxInstance implements IMrcpspMaxInstance {
 	public String toString() {
 		return "MrcpspMaxInstance [" +
 				"aonNetwork=" + aonNetwork
-				+ ", renewableResourceList=" + renewableResourceList
-				+ ", nonRenewableResourceList=" + nonRenewableResourceList
-				+ ", processingTimesList=" + processingTimesList
-				+ ", renewableResourceConsumptionsList=" + renewableResourceConsumptionsList
-				+ ", nonRenewableResourceConsumptionsList=" + nonRenewableResourceConsumptionsList 
-				+ ", timelagsMap="+ timelagsMap + "]";
+				+ ", renewableResourceList=" + Arrays.toString(renewableResourceList.toArray())
+				+ ", nonRenewableResourceList=" + Arrays.toString(nonRenewableResourceList.toArray())
+				+ ", processingTimesList=" + Arrays.toString(processingTimesList.toArray())
+				+ ", renewableResourceConsumptionsList=" + Arrays.toString(renewableResourceConsumptionsList.toArray())
+				+ ", nonRenewableResourceConsumptionsList=" + Arrays.toString(nonRenewableResourceConsumptionsList.toArray()) 
+				+ ", timelagsMap="+ createTimeLagsMapString() + "]";
 	}
-	
-	
+
+	private String createTimeLagsMapString() {
+		StringBuilder string = new StringBuilder();
+		for(Entry<IDirectedEdge, int[][]> entry : timelagsMap.entrySet()) {
+			string.append(entry.getKey()).append("=").append(IntArrays.toOneLineString(entry.getValue())).append("\n");
+		}
+		return string.toString();
+	}
 }

@@ -15,5 +15,7 @@ public interface IDirectedGraph {
 	Set<Integer> getPredecessors(int activity);
 
 	Set<Integer> getVertexSet();
+	
+	boolean[][] getPathMatrix();
 
 }

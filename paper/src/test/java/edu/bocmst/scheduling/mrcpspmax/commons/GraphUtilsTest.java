@@ -28,7 +28,7 @@ public class GraphUtilsTest {
 	public void testAdjacencyMatrixGeneration() throws IOException {
 		
 		int[] modes = new int[] {1,2,2,3,3,1,3,1};
-		int[][] result = GraphUtils.getAdjacencyMatrix(modes, TestConstants.THESIS_INSTANCE);
+		int[][] result = GraphUtils.getAdjacencyMatrix(modes, TestConstants.BARRIOS_INSTANCE);
 		
 		assertArrayEquals(EXPECTED_ADJACENCY_MATRIX, result);
 	}
@@ -36,7 +36,7 @@ public class GraphUtilsTest {
 	@Test
 	public void testPositiveCycleDetection() {
 		int[] modes = new int[] {1,2,2,3,3,1,3,1};
-		Set<Set<IDirectedEdge>> result = GraphUtils.getPositiveCycles(modes, TestConstants.THESIS_INSTANCE);
+		Set<Set<IDirectedEdge>> result = GraphUtils.getPositiveCycles(modes, TestConstants.BARRIOS_INSTANCE);
 		
 		assertTrue(result.size() == 1);
 		Set<IDirectedEdge> cycle = result.iterator().next();
@@ -59,7 +59,7 @@ public class GraphUtilsTest {
 	@Test
 	public void testNoPositiveCycleDetection() {
 		int[] modes = new int[] {1,2,1,1,1,3,3,1};
-		Set<Set<IDirectedEdge>> result = GraphUtils.getPositiveCycles(modes, TestConstants.THESIS_INSTANCE);
+		Set<Set<IDirectedEdge>> result = GraphUtils.getPositiveCycles(modes, TestConstants.BARRIOS_INSTANCE);
 		
 		assertTrue(result.size() == 0);
 	}

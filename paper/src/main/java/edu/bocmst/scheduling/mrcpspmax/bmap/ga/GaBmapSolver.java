@@ -23,7 +23,7 @@ class GaBmapSolver extends AbstractGaSolver<IModeAssignment, List<IModeAssignmen
 			EvolutionEngine<IModeAssignment> engine,
 			int populationSize, 
 			int eliteCount,
-			TerminationCondition terminationCondition) {
+			TerminationCondition... terminationCondition) {
 		super(engine, populationSize, eliteCount, terminationCondition);
 	}
 	

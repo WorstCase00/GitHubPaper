@@ -3,9 +3,9 @@ package edu.bocmst.utils;
 public class IntInterval {
 
 	private final int lowerBound;
-	private final Integer upperBound;
+	private final int upperBound;
 
-	public IntInterval(int lowerBound, Integer upperBound) {
+	public IntInterval(int lowerBound, int upperBound) {
 		this.lowerBound = lowerBound;
 		this.upperBound = upperBound;
 	}
@@ -14,14 +14,8 @@ public class IntInterval {
 		return this.lowerBound;
 	}
 
-	public Integer getUpperBound() {
+	public int getUpperBound() {
 		return this.upperBound;
-	}
-
-	@Override
-	public String toString() {
-		return "StartTimeWindow [" + lowerBound + ", "
-				+ upperBound + "]";
 	}
 
 	@Override
@@ -29,8 +23,7 @@ public class IntInterval {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + lowerBound;
-		result = prime * result
-				+ ((upperBound == null) ? 0 : upperBound.hashCode());
+		result = prime * result + upperBound;
 		return result;
 	}
 
@@ -45,12 +38,16 @@ public class IntInterval {
 		IntInterval other = (IntInterval) obj;
 		if (lowerBound != other.lowerBound)
 			return false;
-		if (upperBound == null) {
-			if (other.upperBound != null)
-				return false;
-		} else if (!upperBound.equals(other.upperBound))
+		if (upperBound != other.upperBound)
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "IntInterval [" + lowerBound + ", "
+				+ upperBound + "]";
+	}
+	
 	
 }

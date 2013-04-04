@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 
 @Deprecated
-class LegacyResourceProfileImpl {
+public class LegacyResourceProfileImpl {
 	private static final int TIME_INDEX = 0;
 	private static final int VALUE_INDEX = 1;
 	private static final Logger LOGGER = LoggerFactory.getLogger(ResourceProfileListImpl.class);

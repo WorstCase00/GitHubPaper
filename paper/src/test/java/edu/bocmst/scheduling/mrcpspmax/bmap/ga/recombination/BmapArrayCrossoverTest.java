@@ -45,7 +45,7 @@ public class BmapArrayCrossoverTest {
 	
 	@Test
 	public void testWithThreeCandidates() {
-		BmapArrayCrossover testee = new BmapArrayCrossover(intArrayCrossover, problem);
+		BmapArrayRecombination testee = new BmapArrayRecombination(intArrayCrossover, problem);
 		List<IModeAssignment> candidates = Lists.newArrayList();
 		List<int[]> modeList = Lists.newArrayList(MODES1, MODES2, MODES3);
 		when(intArrayCrossover.apply(anyListOf(int[].class), any(Random.class))).thenReturn(modeList);

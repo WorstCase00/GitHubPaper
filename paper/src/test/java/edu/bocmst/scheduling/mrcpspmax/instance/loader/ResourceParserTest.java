@@ -21,7 +21,7 @@ public class ResourceParserTest extends BaseInstanceFileTest {
 	
 	@Test
 	public void testNonRenewableResourcesExampleFromFile() throws FileNotFoundException, IOException {
-		List<String> instanceLines = readFromThesisFile();
+		List<String> instanceLines = readFromBarriosExampleFile();
 		
 		List<INonRenewableResource> result = ResourceParser.parseNonRenewableResourceList(instanceLines);
 	
@@ -31,7 +31,7 @@ public class ResourceParserTest extends BaseInstanceFileTest {
 
 	@Test
 	public void tesRenewableResourcesExampleFromFile() throws FileNotFoundException, IOException {
-		List<String> instanceLines = readFromThesisFile();
+		List<String> instanceLines = readFromBarriosExampleFile();
 		
 		List<IRenewableResource> result = ResourceParser.parseRenewableResourcesList(instanceLines);
 	

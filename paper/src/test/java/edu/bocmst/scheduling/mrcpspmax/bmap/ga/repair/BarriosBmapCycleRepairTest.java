@@ -12,9 +12,9 @@ public class BarriosBmapCycleRepairTest {
 
 	@Test
 	public void testRepair() {
-		BarriosBmapCycleRepair testee = new BarriosBmapCycleRepair(TestConstants.THESIS_INSTANCE);
+		BarriosModeAssignmentCycleRepair testee = new BarriosModeAssignmentCycleRepair(TestConstants.BARRIOS_INSTANCE);
 		int[] modes = new int[] {1,2,2,3,3,1,3,1};
-		IModeAssignment assignment = ModeAssignmentFactory.createInstance(modes, TestConstants.THESIS_INSTANCE);
+		IModeAssignment assignment = ModeAssignmentFactory.createInstance(modes, TestConstants.BARRIOS_INSTANCE);
 		IModeAssignment result = testee.operate(assignment);
 		
 		assertTrue(result.isTimeFeasible());

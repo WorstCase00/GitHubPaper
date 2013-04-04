@@ -27,13 +27,13 @@ public abstract class AbstractGaSolver<C, S> {
 	private final EvolutionEngine<C> engine;
 	private final int populationSize;
 	private final int eliteCount;
-	private final TerminationCondition terminationCondition;
+	private final TerminationCondition[] terminationCondition;
 	
 	public AbstractGaSolver(
 			EvolutionEngine<C> engine,
 			int populationSize, 
 			int eliteCount,
-			TerminationCondition terminationCondition) {
+			TerminationCondition... terminationCondition) {
 		this.engine = engine;
 		this.populationSize = populationSize;
 		this.eliteCount = eliteCount;
@@ -42,25 +42,25 @@ public abstract class AbstractGaSolver<C, S> {
 	
 	public S solve(IMrcpspMaxInstance instance) {
 		LOGGER.info("start problem resolution for instance {}", instance);
-		if(LOGGER.isDebugEnabled()) {
+//		if(LOGGER.isDebugEnabled()) {
 			LOGGER.debug("debug enabled - enable evolution monitor");
 			EvolutionMonitor<C> monitor = new EvolutionMonitor<C>();
 			int instanceId = instance.getInstanceId();
 			monitor.showInFrame("monitor instance " + instanceId, true);
 			engine.addEvolutionObserver(monitor);
-		}
+//		}
 		LOGGER.info("start evlutionary engine with population size = {}, " +
 				"eliteCount = {} " +
 				"and termination condition: {}",
 				new Object[] {populationSize, eliteCount, terminationCondition});
 		
-		List<EvaluatedCandidate<C>> solutions = engine.evolvePopulation(
+		List<EvaluatedCandidate<C>> wrappedSolutions = engine.evolvePopulation(
 				populationSize, 
 				eliteCount, 
 				terminationCondition);
-		LOGGER.info("bmap result: {}", Arrays.toString(solutions.toArray()));
-		S modeAssignments = extractSolutionFromFinalPopultation(solutions);
-		return modeAssignments;
+		LOGGER.info("bmap result: {}", Arrays.toString(wrappedSolutions.toArray()));
+		S solutions = extractSolutionFromFinalPopultation(wrappedSolutions);
+		return solutions;
 	}
 
 	protected abstract S extractSolutionFromFinalPopultation(List<EvaluatedCandidate<C>> solutions);	

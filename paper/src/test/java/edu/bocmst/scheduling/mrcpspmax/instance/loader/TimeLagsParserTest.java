@@ -2,21 +2,18 @@ package edu.bocmst.scheduling.mrcpspmax.instance.loader;
 
 import static org.junit.Assert.assertArrayEquals;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
 import edu.bocmst.graph.DirectedGraphEdgeFactory;
 import edu.bocmst.graph.IDirectedEdge;
 
-public class TimeLagsParserTest {
+public class TimeLagsParserTest extends BaseInstanceFileTest {
 	
-	private static final String THESIS_FILE = "src/test/resources/thesisExample.sch";
 	private static final int VERTEX_COUNT = 8;
 	
 	private static final int[][] TL_MATRIX01 = new int[][] {{0,0,0}};
@@ -25,14 +22,14 @@ public class TimeLagsParserTest {
 	private static final int[][] TL_MATRIX24 = new int[][] {{4,4,1},{1,1,4},{2,2,1}};
 	private static final int[][] TL_MATRIX35 = new int[][] {{1,1,2},{2,2,1},{4,1,2}};
 	private static final int[][] TL_MATRIX42 = new int[][] {{-4,-4,-6},{-2,-1,-2},{-6,-2,-2}};
-	private static final int[][] TL_MATRIX46 = new int[][] {{0,6,1},{2,1,7},{1,1,4}};
+	private static final int[][] TL_MATRIX46 = new int[][] {{0,4,1},{2,1,7},{1,1,4}};
 	private static final int[][] TL_MATRIX53 = new int[][] {{-3,-1,-4},{-4,-4,-6},{-3,-3,-2}};
 	private static final int[][] TL_MATRIX57 = new int[][] {{2},{2},{1}};
 	private static final int[][] TL_MATRIX67 = new int[][] {{1},{1},{4}};
 
 	@Test
 	public void testTimeLagParsing() throws FileNotFoundException, IOException {
-		List<String> instanceLines = IOUtils.readLines(new FileInputStream(THESIS_FILE));
+		List<String> instanceLines = readFromBarriosExampleFile();
 		
 		Map<IDirectedEdge, int[][]> result = TimeLagsParser.parseTimeLags(instanceLines, VERTEX_COUNT);
 		

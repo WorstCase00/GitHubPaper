@@ -1,5 +1,6 @@
 package edu.bocmst.scheduling.mrcpspmax.bmap.ga;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -32,13 +33,16 @@ import edu.bocmst.scheduling.mrcpspmax.bmap.ga.evaluation.PenalizingLongestPathE
 import edu.bocmst.scheduling.mrcpspmax.bmap.ga.factory.BmapFactoryType;
 import edu.bocmst.scheduling.mrcpspmax.bmap.ga.factory.RandomBmapFactory;
 import edu.bocmst.scheduling.mrcpspmax.bmap.ga.factory.RelativeResourceConsumptionBmapFactory;
-import edu.bocmst.scheduling.mrcpspmax.bmap.ga.recombination.BmapArrayCrossover;
-import edu.bocmst.scheduling.mrcpspmax.bmap.ga.repair.BarriosBmapRepair;
+import edu.bocmst.scheduling.mrcpspmax.bmap.ga.recombination.BmapArrayRecombination;
+import edu.bocmst.scheduling.mrcpspmax.bmap.ga.repair.BarriosModeAssignmentRepair;
 import edu.bocmst.scheduling.mrcpspmax.bmap.ga.selection.BampSelectionType;
 import edu.bocmst.scheduling.mrcpspmax.bmap.ga.selection.SimilaritySampling;
 import edu.bocmst.scheduling.mrcpspmax.bmap.ga.selection.SimilarityTournament;
+import edu.bocmst.scheduling.mrcpspmax.bmap.metric.IModeAssignmentCollectionMetric;
+import edu.bocmst.scheduling.mrcpspmax.bmap.metric.UniqueValidModeAssignmentMetric;
+import edu.bocmst.scheduling.mrcpspmax.bmap.metric.ValidPercentage;
 import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.IModeAssignment;
-import edu.bocmst.scheduling.mrcpspmax.commons.RandomUtils;
+import edu.bocmst.scheduling.mrcpspmax.commons.MrcpspMaxRandomUtils;
 import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
 
 public abstract class GaBmapSolverFactory {
@@ -58,30 +62,45 @@ public abstract class GaBmapSolverFactory {
 		TerminationConditionConfiguration terminationConfiguration = 
 			configuration.getTerminationConfiguration();
 		TerminationConditionCreator terminationCreator = new TerminationConditionCreator();
+		
+		IModeAssignmentCollectionMetric validPercentage = new ValidPercentage();
+		UniqueValidModeAssignmentMetric uniqueValidModeAssignmentMetric = new UniqueValidModeAssignmentMetric();
+		ArrayList<IModeAssignmentCollectionMetric> documentMetrics = Lists.newArrayList(
+				validPercentage,
+				uniqueValidModeAssignmentMetric
+		);
+		
 		EvolutionEngine<IModeAssignment> ga = createEngine(
 				problem, 
 				configuration,
-				solutionsCounter);
+				solutionsCounter,
+				documentMetrics);
 		TerminationCondition termination = terminationCreator.createCondition(terminationConfiguration, solutionsCounter);
+		TerminationCondition uniqueTermination = new MetricTerminationTermination(uniqueValidModeAssignmentMetric, 90);
 		GaBmapSolver instance = new GaBmapSolver(
 				ga, 
 				popSize, 
 				elite, 
-				termination);
+				termination,
+				uniqueTermination);
 		return instance;
 	}
 
 	private static EvolutionEngine<IModeAssignment> createEngine(
 			IMrcpspMaxInstance problem, 
-			GaBmapSolverConfiguration solverConfiguration, IGeneratedSolutionsCounter solutionsCounter) {
+			GaBmapSolverConfiguration solverConfiguration, IGeneratedSolutionsCounter solutionsCounter, 
+			List<IModeAssignmentCollectionMetric> metrics) {
 		EvolutionEngineConfiguration engineConfiguration = solverConfiguration.getEvolutionEngineConfiguration();
 		EvolutionEngineType engineType = engineConfiguration.getEngineType();
 		CandidateFactory<IModeAssignment> candidateFactory = createFactory(problem, solverConfiguration);
 		EvolutionaryOperator<IModeAssignment> evolutionScheme = createEvolutionScheme(solverConfiguration, problem);
-		SelectionStrategy<? super IModeAssignment> selectionStrategy = createSelectionStrategy(solverConfiguration);
+		SelectionStrategy<? super IModeAssignment> selectionStrategy = new DocumentingSelectionWrapper(
+				createSelectionStrategy(solverConfiguration), 
+				solverConfiguration,
+				metrics);
 		FitnessEvaluator<? super IModeAssignment> fitnessEvaluator = 
 			createFitnessEvaluator(problem, solverConfiguration, solutionsCounter);
-		Random rng = RandomUtils.getInstance();
+		Random rng = MrcpspMaxRandomUtils.getInstance();
 		switch(engineType) {
 		case Generational: 	
 		return new GenerationalEvolutionEngine<IModeAssignment>(
@@ -151,13 +170,13 @@ public abstract class GaBmapSolverFactory {
 			AbstractGaSolverConfiguration solverConfiguration,
 			IMrcpspMaxInstance instance) {
 		// TODO Auto-generated method stub
-		return BarriosBmapRepair.createInstance(instance);
+		return BarriosModeAssignmentRepair.createInstance(instance);
 	}
 
 	private static EvolutionaryOperator<IModeAssignment> createCrossoverOperator(
 			AbstractGaSolverConfiguration solverConfiguration, IMrcpspMaxInstance problem) {
 		// TODO Auto-generated method stub
-		return BmapArrayCrossover.createInstance(2, problem);
+		return BmapArrayRecombination.createInstance(2, problem);
 	}
 
 	private static CandidateFactory<IModeAssignment> createFactory(

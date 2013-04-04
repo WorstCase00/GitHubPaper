@@ -15,7 +15,7 @@ public class SolutionValidatorTest {
 	public void testTimeFeasibilityCheckFail() throws IOException {
 		
 		int[] modes = new int[] {1, 2, 2, 3, 3, 1, 3, 1};
-		IMrcpspMaxInstance instance = InstanceLoader.loadInstance(TestConstants.THESIS_PATH);
+		IMrcpspMaxInstance instance = InstanceLoader.loadInstance(TestConstants.BARRIOS_PATH);
 		boolean result = MrcpspMaxUtils.isModeAssignmentTimeValid(modes, instance);
 		
 		assertFalse(result);
@@ -25,7 +25,7 @@ public class SolutionValidatorTest {
 	public void testTimeFeasibilityCheckPass() throws IOException {
 		
 		int[] modes = new int[] {1,2,1,1,1,3,3,1};
-		IMrcpspMaxInstance instance = InstanceLoader.loadInstance(TestConstants.THESIS_PATH);
+		IMrcpspMaxInstance instance = InstanceLoader.loadInstance(TestConstants.BARRIOS_PATH);
 		boolean result = MrcpspMaxUtils.isModeAssignmentTimeValid(modes, instance);
 		
 		assertTrue(result);
@@ -35,7 +35,7 @@ public class SolutionValidatorTest {
 	public void testResourceFeasibilityCheckFail() throws IOException {
 		
 		int[] modes = new int[] {1,2,1,1,1,3,3,1};
-		IMrcpspMaxInstance instance = InstanceLoader.loadInstance(TestConstants.THESIS_PATH);
+		IMrcpspMaxInstance instance = InstanceLoader.loadInstance(TestConstants.BARRIOS_PATH);
 		boolean result = MrcpspMaxUtils.isModeAssignmentResourceValid(modes, instance);
 		
 		assertFalse(result);
@@ -45,7 +45,7 @@ public class SolutionValidatorTest {
 	public void testResourceFeasibilityCheckOk() throws IOException {
 		
 		int[] modes = new int[] {1, 2, 2, 3, 3, 1, 3, 1};
-		IMrcpspMaxInstance instance = InstanceLoader.loadInstance(TestConstants.THESIS_PATH);
+		IMrcpspMaxInstance instance = InstanceLoader.loadInstance(TestConstants.BARRIOS_PATH);
 		boolean result = MrcpspMaxUtils.isModeAssignmentResourceValid(modes, instance);
 		
 		assertTrue(result);

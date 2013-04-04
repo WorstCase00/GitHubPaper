@@ -1,4 +1,4 @@
-package edu.bocmst.scheduling.mrcpspmax.bmap;
+package edu.bocmst.utils;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -7,10 +7,10 @@ import org.slf4j.LoggerFactory;
 
 import edu.bocmst.metaheuristic.IGeneratedSolutionsCounter;
 
-class ValidModeAssignmentsCounter implements IGeneratedSolutionsCounter {
+public class AtomicCounterCounter implements IGeneratedSolutionsCounter {
 	
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(ValidModeAssignmentsCounter.class);
+			.getLogger(AtomicCounterCounter.class);
 	
 	private final AtomicInteger counter = new AtomicInteger(0);
 	

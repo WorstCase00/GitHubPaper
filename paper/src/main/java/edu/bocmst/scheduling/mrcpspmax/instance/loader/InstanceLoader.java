@@ -58,7 +58,7 @@ public abstract class InstanceLoader {
 
 	private static int extractInstanceId(String path) {
 		if(isBenchmarkInstance(path)) {
-			int start = path.lastIndexOf("psp");
+			int start = path.lastIndexOf("psp") + 3;
 			int end = path.length() - 4;
 			String numberString = path.substring(start, end);
 			return Integer.parseInt(numberString);
@@ -91,6 +91,9 @@ public abstract class InstanceLoader {
 
 	private static int[][] convertLists(List<List<Integer>> value) {
 		int resourceCount = value.size();
+		if(resourceCount == 0) {
+			return new int[0][0];
+		}
 		int modeCount = value.get(0).size();
 		int[][] matrix = new int[modeCount][resourceCount];
 		for(int resourceIndex = 0; resourceIndex < resourceCount; resourceIndex ++) {

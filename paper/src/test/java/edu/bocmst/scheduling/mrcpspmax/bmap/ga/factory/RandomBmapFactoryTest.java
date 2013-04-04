@@ -15,13 +15,13 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.IModeAssignment;
 import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.ModeAssignmentFactory;
-import edu.bocmst.scheduling.mrcpspmax.commons.RandomUtils;
+import edu.bocmst.scheduling.mrcpspmax.commons.MrcpspMaxRandomUtils;
 import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({
 	ModeAssignmentFactory.class,
-	RandomUtils.class
+	MrcpspMaxRandomUtils.class
 })
 public class RandomBmapFactoryTest {
 	
@@ -35,7 +35,7 @@ public class RandomBmapFactoryTest {
 	@Before
 	public void setupFixture() {
 		PowerMockito.mockStatic(ModeAssignmentFactory.class);
-		PowerMockito.mockStatic(RandomUtils.class);
+		PowerMockito.mockStatic(MrcpspMaxRandomUtils.class);
 	}
 	
 	@Test
@@ -43,7 +43,7 @@ public class RandomBmapFactoryTest {
 		when(instance.getActivityCount()).thenReturn(MODE_COUNTS.length);
 		for(int i = 0; i < MODE_COUNTS.length; i++) {
 			when(instance.getModeCount(i)).thenReturn(MODE_COUNTS[i]);
-			PowerMockito.when(RandomUtils.getRandomMode(i, instance)).thenReturn(RNG_RESPONSES[i]);
+			PowerMockito.when(MrcpspMaxRandomUtils.getRandomMode(i, instance)).thenReturn(RNG_RESPONSES[i]);
 		}
 		PowerMockito.when(ModeAssignmentFactory.createInstance(RNG_RESPONSES, instance)).thenReturn(candidate);
 		RandomBmapFactory testee = new RandomBmapFactory(instance);

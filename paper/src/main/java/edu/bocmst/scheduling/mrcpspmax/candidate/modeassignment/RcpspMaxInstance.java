@@ -10,7 +10,7 @@ import edu.bocmst.scheduling.mrcpspmax.commons.GraphUtils;
 import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
 import edu.bocmst.scheduling.mrcpspmax.instance.IRenewableResource;
 
-class RcpspMaxInstance implements IRcpspMaxInstance {
+public class RcpspMaxInstance implements IRcpspMaxInstance {
 
 	private final List<Integer> processingTimes;
 	private final List<int[]> renewableResourceConsumptions;

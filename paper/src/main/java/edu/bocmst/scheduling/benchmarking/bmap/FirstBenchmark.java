@@ -19,7 +19,7 @@ import edu.bocmst.scheduling.mrcpspmax.bmap.IBmapSolver;
 import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.IModeAssignment;
 import edu.bocmst.scheduling.mrcpspmax.candidate.priority.ActivityListPriorityRule;
 import edu.bocmst.scheduling.mrcpspmax.candidate.priority.IPriorityRule;
-import edu.bocmst.scheduling.mrcpspmax.commons.RandomUtils;
+import edu.bocmst.scheduling.mrcpspmax.commons.MrcpspMaxRandomUtils;
 import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
 import edu.bocmst.scheduling.mrcpspmax.instance.loader.InstanceLoader;
 import edu.bocmst.scheduling.mrcpspmax.scheduler.IRcpspMaxScheduler;
@@ -45,7 +45,7 @@ public class FirstBenchmark implements IBmapBenchmark {
 				for(IModeAssignment assignment : modeAssignments) {
 					modesHashes.add(Arrays.hashCode(assignment.getModeArray()));
 					IRcpspMaxScheduler scheduler = RcpspMaxSchedulerFactory.createInstance();
-					List<Integer> randomList = RandomUtils.getRandomActivityPermutation(instance);
+					List<Integer> randomList = MrcpspMaxRandomUtils.getRandomActivityPermutation(instance);
 					ImmutableList<Integer> activityList = ImmutableList.copyOf(randomList);
 					IPriorityRule priorityRule = new ActivityListPriorityRule(activityList);
 					LOGGER.info("schedule: {}", scheduler.createSchedule(assignment, priorityRule));

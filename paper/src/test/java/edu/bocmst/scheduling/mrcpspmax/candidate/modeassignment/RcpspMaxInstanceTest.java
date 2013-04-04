@@ -16,7 +16,7 @@ public class RcpspMaxInstanceTest {
 	@Test
 	public void testInstanceCreation() {
 		int[] modes = new int[] {1,2,2,3,3,1,3,1};
-		IMrcpspMaxInstance instance = TestConstants.THESIS_INSTANCE;
+		IMrcpspMaxInstance instance = TestConstants.BARRIOS_INSTANCE;
 		IRcpspMaxInstance result = RcpspMaxInstance.createInstance(modes, instance);
 		
 		for(int activity = 0; activity < modes.length; activity ++) {

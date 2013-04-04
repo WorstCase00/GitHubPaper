@@ -7,13 +7,13 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 
+import edu.bocmst.scheduling.mrcpspmax.TestConstants;
+
 public abstract class BaseInstanceFileTest {
 
-	private static final String THESIS_FILE = "src/test/resources/thesisExample.sch";
-
-	protected List<String> readFromThesisFile() throws IOException,
+	protected List<String> readFromBarriosExampleFile() throws IOException,
 			FileNotFoundException {
-				List<String> instanceLines = IOUtils.readLines(new FileInputStream(THESIS_FILE));
+				List<String> instanceLines = IOUtils.readLines(new FileInputStream(TestConstants.BARRIOS_PATH));
 				return instanceLines;
 			}
 

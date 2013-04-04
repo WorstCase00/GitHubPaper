@@ -12,13 +12,13 @@ import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.IModeAssignment;
 import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.ModeAssignmentFactory;
 import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
 
-public class BmapArrayCrossover implements
+public class BmapArrayRecombination implements
 		EvolutionaryOperator<IModeAssignment> {
 
 	private final IntArrayCrossover intArrayCrossover;
 	private final IMrcpspMaxInstance problem;
 	
-	public BmapArrayCrossover(IntArrayCrossover intArrayCrossover, IMrcpspMaxInstance problem) {
+	public BmapArrayRecombination(IntArrayCrossover intArrayCrossover, IMrcpspMaxInstance problem) {
 		this.intArrayCrossover = intArrayCrossover;
 		this.problem = problem;
 	}
@@ -52,7 +52,7 @@ public class BmapArrayCrossover implements
 			int crossoverPoints,
 			IMrcpspMaxInstance problem) {
 		IntArrayCrossover crossover = new IntArrayCrossover(crossoverPoints);
-		EvolutionaryOperator<IModeAssignment> instance = new BmapArrayCrossover(crossover, problem);
+		EvolutionaryOperator<IModeAssignment> instance = new BmapArrayRecombination(crossover, problem);
 		return instance;
 	}
 }

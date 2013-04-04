@@ -1,5 +1,8 @@
 package edu.bocmst.utils;
 
+import java.util.Arrays;
+import java.util.List;
+
 
 public abstract class IntArrays {
 
@@ -13,7 +16,6 @@ public abstract class IntArrays {
 		}
 		return sums;
 	}
-
 
 	public static int[] minus(int[] minuend, int[] subtrahend) {
 		assertSameLengths(minuend, subtrahend);
@@ -36,5 +38,46 @@ public abstract class IntArrays {
 			column[i] = matrix[i][index];
 		}
 		return column;
+	}
+
+	public static String toOneLineString(int[][] matrix) {
+		StringBuilder string = new StringBuilder("[");
+		for (int row = 0; row < matrix.length; row++) {
+			string.append(Arrays.toString(matrix[row])).append(", ");
+		}
+		string.append("]");
+		return string.toString();
+	}
+
+	public static int countUnique(List<int[]> arrays) {
+		if(arrays.isEmpty()) {
+			return 0;
+		}
+		int count = 1;
+		for (int i = 0; i < arrays.size() - 1; i++) {
+			int[] first = arrays.get(i);
+			boolean foundMatch = false;
+			for (int j = i + 1; j < arrays.size(); j++) {
+				int[] second = arrays.get(j);
+				if(Arrays.equals(first, second)) {
+					foundMatch = true;
+					break;
+				}
+			}
+			if(!foundMatch) {
+				count ++;
+			}
+		}
+		return count;
+	}
+
+	public static boolean isValidTimeWindow(IntInterval temporalWindow) {
+		if(
+				(temporalWindow.getLowerBound() < 0) || 
+				(temporalWindow.getUpperBound() < 0) || 
+				(temporalWindow.getLowerBound() > temporalWindow.getUpperBound())) {
+			return false;
+		}
+		return true;
 	}
 }

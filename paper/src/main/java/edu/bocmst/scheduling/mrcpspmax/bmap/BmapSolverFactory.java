@@ -4,6 +4,7 @@ import edu.bocmst.metaheuristic.IGeneratedSolutionsCounter;
 import edu.bocmst.scheduling.mrcpspmax.bmap.ga.GaBmapSolverConfiguration;
 import edu.bocmst.scheduling.mrcpspmax.bmap.ga.GaBmapSolverFactory;
 import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
+import edu.bocmst.utils.AtomicCounterCounter;
 
 public abstract class BmapSolverFactory {
 
@@ -12,7 +13,7 @@ public abstract class BmapSolverFactory {
 	public static IBmapSolver createInstanceForInstance(
 			IMrcpspMaxInstance instance,
 			BmapSolverConfiguration configuration) {
-		IGeneratedSolutionsCounter solutionsCounter = new ValidModeAssignmentsCounter();
+		IGeneratedSolutionsCounter solutionsCounter = new AtomicCounterCounter();
 		BmapSolverType type = configuration.getSolverType();
 		switch(type) {
 		case GeneticAlgorithm: 

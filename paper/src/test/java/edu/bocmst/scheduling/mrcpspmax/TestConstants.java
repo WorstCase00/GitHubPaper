@@ -13,14 +13,16 @@ public class TestConstants {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(TestConstants.class);
 	
-	public static final String THESIS_PATH = "src/test/resources/thesisExample.sch";
-	public static IMrcpspMaxInstance THESIS_INSTANCE;
+	public static final String BARRIOS_PATH = "src/test/resources/barriosExample.sch";
+
+	public static final int[] VALID_MODES_BARRIOS_INSTANCE = new int[] {1,2,1,3,1,1,3,1};
+	public static IMrcpspMaxInstance BARRIOS_INSTANCE;
 	
 	static {
 		try {
-			THESIS_INSTANCE = InstanceLoader.loadInstance(THESIS_PATH);
+			BARRIOS_INSTANCE = InstanceLoader.loadInstance(BARRIOS_PATH);
 		} catch (IOException e) {
-			LOGGER.error("failed to load thesis instance", e);
+			LOGGER.error("failed to load barrios instance", e);
 		}
 	}
 }

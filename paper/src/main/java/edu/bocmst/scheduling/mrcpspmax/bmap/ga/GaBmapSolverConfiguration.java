@@ -18,7 +18,7 @@ public class GaBmapSolverConfiguration extends AbstractGaSolverConfiguration {
 	}
 	
 	public static final class Defaults {
-		public static final String SELECTION_TYPE = "Sampling";
+		public static final String SELECTION_TYPE = "Tournament";
 		public static final String FACTORY_TYPE = "RelativeResource";
 		public static final String EVALUATION_TYPE = BmapEvaluationType.PenalizingLongestPath.name();//"PenalizingLongestPath";
 	}

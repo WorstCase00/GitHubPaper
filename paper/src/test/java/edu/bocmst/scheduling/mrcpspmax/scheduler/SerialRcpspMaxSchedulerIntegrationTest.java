@@ -29,7 +29,7 @@ public class SerialRcpspMaxSchedulerIntegrationTest {
 	@Test
 	public void integrationTestBarriosPaperExample() throws Exception {
 		priorityRule = new ActivityListPriorityRule(LIST);
-		candidate = ModeAssignmentFactory.createInstance(MODES, TestConstants.THESIS_INSTANCE);
+		candidate = ModeAssignmentFactory.createInstance(MODES, TestConstants.BARRIOS_INSTANCE);
 		SerialRcpspMaxScheduler testee = new SerialRcpspMaxScheduler();
 		Schedule result = testee.createSchedule(candidate, priorityRule);
 		int[] startTime = result.getStartTimes();
