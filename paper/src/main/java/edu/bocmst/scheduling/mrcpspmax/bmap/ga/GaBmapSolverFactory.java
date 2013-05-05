@@ -160,7 +160,7 @@ public abstract class GaBmapSolverFactory {
 		EvolutionaryOperator<IModeAssignment> mutationOperator = createMutationOperator(
 				solverConfiguration, 
 				instance);
-//		operators.add(mutationOperator);
+		operators.add(mutationOperator);
 		EvolutionaryOperator<IModeAssignment> repairOperator = createRepairOperator(
 				solverConfiguration,
 				instance
