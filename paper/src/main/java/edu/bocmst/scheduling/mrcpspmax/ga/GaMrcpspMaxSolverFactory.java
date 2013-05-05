@@ -24,11 +24,13 @@ import edu.bocmst.metaheuristic.IGeneratedSolutionsCounter;
 import edu.bocmst.metaheuristic.TerminationConditionConfiguration;
 import edu.bocmst.metaheuristic.TerminationConditionCreator;
 import edu.bocmst.scheduling.mrcpspmax.bmap.ga.factory.MrcpspMaxCandidateFactoryConfiguration;
+import edu.bocmst.scheduling.mrcpspmax.bmap.ga.mutation.RandomModeMutation;
 import edu.bocmst.scheduling.mrcpspmax.candidate.IMrcpspMaxCandidate;
 import edu.bocmst.scheduling.mrcpspmax.commons.MrcpspMaxRandomUtils;
 import edu.bocmst.scheduling.mrcpspmax.ga.evaluation.MrcpspMaxFitnessEvaluatorConfiguration;
 import edu.bocmst.scheduling.mrcpspmax.ga.evaluation.MrcpspMaxFitnessEvaluatorFactory;
 import edu.bocmst.scheduling.mrcpspmax.ga.factory.MrcpspMaxFactoryFactory;
+import edu.bocmst.scheduling.mrcpspmax.ga.mutation.ModeAssignmentMutationWrapper;
 import edu.bocmst.scheduling.mrcpspmax.ga.recombination.MrcpspMaxRecombinationConfiguration;
 import edu.bocmst.scheduling.mrcpspmax.ga.recombination.MrcpspMaxRecombinationFactory;
 import edu.bocmst.scheduling.mrcpspmax.ga.repair.ModeAssignmentRepairWrapper;
@@ -110,7 +112,8 @@ public abstract class GaMrcpspMaxSolverFactory {
 	private static SelectionStrategy<? super IMrcpspMaxCandidate> createSelectionStrategy(
 			GaMrcpspMaxSolverConfiguration configuration) {
 		// TODO Auto-generated method stub
-		return new TournamentSelection(new Probability(1d));// StochasticUniversalSampling();
+//		return new TournamentSelection(new Probability(1d));// 
+		return new StochasticUniversalSampling();
 	}
 
 	private static EvolutionaryOperator<IMrcpspMaxCandidate> createEvolutionScheme(
@@ -119,10 +122,19 @@ public abstract class GaMrcpspMaxSolverFactory {
 		MrcpspMaxRecombinationConfiguration recombinationConfiguration = configuration.getRecombinationConfiguration();
 		EvolutionaryOperator<IMrcpspMaxCandidate> crossover = MrcpspMaxRecombinationFactory.create(recombinationConfiguration, problem);
 		pipeline.add(crossover);
+		
+		EvolutionaryOperator<IMrcpspMaxCandidate> mutation = createMutationOperator(problem);
 		EvolutionaryOperator<IMrcpspMaxCandidate> repair = ModeAssignmentRepairWrapper.createInstance(problem);
+		pipeline.add(mutation);
 		pipeline.add(repair);
 		EvolutionaryOperator<IMrcpspMaxCandidate> evolutionPipeline = new EvolutionPipeline<IMrcpspMaxCandidate>(pipeline);
 		return evolutionPipeline;
+	}
+
+	private static EvolutionaryOperator<IMrcpspMaxCandidate> createMutationOperator(
+			IMrcpspMaxInstance problem) {
+		// TODO Auto-generated method stub
+		return new ModeAssignmentMutationWrapper(new RandomModeMutation(problem));
 	}
 
 	private static CandidateFactory<IMrcpspMaxCandidate> createFactory(

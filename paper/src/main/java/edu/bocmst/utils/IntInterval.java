@@ -46,8 +46,17 @@ public class IntInterval {
 	@Override
 	public String toString() {
 		return "IntInterval [" + lowerBound + ", "
-				+ upperBound + "]";
+		+ upperBound + "]";
 	}
-	
-	
+
+	public boolean isValidTimeWindow() {
+		if( (getLowerBound() < 0) || 
+			(getUpperBound() < 0) || 
+			(getLowerBound() > getUpperBound())) {
+			return false;
+		}
+		return true;
+	}
+
+
 }

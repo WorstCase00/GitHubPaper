@@ -12,10 +12,9 @@ import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
 import edu.bocmst.utils.IntInterval;
 
 @NotThreadSafe
-public class MultiModeTemporalConstraintsTracker {
+public class MmdjMaxTemporalConstraintsTracker {
 
-	private static final Logger LOGGER = LoggerFactory
-		.getLogger(MultiModeTemporalConstraintsTracker.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(MmdjMaxTemporalConstraintsTracker.class);
 
 	private final IMrcpspMaxInstance instance;
 	
@@ -23,7 +22,7 @@ public class MultiModeTemporalConstraintsTracker {
 	private int[] modes;
 	private int[] startTimes;
 	
-	public MultiModeTemporalConstraintsTracker(
+	public MmdjMaxTemporalConstraintsTracker(
 			int[] modes,
 			int[] startTimes,
 			IMrcpspMaxInstance instance) {
@@ -60,9 +59,28 @@ public class MultiModeTemporalConstraintsTracker {
 		for(int predecessor : predecessors) {
 			int timeLag = instance.getTimeLag(predecessor, modes[predecessor], activity, mode);
 			LOGGER.debug("time lag with predecessor {}: {}", predecessor, timeLag);
+			if(timeLag < 0) {
+				LOGGER.debug("skipped because of negative timelag");
+				continue;
+			}
 			int predecessorStart = startTimes[predecessor];
 			LOGGER.debug("start time of predecessor {}: {}", predecessor, predecessorStart);
 			earliestStart = Math.max(earliestStart, predecessorStart + timeLag);
+			LOGGER.debug("earliest start after considering activity {}: {}", activity, earliestStart);
+		}
+		
+		Set<Integer> successors = instance.getAonNetwork().getSuccessors(activity);
+		LOGGER.debug("considered successors of activity {}", Arrays.toString(successors.toArray()));
+		for(int successor : successors) {
+			int timeLag = instance.getTimeLag(activity, mode, successor, modes[successor]);
+			LOGGER.debug("time lag with successor {}: {}", successor, timeLag);
+			if(timeLag >= 0) {
+				LOGGER.debug("skipped because of positive time lag");
+				continue;
+			}
+			int successorStart = startTimes[successor];
+			LOGGER.debug("start time of predecessor {}: {}", successor, successorStart);
+			earliestStart = Math.max(earliestStart, successorStart + timeLag);
 			LOGGER.debug("earliest start after considering activity {}: {}", activity, earliestStart);
 		}
 		return earliestStart;
@@ -70,15 +88,34 @@ public class MultiModeTemporalConstraintsTracker {
 
 	private int getLatestStart(int activity, int mode) {
 		LOGGER.debug("calculate latest start of activity {} with mode {}", activity, mode);
-		int latestStart = Integer.MAX_VALUE;
+		int latestStart = startTimes[startTimes.length-1];
 		Set<Integer> successors = instance.getAonNetwork().getSuccessors(activity);
 		LOGGER.debug("considered successors of activity {}", Arrays.toString(successors.toArray()));
 		for(int successor : successors) {
 			int timeLag = instance.getTimeLag(activity, mode, successor, modes[successor]);
 			LOGGER.debug("time lag with successor {}: {}", successor, timeLag);
+			if(timeLag < 0) {
+				LOGGER.debug("skipped because of negative time lag");
+				continue;
+			}
 			int successorStart = startTimes[successor];
 			LOGGER.debug("start time of successor {}: {}", successor, successorStart);
 			latestStart = Math.min(latestStart, successorStart - timeLag);
+			LOGGER.debug("latest start after considering activity {}: {}", activity, latestStart);
+		}
+		
+		Set<Integer> predecessors = instance.getAonNetwork().getPredecessors(activity);
+		LOGGER.debug("considered successors of activity {}", Arrays.toString(successors.toArray()));
+		for(int predecessor : predecessors) {
+			int timeLag = instance.getTimeLag(predecessor, modes[predecessor], activity, mode);
+			LOGGER.debug("time lag with successor {}: {}", predecessor, timeLag);
+			if(timeLag >= 0) {
+				LOGGER.debug("skipped because of positive time lag");
+				continue;
+			}
+			int predecessorStart = startTimes[predecessor];
+			LOGGER.debug("start time of predecessor {}: {}", predecessor, predecessorStart);
+			latestStart = Math.min(latestStart, predecessorStart - timeLag);
 			LOGGER.debug("latest start after considering activity {}: {}", activity, latestStart);
 		}
 		return latestStart;

@@ -3,11 +3,14 @@ package edu.bocmst.scheduling.mrcpspmax.candidate.priority;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+import com.google.common.primitives.Ints;
 
 public class RandomKeysPriorityRule implements IPriorityRule {
 
@@ -52,6 +55,23 @@ public class RandomKeysPriorityRule implements IPriorityRule {
 		int valueActivity2 = priorityList.get(activity2);
 		int compareValue = (new Integer(valueActivity1)).compareTo(valueActivity2);
 		return compareValue;
+	}
+
+	public static IPriorityRule toPriorityRule(int[] startTimes) {
+		int[] p = new int[startTimes.length];
+		TreeSet<Integer> orderedTimes = new TreeSet<Integer>(Ints.asList(startTimes));
+		int count = 0;
+		for(int time : orderedTimes) {
+			for (int i = 0; i < startTimes.length; i++) {
+				if(startTimes[i] == time) {
+					p[i] = count; // TODO ++ is shit, but else everything blows up at crossover
+//					jdkasöfjskljdfa
+				}
+			}
+			count ++;
+		}
+		IPriorityRule instance = new RandomKeysPriorityRule(Ints.asList(p));
+		return instance;
 	}
 
 }

@@ -14,6 +14,7 @@ import edu.bocmst.scheduling.mrcpspmax.candidate.priority.IPriorityRule;
 import edu.bocmst.scheduling.mrcpspmax.candidate.schedule.IResourceProfile;
 import edu.bocmst.scheduling.mrcpspmax.candidate.schedule.ResourceProfileListImpl;
 import edu.bocmst.scheduling.mrcpspmax.candidate.schedule.Schedule;
+import edu.bocmst.scheduling.mrcpspmax.commons.SolutionValidator;
 import edu.bocmst.utils.IntInterval;
 
 public class SerialRcpspMaxScheduler implements IRcpspMaxScheduler {
@@ -39,7 +40,7 @@ public class SerialRcpspMaxScheduler implements IRcpspMaxScheduler {
 		int[] startTimes = new int[activityCount];
 		IResourceProfile resourceProfile = new ResourceProfileListImpl(instance);
 		CausalEligibilityTracker causalConstraintsTracker = CausalEligibilityTracker.createInstance(candidate);
-		TemporalConstraintsTracker temporalConstraintsTracker = TemporalConstraintsTracker.createInstance(candidate);
+		RigidTemporalConstraintsTracker temporalConstraintsTracker = RigidTemporalConstraintsTracker.createInstance(candidate);
 		
 		while(scheduledActivities.size() != activityCount) {
 			Set<Integer> eligibleActivities = causalConstraintsTracker.getEligibleActivities();
@@ -47,6 +48,7 @@ public class SerialRcpspMaxScheduler implements IRcpspMaxScheduler {
 			int activity = priorityRule.getNextActivityFromEligibleSet(eligibleActivities);
 			LOGGER.debug("next activity to be schedule: {}", activity);
 			IntInterval startTimeWindow = temporalConstraintsTracker.getStartTimeWindow(activity);
+			
 			LOGGER.debug("temporally valid start time window: {}", startTimeWindow);
 			int earliestStartOrMissingTime = resourceProfile.getEarliestPossibleStartInTimeWindowOrNegativeMissingTimeSpan(activity, startTimeWindow);
 			if(earliestStartOrMissingTime < 0) {
@@ -82,6 +84,10 @@ public class SerialRcpspMaxScheduler implements IRcpspMaxScheduler {
 				causalConstraintsTracker.schedule(activity);
 				scheduledActivities.add(activity);
 			}
+		}
+		if(!SolutionValidator.isTimeValid(startTimes, candidate.getInstance())) {
+			LOGGER.warn("scheduler produced invalid schedule");
+			return null;
 		}
 		Schedule schedule = new Schedule(startTimes, resourceProfile);
 		return schedule;

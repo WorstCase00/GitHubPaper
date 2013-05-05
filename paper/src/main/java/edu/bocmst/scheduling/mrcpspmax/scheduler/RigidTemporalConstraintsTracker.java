@@ -14,19 +14,22 @@ import edu.bocmst.scheduling.mrcpspmax.commons.GraphUtils;
 import edu.bocmst.utils.IntArrays;
 import edu.bocmst.utils.IntInterval;
 
-class TemporalConstraintsTracker {
+class RigidTemporalConstraintsTracker {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(TemporalConstraintsTracker.class);
-	
+	private static final Logger LOGGER = LoggerFactory.getLogger(RigidTemporalConstraintsTracker.class);
+
 	private final int[][] pathMatrix;
 	private final IDirectedGraph aonNetwork;
 	private final int[] lowerBounds;
 	private final int[] upperBounds;
 	private final Set<Integer> scheduled;
 
-	TemporalConstraintsTracker(int[][] pathMatrix,
-			IDirectedGraph aonNetwork, int[] lowerBounds, int[] upperBounds,
-			IRcpspMaxInstance instance, Set<Integer> scheduled) {
+	RigidTemporalConstraintsTracker(
+			int[][] pathMatrix,
+			IDirectedGraph aonNetwork, 
+			int[] lowerBounds, int[] upperBounds,
+			IRcpspMaxInstance instance, 
+			Set<Integer> scheduled) {
 		this.pathMatrix = pathMatrix;
 		this.aonNetwork = aonNetwork;
 		this.lowerBounds = lowerBounds;
@@ -42,23 +45,25 @@ class TemporalConstraintsTracker {
 	}
 
 	void schedule(int activity, int start) {
-		Set<Integer> successors = aonNetwork.getSuccessors(activity);
 		scheduled.add(activity);
+		updateSuccessorBounds(activity, start);
+		updatePredecessorBounds(activity, start);
+	}
+
+	private void updatePredecessorBounds(int fixedActivity, int start) {
+		for(int predecessor : aonNetwork.getPredecessors(fixedActivity)) {
+			int timeLag = pathMatrix[predecessor][fixedActivity];
+			int newUpperBound = start - timeLag;
+			upperBounds[predecessor] = Math.min(upperBounds[predecessor], newUpperBound);
+		}
+	}
+
+	private void updateSuccessorBounds(int activity, int start) {
+		Set<Integer> successors = aonNetwork.getSuccessors(activity);
 		for(int successor : successors) {
-			int actualLowerBound = lowerBounds[successor];
 			int timeLag = pathMatrix[activity][successor];
 			int newLowerBound = start + timeLag;
-			if(newLowerBound > actualLowerBound) {
-				lowerBounds[successor] = newLowerBound;
-			}
-		}
-		for(int predecessor : aonNetwork.getPredecessors(activity)) {
-			int actualUpperBound = upperBounds[predecessor];
-			int timeLag = pathMatrix[predecessor][activity];
-			int newUpperBound = start - timeLag;
-			if(newUpperBound < actualUpperBound) {
-				upperBounds[predecessor] = newUpperBound;
-			}
+			lowerBounds[successor] = Math.max(lowerBounds[successor], newLowerBound);
 		}
 	}
 
@@ -67,6 +72,7 @@ class TemporalConstraintsTracker {
 		for(int scheduledActivity : scheduled) {
 			int startTime = startTimes[scheduledActivity];
 			int timeLag = pathMatrix[activity][scheduledActivity];
+
 			if((startTime - timeLag) == upperBounds[activity]) {
 				directUnschedule.add(scheduledActivity);
 			}
@@ -75,7 +81,7 @@ class TemporalConstraintsTracker {
 			lowerBounds[unscheduleActivity] = startTimes[unscheduleActivity] + timeSpan;
 		}
 		scheduled.removeAll(directUnschedule);
-		
+
 		Set<Integer> indirectUnschedule = Sets.newHashSet();
 		int minStartTimeInUnscheduled = getMinStartTime(directUnschedule, startTimes);
 		for(int scheduledActivity : scheduled) {
@@ -84,7 +90,7 @@ class TemporalConstraintsTracker {
 			}
 		}
 		scheduled.removeAll(indirectUnschedule);
-		
+
 		for(int openActivity = 0; openActivity < lowerBounds.length; openActivity++) {
 			if(scheduled.contains(openActivity)) {
 				continue;
@@ -99,27 +105,27 @@ class TemporalConstraintsTracker {
 			for(int scheduledActivity : scheduled) {
 
 				if(pathMatrix[scheduledActivity][openActivity] != GraphUtils.NO_EDGE) {
-				lowerBounds[openActivity] = Math.max(
-						lowerBounds[openActivity], 
-						startTimes[scheduledActivity] + pathMatrix[scheduledActivity][openActivity]);
+					lowerBounds[openActivity] = Math.max(
+							lowerBounds[openActivity], 
+							startTimes[scheduledActivity] + pathMatrix[scheduledActivity][openActivity]);
 				}
 				if(pathMatrix[openActivity][scheduledActivity] != GraphUtils.NO_EDGE) {
 					upperBounds[openActivity] = Math.min(
 							upperBounds[openActivity], 
 							startTimes[scheduledActivity] - pathMatrix[openActivity][scheduledActivity]);
 				}
-			
+
 			}
 			LOGGER.debug("modefied time window for activity {}: {}", 
 					openActivity, new IntInterval(lowerBounds[openActivity], upperBounds[openActivity]));
 		}
-		
+
 		Set<Integer> allUnscheduled = Sets.union(directUnschedule, indirectUnschedule);
 		return allUnscheduled;
 	}
 
 	private int getMaxDistance(int openActivity, Set<Integer> directUnschedule) {
-		
+
 		int maxDistance = Integer.MIN_VALUE;
 		for(int unscheduleActivity : directUnschedule) {
 			int distance = lowerBounds[unscheduleActivity] + pathMatrix[unscheduleActivity][openActivity];
@@ -140,7 +146,7 @@ class TemporalConstraintsTracker {
 		return minStartTime;
 	}
 
-	static TemporalConstraintsTracker createInstance(IModeAssignment candidate) {
+	static RigidTemporalConstraintsTracker createInstance(IModeAssignment candidate) {
 		int[][] paths = candidate.getInstance().getPathMatrix();
 		IDirectedGraph network = candidate.getInstance().getAonNetwork();
 		int[] lbs = paths[0].clone();
@@ -148,7 +154,7 @@ class TemporalConstraintsTracker {
 		int[] ubs = initUpperBounds(candidate.getInstance().getPathMatrix());
 		IRcpspMaxInstance problem = candidate.getInstance();
 		Set<Integer> done = Sets.newHashSet();
-		TemporalConstraintsTracker tracker = new TemporalConstraintsTracker(paths, network, lbs, ubs, problem, done);
+		RigidTemporalConstraintsTracker tracker = new RigidTemporalConstraintsTracker(paths, network, lbs, ubs, problem, done);
 		return tracker;
 	}
 

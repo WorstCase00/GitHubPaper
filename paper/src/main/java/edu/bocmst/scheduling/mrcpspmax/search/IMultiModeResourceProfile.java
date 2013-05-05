@@ -17,4 +17,9 @@ public interface IMultiModeResourceProfile {
 			int activity,
 			int mode, 
 			int startTime);
+
+	int getLatestPossibleStartInTimeWindowOrNegativeMissingTimeSpan(
+			int activity, 
+			int mode, 
+			IntInterval startTimeWindow);
 }

@@ -11,5 +11,9 @@ public interface IMrcpspMaxCandidate {
 	IModeAssignment getModeAssignment();
 
 	IRcpspMaxScheduler getScheduler();
+	
+	void setPriorityRule(IPriorityRule priorityRule);
+	
+	void setModeAssignment(IModeAssignment modeAssignment);
 
 }

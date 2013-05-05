@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import edu.bocmst.scheduling.mrcpspmax.TestConstants;
-import edu.bocmst.scheduling.mrcpspmax.search.MultiModeTemporalConstraintsTracker;
+import edu.bocmst.scheduling.mrcpspmax.search.MmdjMaxTemporalConstraintsTracker;
 import edu.bocmst.utils.IntInterval;
 
 public class MultiModeTemporalConstraintsTrackerTest {
@@ -15,7 +15,7 @@ public class MultiModeTemporalConstraintsTrackerTest {
 		int[] modes = new int[] {1,1,1,1,1,1,1,1,1};
 		int[] startTimes = new int[] {0,0,0,3,4,4,4,6};
 		
-		MultiModeTemporalConstraintsTracker testee = new MultiModeTemporalConstraintsTracker(modes, startTimes, TestConstants.BARRIOS_INSTANCE);
+		MmdjMaxTemporalConstraintsTracker testee = new MmdjMaxTemporalConstraintsTracker(modes, startTimes, TestConstants.BARRIOS_INSTANCE);
 		
 		IntInterval result = testee.getStartTimeWindow(1, 1);
 		assertEquals(0, result.getLowerBound());
@@ -35,7 +35,7 @@ public class MultiModeTemporalConstraintsTrackerTest {
 		int[] modes = new int[] {1,1,1,1,1,1,1,1,1};
 		int[] startTimes = new int[] {0,0,0,3,4,4,4,6};
 		
-		MultiModeTemporalConstraintsTracker testee = new MultiModeTemporalConstraintsTracker(modes, startTimes, TestConstants.BARRIOS_INSTANCE);
+		MmdjMaxTemporalConstraintsTracker testee = new MmdjMaxTemporalConstraintsTracker(modes, startTimes, TestConstants.BARRIOS_INSTANCE);
 		
 		IntInterval result = testee.getStartTimeWindow(3, 1);
 		assertEquals(3, result.getLowerBound());
@@ -47,7 +47,7 @@ public class MultiModeTemporalConstraintsTrackerTest {
 		int[] modes = new int[] {1,1,1,1,1,1,1,1,1};
 		int[] startTimes = new int[] {0,0,0,3,4,4,4,6};
 		
-		MultiModeTemporalConstraintsTracker testee = new MultiModeTemporalConstraintsTracker(modes, startTimes, TestConstants.BARRIOS_INSTANCE);
+		MmdjMaxTemporalConstraintsTracker testee = new MmdjMaxTemporalConstraintsTracker(modes, startTimes, TestConstants.BARRIOS_INSTANCE);
 		
 		IntInterval result = testee.getStartTimeWindow(5, 1);
 		assertEquals(4, result.getLowerBound());

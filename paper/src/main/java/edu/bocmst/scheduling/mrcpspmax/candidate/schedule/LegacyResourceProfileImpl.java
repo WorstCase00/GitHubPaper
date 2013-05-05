@@ -17,7 +17,8 @@ public class LegacyResourceProfileImpl {
 	
 	private final int[] resourceLimits;
 	
-	private ArrayList<int[]>[] resourceProfile;
+	// state
+	private List<int[]>[] resourceProfile;
 
 	@SuppressWarnings("unchecked")
 	public LegacyResourceProfileImpl(int[] resourceLimits) {
@@ -363,7 +364,7 @@ public class LegacyResourceProfileImpl {
 	}
 
 	public void shift(int delta) {
-		for(ArrayList<int[]> function : resourceProfile) {
+		for(List<int[]> function : resourceProfile) {
 			for(int[] point : function) {
 				point[TIME_INDEX] +=  delta;
 			}

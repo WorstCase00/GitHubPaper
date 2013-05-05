@@ -27,6 +27,7 @@ class MrcpspMaxInstance implements IMrcpspMaxInstance {
 	private final ImmutableList<int[][]> renewableResourceConsumptionsList; //int[mode][resource]
 	private final ImmutableList<int[][]>  nonRenewableResourceConsumptionsList; //int[mode][resource]
 	private final ImmutableMap<IDirectedEdge, int[][]> timelagsMap;
+	private final int[] modeCounts;
 	
 	MrcpspMaxInstance(
 			int instanceId,
@@ -46,6 +47,10 @@ class MrcpspMaxInstance implements IMrcpspMaxInstance {
 		this.renewableResourceConsumptionsList = ImmutableList.copyOf(renewableResourceConsumptionsList);
 		this.nonRenewableResourceConsumptionsList = ImmutableList.copyOf(nonRenewableResourceConsumptionsList);
 		this.timelagsMap = ImmutableMap.copyOf(timelagsMap);
+		this.modeCounts = new int[processingTimesList.size()];
+		for (int activity = 0; activity < modeCounts.length; activity++) {
+			modeCounts[activity] = processingTimesList.get(activity).length;
+		}
 	}
 
 	@Override
@@ -144,7 +149,12 @@ class MrcpspMaxInstance implements IMrcpspMaxInstance {
 	public IDirectedGraph getAonNetwork() {
 		return this.aonNetwork;
 	}
-
+	
+	@Override
+	public int[] getModeCounts() {
+		return this.modeCounts;
+	}
+	
 	@Override
 	public String toString() {
 		return "MrcpspMaxInstance [" +
@@ -164,4 +174,6 @@ class MrcpspMaxInstance implements IMrcpspMaxInstance {
 		}
 		return string.toString();
 	}
+
+	
 }

@@ -33,6 +33,7 @@ import edu.bocmst.scheduling.mrcpspmax.bmap.ga.evaluation.PenalizingLongestPathE
 import edu.bocmst.scheduling.mrcpspmax.bmap.ga.factory.BmapFactoryType;
 import edu.bocmst.scheduling.mrcpspmax.bmap.ga.factory.RandomBmapFactory;
 import edu.bocmst.scheduling.mrcpspmax.bmap.ga.factory.RelativeResourceConsumptionBmapFactory;
+import edu.bocmst.scheduling.mrcpspmax.bmap.ga.mutation.RandomModeMutation;
 import edu.bocmst.scheduling.mrcpspmax.bmap.ga.recombination.BmapArrayRecombination;
 import edu.bocmst.scheduling.mrcpspmax.bmap.ga.repair.BarriosModeAssignmentRepair;
 import edu.bocmst.scheduling.mrcpspmax.bmap.ga.selection.BampSelectionType;
@@ -156,6 +157,9 @@ public abstract class GaBmapSolverFactory {
 				solverConfiguration,
 				instance);
 		operators.add(crossoverOperator);
+		EvolutionaryOperator<IModeAssignment> mutationOperator = createMutationOperator(
+				solverConfiguration, 
+				instance);
 //		operators.add(mutationOperator);
 		EvolutionaryOperator<IModeAssignment> repairOperator = createRepairOperator(
 				solverConfiguration,
@@ -164,6 +168,13 @@ public abstract class GaBmapSolverFactory {
 		operators.add(repairOperator);
 		EvolutionaryOperator<IModeAssignment> pipeline = new EvolutionPipeline<IModeAssignment>(operators);
 		return pipeline;
+	}
+
+	private static EvolutionaryOperator<IModeAssignment> createMutationOperator(
+			AbstractGaSolverConfiguration solverConfiguration,
+			IMrcpspMaxInstance instance) {
+		// TODO Auto-generated method stub
+		return new RandomModeMutation(instance);
 	}
 
 	private static EvolutionaryOperator<IModeAssignment> createRepairOperator(

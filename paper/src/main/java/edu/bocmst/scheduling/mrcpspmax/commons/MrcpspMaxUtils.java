@@ -150,4 +150,16 @@ public abstract class MrcpspMaxUtils {
 		}
 		return orderedActivities;
 	}
+
+	public static List<Integer> getActivitiesOrderedByStartTimeIncreasing(
+			int[] startTimes) {
+		PriorityQueue<ActivityToStartTimeEntry> orderedEntries = 
+			new PriorityQueue<ActivityToStartTimeEntry>(startTimes.length, new IncreasingStartTimeComparator());
+		for (int activity = 0; activity < startTimes.length; activity++) {
+			ActivityToStartTimeEntry entry = new ActivityToStartTimeEntry(activity, startTimes[activity]);
+			orderedEntries.add(entry);
+		}
+		List<Integer> orderedList = extractOrderedActivities(orderedEntries);
+		return orderedList;
+	}
 }

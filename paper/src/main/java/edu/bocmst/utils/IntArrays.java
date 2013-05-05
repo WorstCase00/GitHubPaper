@@ -71,13 +71,11 @@ public abstract class IntArrays {
 		return count;
 	}
 
-	public static boolean isValidTimeWindow(IntInterval temporalWindow) {
-		if(
-				(temporalWindow.getLowerBound() < 0) || 
-				(temporalWindow.getUpperBound() < 0) || 
-				(temporalWindow.getLowerBound() > temporalWindow.getUpperBound())) {
-			return false;
+	public static int[] createIntArray(int length, int value) {
+		int[] array = new int[length];
+		for (int i = 0; i < length; i++) {
+			array[i] = value;
 		}
-		return true;
+		return array;
 	}
 }

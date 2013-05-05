@@ -40,4 +40,6 @@ public interface IMrcpspMaxInstance {
 	IDirectedGraph getAonNetwork();
 
 	int getInstanceId();
+
+	int[] getModeCounts();
 }

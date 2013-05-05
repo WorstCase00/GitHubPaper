@@ -1,52 +1,52 @@
 package edu.bocmst.scheduling.mrcpspmax.search;
 
 import java.util.List;
-import java.util.PriorityQueue;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import edu.bocmst.scheduling.mrcpspmax.MrcpspMaxSolution;
 import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.IModeAssignment;
-import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.ModeAssignmentFactory;
-import edu.bocmst.scheduling.mrcpspmax.candidate.schedule.IResourceProfile;
 import edu.bocmst.scheduling.mrcpspmax.candidate.schedule.Schedule;
 import edu.bocmst.scheduling.mrcpspmax.commons.MrcpspMaxUtils;
-import edu.bocmst.scheduling.mrcpspmax.ga.repair.ModeAssignmentRepairWrapper;
 import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
-import edu.bocmst.scheduling.mrcpspmax.scheduler.CausalEligibilityTracker;
-import edu.bocmst.utils.IntArrays;
 import edu.bocmst.utils.IntInterval;
 
-public class MmdjMaxSearch {
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(MmdjMaxSearch.class);
+public class MmdjMaxLeftShift implements IMrcpspMaxSearch {
+
 	private static final int MODE_INDEX = 0;
 	private static final int START_INDEX = 1;
-	
+	private static final Logger LOGGER = LoggerFactory.getLogger(MmdjMaxLeftShift.class);
 	private final IMrcpspMaxInstance instance;
 	
-	public MmdjMaxSearch(IMrcpspMaxInstance instance) {
+	public MmdjMaxLeftShift(IMrcpspMaxInstance instance) {
 		this.instance = instance;
 	}
-
-	public MrcpspMaxSolution search(IModeAssignment modeAssignment, Schedule schedule) {
+	
+	@Override
+	public MrcpspMaxSolution search(
+			IModeAssignment modeAssignment,
+			Schedule schedule) {
 		int[] oldModes = modeAssignment.getModeArray();
 		int[] oldStartTimes = schedule.getStartTimes();
-		MultiModeTemporalConstraintsTracker temporalConstraintsTracker = new MultiModeTemporalConstraintsTracker(
+		MmdjMaxTemporalConstraintsTracker temporalConstraintsTracker = new MmdjMaxTemporalConstraintsTracker(
 				oldModes, 
 				oldStartTimes, 
 				instance);
-		IMultiModeResourceProfile resourceProfile = new WrappedLegacyMultiModeResourceProfile(instance);
+		IMultiModeResourceProfile resourceProfile = new WrappedLegacyMultiModeResourceProfile(instance, oldModes, oldStartTimes);
 		int[] remainingResources = modeAssignment.getResourceRemainingVector();
 		NonRenewableResourceTracker nonRenewableResourceTracker = new NonRenewableResourceTracker(remainingResources, instance);
-		List<Integer> orderedActivities = MrcpspMaxUtils.getActivitiesOrderedByStartTimeDecreasing(oldStartTimes);
+		
+		List<Integer> orderedActivities = MrcpspMaxUtils.getActivitiesOrderedByStartTimeIncreasing(oldStartTimes);
 		
 		int[] newStartTimes = new int[oldStartTimes.length];
 		int[] newModes = new int[oldModes.length];
 		for(int activity : orderedActivities) {
-			resourceProfile.unschedule(activity, oldModes[activity], oldStartTimes[activity]);
-			nonRenewableResourceTracker.freeResourcesForActivity(activity, oldModes[activity]);
+			int oldMode = oldModes[activity];
+			LOGGER.debug("unschedule activity {} with mode {}", activity, oldMode);
+			resourceProfile.unschedule(activity, oldMode, oldStartTimes[activity]);
+			LOGGER.debug("resource profile after unscheduling: {}", resourceProfile);
+			nonRenewableResourceTracker.freeResourcesForActivity(activity, oldMode);
 			
 			int[] newModeAndStart = getEarliestPossibleModeAndStart(
 					activity,
@@ -55,26 +55,30 @@ public class MmdjMaxSearch {
 					nonRenewableResourceTracker);
 			int newMode = newModeAndStart[MODE_INDEX];
 			int newStart = newModeAndStart[START_INDEX];
+			LOGGER.debug("found earliest possible start time {} with mode {}", 
+					newStart, newMode);
+			
 			newModes[activity] = newMode;
 			newStartTimes[activity] = newStart;
-			if((oldModes[activity] == newMode) && (oldStartTimes[activity] == newStart)) {
+			if((oldMode == newMode) && (oldStartTimes[activity] == newStart)) {
 				LOGGER.debug("no changes possible for activity {}", activity);
 			} else {
-				LOGGER.debug("change");
-				temporalConstraintsTracker.update(activity, newMode, newStart);
-				resourceProfile.schedule(activity, newMode, newStart);
-				nonRenewableResourceTracker.update(activity, newMode, newStart);
+				LOGGER.debug("change to new values");
 			}
+			temporalConstraintsTracker.update(activity, newMode, newStart);
+			resourceProfile.schedule(activity, newMode, newStart);
+			nonRenewableResourceTracker.update(activity, newMode, newStart);
 		}
 		
 		Schedule newSchedule = new Schedule(newStartTimes, new WrappedResourceProfile(resourceProfile, newModes));
 		MrcpspMaxSolution solution = new MrcpspMaxSolution(newSchedule, newModes);
+		LOGGER.debug("search algorithm delivered solution {}", solution);
 		return solution;
 	}
 
 	private int[] getEarliestPossibleModeAndStart(
 			int activity,
-			MultiModeTemporalConstraintsTracker temporalConstraintsTracker,
+			MmdjMaxTemporalConstraintsTracker temporalConstraintsTracker,
 			IMultiModeResourceProfile renewableResourceTracker,
 			NonRenewableResourceTracker nonRenewableResourceTracker) {
 		LOGGER.debug("get earliest mode and start for activity {}", activity);
@@ -86,11 +90,13 @@ public class MmdjMaxSearch {
 				LOGGER.debug("mode {} is not feasible for activity {}", mode, activity);
 				continue;
 			}
+			LOGGER.debug("mode {} is feasible with respect to budget constraints", mode);
 			IntInterval temporalWindow = temporalConstraintsTracker.getStartTimeWindow(activity, mode);
-			if(!IntArrays.isValidTimeWindow(temporalWindow)) {
+			if(!temporalWindow.isValidTimeWindow()) {
 				LOGGER.debug("start time window not valid: {}", temporalWindow);
 				continue;
 			}
+			LOGGER.debug("mode {} has temporal time window {}", mode, temporalWindow);
 			int start = renewableResourceTracker.getEarliestPossibleStartInTimeWindowOrNegativeMissingTimeSpan(activity, mode, temporalWindow);
 			if(start < 0) {
 				LOGGER.debug("found no suitable start because of resource constraints in temporal window {}", temporalWindow);
@@ -105,5 +111,4 @@ public class MmdjMaxSearch {
 		int[] modeAndStart = new int[] {earliestMode, earliestStart};
 		return modeAndStart;
 	}
-
 }

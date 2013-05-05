@@ -8,11 +8,12 @@ import java.util.Random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.uncommons.watchmaker.framework.EvolutionaryOperator;
+import org.uncommons.watchmaker.framework.operators.ListCrossover;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.google.common.primitives.Ints;
 
-import edu.bocmst.metaheuristic.ListOrderCrossoverHelper;
 import edu.bocmst.scheduling.mrcpspmax.candidate.IMrcpspMaxCandidate;
 import edu.bocmst.scheduling.mrcpspmax.candidate.MrcpspMaxCandidate;
 import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.IModeAssignment;
@@ -27,7 +28,6 @@ public class MrcpspMaxListOrderRecombination implements EvolutionaryOperator<IMr
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(MrcpspMaxListOrderRecombination.class);
 	
-	private final ListOrderCrossoverHelper<Integer> listOrderCrossoverHelper = new ListOrderCrossoverHelper<Integer>();
 	private final IMrcpspMaxInstance problem;
 	
 	public MrcpspMaxListOrderRecombination(IMrcpspMaxInstance problem) {
@@ -43,7 +43,8 @@ public class MrcpspMaxListOrderRecombination implements EvolutionaryOperator<IMr
 			IMrcpspMaxCandidate candidate1 = selectedCandidates.get(2* i);
 			IMrcpspMaxCandidate candidate2 = selectedCandidates.get(2*i + 1);
 			LOGGER.debug("recombine candidate {} and {}", candidate1, candidate2);
-			List<IMrcpspMaxCandidate> recombined = recombine(candidate1, candidate2);
+			List<IMrcpspMaxCandidate> recombined = recombine(
+					candidate1, candidate2, rng);
 			newCandidates.addAll(recombined);
 		}
 		LOGGER.debug("return new candidate: {}", Arrays.toString(newCandidates.toArray()));
@@ -52,17 +53,24 @@ public class MrcpspMaxListOrderRecombination implements EvolutionaryOperator<IMr
 
 	private List<IMrcpspMaxCandidate> recombine(
 			IMrcpspMaxCandidate candidate1,
-			IMrcpspMaxCandidate candidate2) {
+			IMrcpspMaxCandidate candidate2, Random rng) {
 		List<IMrcpspMaxCandidate> recombined = Lists.newArrayListWithCapacity(2);
 		ImmutableList<Integer> priorityList1 = candidate1.getPriorityRule().getIntegerListRepresentation();
 		ImmutableList<Integer> priorityList2 = candidate2.getPriorityRule().getIntegerListRepresentation();
 		int point1 = RandomUtils.getInstance().nextInt(priorityList1.size());
 		int point2 = RandomUtils.getInstance().nextInt(priorityList2.size());
-		List<List<Integer>> priorityListRecombined = listOrderCrossoverHelper.mateWithCrossoverPoints(
-				priorityList1, 
-				priorityList2, 
-				point1, 
-				point2);
+
+		ListCrossover<Integer> listCrossOver = new XPointCrossover<Integer>(Ints.asList(point1, point2));
+		List<List<Integer>> candidates = Lists.newArrayList(
+				(List<Integer>)priorityList1, 
+				(List<Integer>)priorityList2);
+		List<List<Integer>> priorityListRecombined = listCrossOver.apply(
+				candidates, rng);
+//		List<List<Integer>> priorityListRecombined = listOrderCrossoverHelper.mateWithCrossoverPoints(
+//				priorityList1, 
+//				priorityList2, 
+//				point1, 
+//				point2);
 		
 		int[] modes1 = candidate1.getModeAssignment().getModeArray();
 		int[] modes2 = candidate2.getModeAssignment().getModeArray();

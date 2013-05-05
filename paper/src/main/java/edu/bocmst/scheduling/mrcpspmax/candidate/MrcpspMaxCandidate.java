@@ -6,8 +6,8 @@ import edu.bocmst.scheduling.mrcpspmax.scheduler.IRcpspMaxScheduler;
 
 public class MrcpspMaxCandidate implements IMrcpspMaxCandidate {
 
-	private final IPriorityRule priorityRule;
-	private final IModeAssignment modeAssignment;
+	private IPriorityRule priorityRule;
+	private IModeAssignment modeAssignment;
 	private final IRcpspMaxScheduler scheduler;
 	
 	public MrcpspMaxCandidate(
@@ -32,6 +32,16 @@ public class MrcpspMaxCandidate implements IMrcpspMaxCandidate {
 	@Override
 	public IRcpspMaxScheduler getScheduler() {
 		return this.scheduler;
+	}
+
+	@Override
+	public void setPriorityRule(IPriorityRule priorityRule) {
+		this.priorityRule = priorityRule;
+	}
+
+	@Override
+	public void setModeAssignment(IModeAssignment modeAssignment) {
+		this.modeAssignment = modeAssignment;
 	}
 
 }

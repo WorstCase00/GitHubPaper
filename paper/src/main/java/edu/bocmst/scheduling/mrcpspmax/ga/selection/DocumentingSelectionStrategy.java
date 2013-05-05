@@ -10,6 +10,7 @@ import org.uncommons.watchmaker.framework.SelectionStrategy;
 
 import com.google.common.collect.Lists;
 
+import edu.bocmst.scheduling.mrcpspmax.bmap.metric.UniqueModeArraysSumMetric;
 import edu.bocmst.scheduling.mrcpspmax.bmap.metric.UniqueValidModeAssignmentMetric;
 import edu.bocmst.scheduling.mrcpspmax.candidate.IMrcpspMaxCandidate;
 import edu.bocmst.scheduling.mrcpspmax.ga.GaMrcpspMaxSolverConfiguration;
@@ -17,6 +18,7 @@ import edu.bocmst.scheduling.mrcpspmax.ga.recombination.ModeAssignmentMetricWrap
 import edu.bocmst.scheduling.mrcpspmax.metric.BestFitnessMetric;
 import edu.bocmst.scheduling.mrcpspmax.metric.IMrcpspMaxPopulationMetric;
 import edu.bocmst.scheduling.mrcpspmax.metric.Metric;
+import edu.bocmst.scheduling.mrcpspmax.metric.UniqueStartTimeArraysSumMetric;
 import edu.bocmst.scheduling.mrcpspmax.metric.ValidFitnessStdDevMetric;
 import edu.bocmst.scheduling.mrcpspmax.metric.ValidPercentageMetric;
 
@@ -37,7 +39,9 @@ public class DocumentingSelectionStrategy implements SelectionStrategy<IMrcpspMa
 				new BestFitnessMetric(),
 				new ValidFitnessStdDevMetric(),
 				new ValidPercentageMetric(),
-				new ModeAssignmentMetricWrapper(new UniqueValidModeAssignmentMetric())
+				new ModeAssignmentMetricWrapper(new UniqueValidModeAssignmentMetric()),
+				new ModeAssignmentMetricWrapper(new UniqueModeArraysSumMetric()),
+				new UniqueStartTimeArraysSumMetric()
 				);
 	}
 

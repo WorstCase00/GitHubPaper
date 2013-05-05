@@ -13,7 +13,7 @@ public class AbstractGaSolverConfiguration extends AbstractPropertyFileConfigura
 	
 	static class Defaults {
 		public static final int ELITE_COUNT = 5;
-		public static final int POPULATION_COUNT = 100;
+		public static final int POPULATION_COUNT = 500;
 	}
 	
 	private final TerminationConditionConfiguration terminationConditionConfiguration;

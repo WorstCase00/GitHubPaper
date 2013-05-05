@@ -8,11 +8,16 @@ import edu.bocmst.metaheuristic.IGeneratedSolutionsCounter;
 import edu.bocmst.scheduling.mrcpspmax.MrcpspMaxSolution;
 import edu.bocmst.scheduling.mrcpspmax.candidate.IMrcpspMaxCandidate;
 import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.IModeAssignment;
+import edu.bocmst.scheduling.mrcpspmax.candidate.modeassignment.ModeAssignmentFactory;
 import edu.bocmst.scheduling.mrcpspmax.candidate.priority.IPriorityRule;
+import edu.bocmst.scheduling.mrcpspmax.candidate.priority.RandomKeysPriorityRule;
 import edu.bocmst.scheduling.mrcpspmax.candidate.schedule.Schedule;
+import edu.bocmst.scheduling.mrcpspmax.commons.SolutionValidator;
 import edu.bocmst.scheduling.mrcpspmax.instance.IMrcpspMaxInstance;
 import edu.bocmst.scheduling.mrcpspmax.scheduler.IRcpspMaxScheduler;
-import edu.bocmst.scheduling.mrcpspmax.search.MmdjMaxSearch;
+import edu.bocmst.scheduling.mrcpspmax.search.IMrcpspMaxSearch;
+import edu.bocmst.scheduling.mrcpspmax.search.RandomizedMmdjMaxSearch;
+import edu.bocmst.scheduling.mrcpspmax.search.RandomizedMmdjSearch;
 
 public class MrcpspMaxFitnessEvaluator implements FitnessEvaluator<IMrcpspMaxCandidate> {
 
@@ -34,14 +39,18 @@ public class MrcpspMaxFitnessEvaluator implements FitnessEvaluator<IMrcpspMaxCan
 			IPriorityRule priorityRule = candidate.getPriorityRule();
 			IRcpspMaxScheduler scheduler = candidate.getScheduler();
 			Schedule schedule = scheduler.createSchedule(modeAssignment, priorityRule);
-			if(schedule != null) {
+			if((schedule != null) && SolutionValidator.isTimeValid(schedule.getStartTimes(), modeAssignment.getModeArray(), instance)) {
 				solutionsCounter.increment();
 				
 
-				MmdjMaxSearch search = new MmdjMaxSearch(instance);
+				IMrcpspMaxSearch search = new RandomizedMmdjSearch(instance);
 				MrcpspMaxSolution searchResult = search.search(candidate.getModeAssignment(), schedule);
-				schedule = searchResult.getSchedule();
 				
+//				return searchResult.getSchedule().getMakespan();
+				
+				schedule = searchResult.getSchedule();
+				candidate.setPriorityRule(RandomKeysPriorityRule.toPriorityRule(schedule.getStartTimes()));
+				candidate.setModeAssignment(ModeAssignmentFactory.createInstance(searchResult.getModes(), instance));
 				return schedule.getMakespan();
 			}
 		} 
